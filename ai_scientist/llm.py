@@ -153,19 +153,21 @@ def get_response_from_llm(
     msg_history: Optional[List[Dict[str, Any]]] = None,
     temperature: float = 0.7,
 ) -> Tuple[str, List[Dict[str, Any]]]:
-    # 온도는 호출 시 덮어쓰기
-    gen_cfg = client.gen_cfg.clone()
+    
+    try:
+        gen_cfg = copy.deepcopy(client.gen_cfg)
+    except Exception:
+        # 일부 환경에서 deepcopy가 문제면 dict 기반 복제
+        gen_cfg = GenerationConfig.from_dict(client.gen_cfg.to_dict())
+
+    # 런타임 파라미터 오버라이드
     gen_cfg.temperature = temperature
 
     built = _build_chat_prompt(client.tokenizer, system_message, msg_history, prompt)
     input_text = built["text"]
     new_history = built["messages"].copy()
 
-    inputs = client.tokenizer(
-        input_text,
-        return_tensors="pt",
-        add_special_tokens=False,
-    )
+    inputs = client.tokenizer(input_text, return_tensors="pt", add_special_tokens=False)
     inputs = {k: v.to(client.model.device) for k, v in inputs.items()}
 
     with torch.no_grad():
@@ -179,18 +181,9 @@ def get_response_from_llm(
             pad_token_id=gen_cfg.pad_token_id,
         )
 
-    # 입력 길이 이후의 토큰만 디코딩
     gen_ids = output_ids[:, inputs["input_ids"].shape[1]:]
     content = client.tokenizer.decode(gen_ids[0], skip_special_tokens=True)
-
     new_history.append({"role": "assistant", "content": content})
-
-    if print_debug:
-        print("\n" + "*" * 20 + " LLM START " + "*" * 20)
-        for j, msg in enumerate(new_history):
-            print(f'{j}, {msg["role"]}: {msg["content"][:500]}')
-        print("*" * 21 + " LLM END " + "*" * 21 + "\n")
-
     return content, new_history
 
 def get_batch_responses_from_llm(
