@@ -9,9 +9,11 @@ from .journal import Node, Journal
 parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", ".."))
 sys.path.insert(0, parent_dir)
 from ai_scientist.llm import get_response_from_llm, extract_json_between_markers
+from ai_scientist.llm import create_client  # 이전에 만든 huggingface용 로컬 로더
+# 또는 huggingface transformers 직접 사용
 
-client = openai.OpenAI()
-model = "gpt-4o-2024-08-06"
+# 예시: GPT-OSS-20B를 HF repo_id로 지정
+client, model = create_client("openai/gpt-oss-20b")  # HF_REPO_MAP에서 repo_id 매핑됨
 
 report_summarizer_sys_msg = """You are an expert machine learning researcher.
 You are given multiple experiment logs, each representing a node in a stage of exploring scientific ideas and implementations.

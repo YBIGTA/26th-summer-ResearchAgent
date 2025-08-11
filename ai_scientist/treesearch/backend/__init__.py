@@ -1,6 +1,7 @@
 from . import backend_anthropic, backend_openai
 from .utils import FunctionSpec, OutputType, PromptType, compile_prompt_to_md
-
+from . import backend_hf_local  # <-- 새로 추가
+import os
 
 def query(
     system_message: PromptType | None,
@@ -34,7 +35,7 @@ def query(
 
     # Handle models with beta limitations
     # ref: https://platform.openai.com/docs/guides/reasoning/beta-limitations
-    if model.startswith("o1"):
+    if model.startswith("gpt-oss-20b"):
         if system_message and user_message is None:
             user_message = system_message
         elif system_message is None and user_message:
@@ -51,8 +52,19 @@ def query(
         model_kwargs.pop("temperature", None)
     else:
         model_kwargs["max_tokens"] = max_tokens
+    _BACKEND = os.getenv("AI_SCIENTIST_BACKEND", "hf_local").lower()
+    
+    if _BACKEND == "anthropic":
+        query_func = backend_anthropic.query
+    elif _BACKEND == "openai":
+        query_func = backend_openai.query
+    elif _BACKEND == "hf_local":
+        query_func = backend_hf_local.query
+    else:
+        # 알 수 없는 값이면 로컬로
+        query_func = backend_hf_local.query
 
-    query_func = backend_anthropic.query if "claude-" in model else backend_openai.query
+    # query_func = backend_anthropic.query if "claude-" in model else backend_openai.query
     output, req_time, in_tok_count, out_tok_count, info = query_func(
         system_message=compile_prompt_to_md(system_message) if system_message else None,
         user_message=compile_prompt_to_md(user_message) if user_message else None,

@@ -51,7 +51,7 @@ def parse_arguments():
     parser.add_argument(
         "--load_ideas",
         type=str,
-        default="ideas/i_cant_believe_its_not_better.json",
+        default="/root/AI-Scientist-v2/ai_scientist/ideas/i_cant_believe_its_not_better.json",
         help="Path to a JSON file containing pregenerated ideas",
     )
     parser.add_argument(
@@ -85,19 +85,19 @@ def parse_arguments():
     parser.add_argument(
         "--model_agg_plots",
         type=str,
-        default="o3-mini-2025-01-31",
+        default="qwen2-vl-7b-instruct",
         help="Model to use for plot aggregation",
     )
     parser.add_argument(
         "--model_writeup",
         type=str,
-        default="o1-preview-2024-09-12",
+        default="openai/gpt-oss-20b",
         help="Model to use for writeup",
     )
     parser.add_argument(
         "--model_citation",
         type=str,
-        default="gpt-4o-2024-11-20",
+        default="Qwen/Qwen2-7B-Instruct",
         help="Model to use for citation gathering",
     )
     parser.add_argument(
@@ -109,7 +109,7 @@ def parse_arguments():
     parser.add_argument(
         "--model_review",
         type=str,
-        default="gpt-4o-2024-11-20",
+        default="openai/gpt-oss-20b",
         help="Model to use for review main text and captions",
     )
     parser.add_argument(
