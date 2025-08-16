@@ -4,7 +4,9 @@ import os.path as osp
 import re
 import traceback
 from typing import Any, Dict, List
-
+# utils/tool_parse.py
+import ast
+from typing import Tuple, Dict, Any, Optional,List
 import sys
 
 sys.path.append(osp.join(osp.dirname(__file__), ".."))
@@ -12,6 +14,7 @@ from ai_scientist.llm import (
     AVAILABLE_LLMS,
     create_client,
     get_response_from_llm,
+    extract_json_object,
 )
 
 from ai_scientist.tools.semantic_scholar import SemanticScholarSearchTool
@@ -123,6 +126,163 @@ Results from your last action (if any):
 
 {last_tool_results}
 """
+# utils/tool_parse.py
+import re, json, ast
+from typing import Tuple, Dict, Any, Optional
+
+ALLOWED_ACTIONS = {"SearchSemanticScholar", "FinalizeIdea"}
+
+def _strip_markdown_decorations(t: str) -> str:
+    # 굵게/기울임/머리글 같은 장식 최소 제거
+    t = re.sub(r"\*+", "", t)
+    t = re.sub(r"^[ \t]*#{1,6}[ \t]*", "", t, flags=re.M)  # leading ####
+    return t
+
+def _extract_args_region(text: str) -> str:
+    m = re.search(r"^[ \t]*Arguments:[^\S\r\n]*", text, flags=re.M)
+    return text[m.end():] if m else text
+
+def _loads_json_or_python_obj(s: str) -> Optional[Dict[str, Any]]:
+    s = s.strip()
+    if not s:
+        return None
+    # 1) json 우선
+    try:
+        obj = json.loads(s)
+        if isinstance(obj, dict):
+            return obj
+    except Exception:
+        pass
+    # 2) 파이썬 리터럴(dict with single quotes 등) 허용
+    try:
+        obj = ast.literal_eval(s)
+        if isinstance(obj, dict):
+            return obj
+    except Exception:
+        pass
+    return None
+
+def _extract_last_top_level_braces(text: str):
+    starts = [i for i,c in enumerate(text) if c == "{"]
+    for s in reversed(starts):
+        depth = 0
+        for i in range(s, len(text)):
+            ch = text[i]
+            if ch == "{": depth += 1
+            elif ch == "}":
+                depth -= 1
+                if depth == 0:
+                    return text[s:i+1]
+    return None
+
+def load_arguments_loose(arguments_text):
+    """
+    문자열/딕트 무엇이 오든 dict 반환.
+    - ```json { ... } ``` 우선
+    - 순수 JSON 시도 → 실패 시 ast.literal_eval (파이썬 dict) → 실패 시 마지막 {...} 추출 → 폴백
+    """
+    if isinstance(arguments_text, dict):
+        return arguments_text
+
+    s = str(arguments_text or "").strip()
+    if not s:
+        return {}
+
+    # ```json ... ``` 코드펜스 우선
+    m = re.search(r"```json\s*(\{.*?\})\s*```", s, flags=re.S)
+    if m:
+        s = m.group(1).strip()
+
+    # 1) 순수 JSON
+    try:
+        obj = json.loads(s)
+        if isinstance(obj, dict):
+            return obj
+    except Exception:
+        pass
+
+    # 2) 파이썬 dict 리터럴 허용 (홑따옴표 등)
+    try:
+        obj = ast.literal_eval(s)
+        if isinstance(obj, dict):
+            return obj
+    except Exception:
+        pass
+
+    # 3) 텍스트에서 마지막 최상위 {...}만 뽑아 재시도
+    blob = _extract_last_top_level_braces(s)
+    if blob:
+        try:
+            obj = json.loads(blob)
+            if isinstance(obj, dict):
+                return obj
+        except Exception:
+            try:
+                obj = ast.literal_eval(blob)
+                if isinstance(obj, dict):
+                    return obj
+            except Exception:
+                pass
+
+    # 4) 폴백 (파이프라인 중단 방지)
+    return {"idea": {"Name": "unparsed", "Title": "UNPARSED_IDEA", "Abstract": s[:1500]}}
+# 2) 예외 나는 부분 교체 (라인 341 부근)
+
+def _extract_args_object(arg_region: str) -> Dict[str, Any]:
+    # 1) ```json ... ``` 우선
+    m = re.search(r"```json\s*(\{.*?\})\s*```", arg_region, flags=re.S)
+    if m:
+        obj = _loads_json_or_python_obj(m.group(1))
+        if obj is not None:
+            return obj
+    # 2) ``` ... ``` (언어 미표기)도 시도
+    m = re.search(r"```[\w-]*\s*(\{.*?\})\s*```", arg_region, flags=re.S)
+    if m:
+        obj = _loads_json_or_python_obj(m.group(1))
+        if obj is not None:
+            return obj
+    # 3) 텍스트에서 마지막 최상위 { ... } 시도
+    blob = _extract_last_top_level_braces(arg_region)
+    if blob:
+        obj = _loads_json_or_python_obj(blob)
+        if obj is not None:
+            return obj
+    # 4) 전체를 최후 시도
+    obj = _loads_json_or_python_obj(arg_region)
+    if obj is not None:
+        return obj
+    # 5) 폴백
+    return {"idea": {"Name": "unparsed", "Title": "UNPARSED", "Abstract": arg_region[:1500]}}
+
+def parse_tool_call(text: str) -> Tuple[str, Dict[str, Any]]:
+    """
+    항상 (action, arguments_dict) 반환.
+    실패해도 FinalizeIdea와 폴백 딕트를 돌려 파이프라인이 계속 진행되도록 한다.
+    """
+    if not text:
+        return "FinalizeIdea", {"idea": {"Name": "empty", "Title": "EMPTY_RESPONSE", "Abstract": ""}}
+
+    t = _strip_markdown_decorations(text)
+
+    # 마지막 Action 라인 채택
+    action = None
+    for m in re.finditer(r"^[ \t]*Action:[ \t]*([A-Za-z_][A-Za-z0-9_]*)[ \t]*$", t, flags=re.M):
+        action = m.group(1)
+
+    # Arguments 영역 파싱
+    arg_region = _extract_args_region(t)
+    args_obj = _extract_args_object(arg_region)
+
+    # 액션 보정
+    if action not in ALLOWED_ACTIONS:
+        if isinstance(args_obj, dict) and "idea" in args_obj:
+            action = "FinalizeIdea"
+        elif isinstance(args_obj, dict) and "query" in args_obj:
+            action = "SearchSemanticScholar"
+        else:
+            action = "FinalizeIdea"
+
+    return action, args_obj
 
 
 def generate_temp_free_idea(
@@ -177,28 +337,32 @@ def generate_temp_free_idea(
                     system_message=system_prompt,
                     msg_history=msg_history,
                 )
-
+                # print("!!!!!!!!response_text!!!!",response_text,"!!!!!!!!response_text!!!!")
                 # Parse the LLM's response
                 try:
                     # Use regular expressions to extract the components
+                    action,arguments_text=parse_tool_call(response_text)
+                    
                     action_pattern = r"ACTION:\s*(.*?)\s*ARGUMENTS:"
                     arguments_pattern = r"ARGUMENTS:\s*(.*?)(?:$|\nTHOUGHT:|\n$)"
-
-                    action_match = re.search(
+                    if action == None: 
+                        action_match = re.search(
                         action_pattern, response_text, re.DOTALL | re.IGNORECASE
                     )
-                    arguments_match = re.search(
+                        action = action_match.group(1).strip()
+
+                    if arguments_text == None: 
+                        arguments_match = re.search(
                         arguments_pattern, response_text, re.DOTALL | re.IGNORECASE
                     )
-
-                    if not all([action_match, arguments_match]):
+                        arguments_text = arguments_match.group(1).strip()
+                    if not all([action, arguments_text]):
                         raise ValueError("Failed to parse the LLM response.")
 
-                    action = action_match.group(1).strip()
-                    arguments_text = arguments_match.group(1).strip()
+                    
                     print(f"Action: {action}")
                     print(f"Arguments: {arguments_text}")
-
+                    arguments_text=f"{arguments_text}"
                     # If arguments are wrapped in ```json blocks, extract the content
                     if arguments_text.startswith("```json"):
                         arguments_text = re.search(
@@ -211,7 +375,9 @@ def generate_temp_free_idea(
                         tool = tools_dict[action]
                         # Parse arguments
                         try:
-                            arguments_json = json.loads(arguments_text)
+                            arguments_json = load_arguments_loose(arguments_text)
+
+                            # arguments_json = json.loads(arguments_text)
                         except json.JSONDecodeError:
                             raise ValueError(f"Invalid arguments JSON for {action}.")
 
@@ -225,7 +391,9 @@ def generate_temp_free_idea(
                     elif action == "FinalizeIdea":
                         # Parse arguments
                         try:
-                            arguments_json = json.loads(arguments_text)
+                            arguments_json = load_arguments_loose(arguments_text)
+
+                            # arguments_json = json.loads(arguments_text)
                             idea = arguments_json.get("idea")
                             if not idea:
                                 raise ValueError("Missing 'idea' in arguments.")
@@ -273,7 +441,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--model",
         type=str,
-        default="gpt-4o-2024-05-13",
+        default="LGAI-EXAONE",
         choices=AVAILABLE_LLMS,
         help="Model to use for AI Scientist.",
     )
