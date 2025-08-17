@@ -4,7 +4,6 @@ import json
 from dataclasses import dataclass
 from typing import Any, List, Dict, Tuple, Optional
 
-
 import torch
 from transformers import (
     AutoTokenizer,
@@ -23,8 +22,10 @@ MAX_NUM_TOKENS = 4096  # 생성 토큰 상한 (모델/VRAM에 맞게 조절)
 
 HF_REPO_MAP: Dict[str, str] = {
     "qwen-7b": "Qwen/Qwen2.5-3B-Instruct",
-    "gpt-oss-20b": "Qwen/Qwen2.5-3B-Instruct",  
+    "gpt-oss-20b": "LGAI-EXAONE/EXAONE-3.5-7.8B-Instruct",  
+    "LGAI-EXAONE"  : "LGAI-EXAONE/EXAONE-3.5-7.8B-Instruct"
 }
+
 
 AVAILABLE_LLMS = list(HF_REPO_MAP.keys())
 
@@ -213,6 +214,55 @@ def get_batch_responses_from_llm(
         histories.append(hist)
 
     return contents, histories
+
+# utils/json_extract.py (새 파일)
+
+def extract_json_object(text: str):
+    if not text:
+        raise ValueError("Empty LLM text")
+
+    # 1) ```json ... ``` 우선
+    m = re.search(r"```json\s*(\{.*?\})\s*```", text, flags=re.S)
+    if m:
+        return json.loads(m.group(1))
+
+    # 2) 마지막에 등장하는 "가장 바깥 { ... }" 블록 추출
+    start_idxs = [i for i,c in enumerate(text) if c == "{"]
+    end_idxs   = [i for i,c in enumerate(text) if c == "}"]
+    if start_idxs and end_idxs:
+        # 뒤에서부터 시도 (노이즈가 적음)
+        for s in reversed(start_idxs):
+            stack = 0
+            for i in range(s, len(text)):
+                if text[i] == "{": stack += 1
+                elif text[i] == "}":
+                    stack -= 1
+                    if stack == 0:
+                        cand = text[s:i+1]
+                        try:
+                            return json.loads(cand)
+                        except Exception:
+                            break  # 다음 s로 재시도
+
+    # 3) top-level 리스트도 허용: [{...}, ...]
+    m = re.search(r"```json\s*(\[\s*\{.*?\}\s*\])\s*```", text, flags=re.S)
+    if m:
+        arr = json.loads(m.group(1))
+        if isinstance(arr, list) and arr:
+            return arr[0]
+
+    # 4) "choices": [{"...":...}] 형태 보정
+    try:
+        data = json.loads(text)
+        if isinstance(data, dict) and "choices" in data and isinstance(data["choices"], list) and data["choices"]:
+            cand = data["choices"][0]
+            if isinstance(cand, dict):
+                return cand
+    except Exception:
+        pass
+
+    raise ValueError("No JSON object found in LLM text")
+
 
 def extract_json_between_markers(llm_output: str) -> Optional[dict]:
     json_pattern = r"```json(.*?)```"
