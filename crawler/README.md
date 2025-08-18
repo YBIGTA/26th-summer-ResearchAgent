@@ -46,8 +46,8 @@ crawler/
 **A. Clone the Repository**
 
 ```bash
-git clone https://your-repository-url.com/pokemon-crawler.git
-cd pokemon-crawler
+# assumed you already git cloned the full repository
+cd crawler
 ```
 
 **B. Install Dependencies**
