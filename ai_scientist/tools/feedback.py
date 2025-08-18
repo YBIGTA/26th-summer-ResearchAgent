@@ -1,0 +1,103 @@
+import os
+import requests
+import time
+import warnings
+from typing import Dict, List, Optional, Union
+import backoff
+
+import json
+import numpy as np
+from pypdf import PdfReader
+import pymupdf
+import pymupdf4llm
+from ai_scientist.llm import (
+    get_response_from_llm,
+    get_batch_responses_from_llm,
+    extract_json_between_markers,
+)
+
+from ai_scientist.tools.base_tool import BaseTool
+AVAILABLE_reflections = ["conservative","futuristic"]
+
+def on_backoff(details: Dict) -> None:
+    print(
+        f"Backing off {details['wait']:0.1f} seconds after {details['tries']} tries "
+        f"calling function {details['target'].__name__} at {time.strftime('%X')}"
+    )
+
+
+class ReviewbyLLM_tool(BaseTool):
+    def __init__(
+        self,
+        name: str = "ReviewbyLLM",
+        description: str = (
+            "생성한 아이디어에 대해 LLM을 사용하여 피드백을 제공합니다. "
+            "이 도구는 아이디어의 강점과 약점을 분석하고, 개선할 수 있는 방법을 제안합니다."
+        ),
+        max_results: int = 10,
+    ):
+        parameters = [
+            {
+                "name": "ReviewbyLLM",
+                "type": "str",
+                "description": "생성한 아이디어에 대해 LLM을 사용하여 피드백을 제공합니다. 이 도구는 아이디어의 강점과 약점을 분석하고, 개선할 수 있는 방법을 제안합니다.",
+            }
+        ]
+        super().__init__(name, description, parameters)
+        self.max_results = max_results
+        self.reviewer_system_prompt_base = (
+            "당신은 새롭게 생성된 포켓몬 아이디어에 대한 피드백을 제공하는 전문가입니다. "
+            "아이디어의 강점과 약점을 분석하고, 개선할 수 있는 방법을 제안합니다. "
+            "아이디어는 다음과 같습니다: {idea}. "
+            "피드백은 간결하고 명확하게 작성되어야 합니다."
+        )
+          
+
+    def use_tool(self, client, model, client_embed, IDEA_JSON,log_callback) -> Optional[str]:
+        review_text= self.perform_review(IDEA_JSON, model,client, client_embed, log_callback)
+        date = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+        idea_dir=f"experiments/{date}_attempt_{0}"
+        os.makedirs(idea_dir, exist_ok=True)
+        with open(os.path.join(idea_dir, "review.txt"), "w", encoding="utf-8") as f:
+            f.write(json.dumps(review_text, ensure_ascii=False, indent=4))
+        return review_text
+    
+    def perform_review(self, text, model: str, client, client_embed, log_callback, temperature=0.75,msg_history=None) -> str:
+        mynewprompt =f"""
+        아이디어는 다음과 같습니다. 
+        '''
+        {text}
+        '''
+        당신은 다음 아이디어를 평가하고 개선할 책임이 있습니다.
+        1. 아이디어의 강점과 약점을 분석합니다.
+        2. 아이디어를 개선할 수 있는 방법을 제안합니다.
+        3. 피드백은 간결하고 명확하게 작성되어야 합니다.
+        '''json
+        {{
+            "feedback": "아이디어에 대한 피드백을 여기에 작성하세요."
+        }}
+        '''
+        주의: 1번과 2번에 대한 답변외에는 생성하지 마세요.
+        """
+        
+        
+
+        response, msg_history = get_response_from_llm(
+            prompt=mynewprompt,
+            client=client,
+            model=model,
+            system_message=self.reviewer_system_prompt_base,
+            print_debug=False,
+            msg_history=msg_history,
+            temperature=temperature
+        )
+        result= f"""
+        리뷰결과: 
+        """
+        result += response
+        log_callback(result)
+        
+        
+        return result
+
+    

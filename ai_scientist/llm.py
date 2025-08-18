@@ -23,7 +23,8 @@ MAX_NUM_TOKENS = 4096  # 생성 토큰 상한 (모델/VRAM에 맞게 조절)
 HF_REPO_MAP: Dict[str, str] = {
     "qwen-7b": "Qwen/Qwen2.5-3B-Instruct",
     "gpt-oss-20b": "LGAI-EXAONE/EXAONE-3.5-7.8B-Instruct",  
-    "LGAI-EXAONE"  : "LGAI-EXAONE/EXAONE-3.5-7.8B-Instruct"
+    "LGAI-EXAONE"  : "LGAI-EXAONE/EXAONE-3.5-7.8B-Instruct",
+    "Qwen3-Embedding" : "Qwen/Qwen3-Embedding-0.6B",
 }
 
 

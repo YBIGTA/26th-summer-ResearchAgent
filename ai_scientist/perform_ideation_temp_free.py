@@ -2,12 +2,15 @@ import argparse
 import json
 import os.path as osp
 import re
+import regex
 import traceback
 from typing import Any, Dict, List
 # utils/tool_parse.py
 import ast
 from typing import Tuple, Dict, Any, Optional,List
 import sys
+import numpy as np
+from sklearn.metrics.pairwise import cosine_similarity
 
 sys.path.append(osp.join(osp.dirname(__file__), ".."))
 from ai_scientist.llm import (
@@ -17,15 +20,15 @@ from ai_scientist.llm import (
     extract_json_object,
 )
 
-from ai_scientist.tools.semantic_scholar import SemanticScholarSearchTool
+from ai_scientist.tools.feedback import ReviewbyLLM_tool
 from ai_scientist.tools.base_tool import BaseTool
 
 # Create tool instances
-semantic_scholar_tool = SemanticScholarSearchTool()
+ReviewbyLLM_tool = ReviewbyLLM_tool()
 
 # Define tools at the top of the file
 tools = [
-    semantic_scholar_tool,
+    ReviewbyLLM_tool,
     {
         "name": "FinalizeIdea",
         "description": """Finalize your idea by providing the idea details.
@@ -130,7 +133,52 @@ Results from your last action (if any):
 import re, json, ast
 from typing import Tuple, Dict, Any, Optional
 
-ALLOWED_ACTIONS = {"SearchSemanticScholar", "FinalizeIdea"}
+ALLOWED_ACTIONS = {"ReviewbyLLM", "FinalizeIdea"}
+
+def similarity_check(embedmodel,arguments_text,log_callback,idea_fname,idea_fname2) :
+    with open(idea_fname, "r",encoding="utf-8") as f:
+        content=f.read()
+        matches = regex.findall(r'\{(?:[^{}]|(?R))*\}', content, flags=regex.DOTALL)
+        ideas= [match.strip() for match in matches]
+    with open(idea_fname2, "r",encoding="utf-8") as f:
+        content2=f.read()
+        matches2 = regex.findall(r'\{(?:[^{}]|(?R))*\}', content2, flags=regex.DOTALL)
+        for match in matches2:
+            ideas.append(match.strip())
+            
+    def extract_fields(text):
+        fields=["Title","Short Hypothesis","Related Work","Abstract","Experiments","Risk Factors and Limitations"]
+        extracked=[]
+        for field in fields:
+            match = re.search(rf'"{field}"\s*:\s*"([^"]+)"', text)
+            if match:
+                extracked.append(match.group(1).strip())
+        return "".join(extracked)
+    def get_embedding(text):
+        pretext = extract_fields(text)
+        embedding= embedmodel.encode(pretext)
+        return np.array(embedding).reshape(1, -1)
+    
+    user_embedding = get_embedding(arguments_text)
+    best_score = -1
+    worst_score = 1
+    best_idea = None
+    k=0
+    for idea in ideas:
+        k+=1
+        idea_text=f"idea: {idea}"
+        idea_embedding = get_embedding(idea_text)
+        score = cosine_similarity(user_embedding, idea_embedding)[0][0]
+        if score > best_score:
+            best_score = score
+            best_idea = idea_text
+        if score < worst_score:
+            worst_score = score
+            
+    log_callback(f"Similarity check: {k} ideas checked, best score: {best_score}, worst score: {worst_score}")
+    return best_score
+    
+    
 
 def _strip_markdown_decorations(t: str) -> str:
     # 굵게/기울임/머리글 같은 장식 최소 제거
@@ -278,7 +326,7 @@ def parse_tool_call(text: str) -> Tuple[str, Dict[str, Any]]:
         if isinstance(args_obj, dict) and "idea" in args_obj:
             action = "FinalizeIdea"
         elif isinstance(args_obj, dict) and "query" in args_obj:
-            action = "SearchSemanticScholar"
+            action = "ReviewbyLLM"
         else:
             action = "FinalizeIdea"
 
@@ -289,6 +337,10 @@ def generate_temp_free_idea(
     idea_fname: str,
     client: Any,
     model: str,
+    client_embed: Any,
+    idea_fname2: str ,
+    client2: Any,
+    model2: str,
     workshop_description: str,
     max_num_generations: int = 20,
     num_reflections: int = 5,
@@ -314,7 +366,8 @@ def generate_temp_free_idea(
             last_tool_results = ""
             idea_finalized = False
             msg_history = []
-
+            sim= 0
+            review=0
             for reflection_round in range(num_reflections):
                 if reflection_round == 0:
                     # Use the initial idea generation prompt
@@ -369,8 +422,18 @@ def generate_temp_free_idea(
                             r"```json\s*(.*?)\s*```", arguments_text, re.DOTALL
                         ).group(1)
 
+                    print(f"Similarity check start")
+                    similarity=similarity_check(client_embed,arguments_text,print,idea_fname,idea_fname2)
+                    if similarity > 0.8:
+                        last_tool_results = arguments_text
+                        last_tool_results += f"유사도 값이 {similarity}입니다. 아이디어를 수정해야 합니다."
+                        sim +=1
+                        if sim > 3:
+                            idea_finalized = True
+                            break
+                        continue
                     # Process the action and arguments
-                    if action in tools_dict:
+                    if action == "ReviewbyLLM":
                         # It's a tool we have defined
                         tool = tools_dict[action]
                         # Parse arguments
@@ -384,9 +447,10 @@ def generate_temp_free_idea(
                         # Use the tool
                         try:
                             # Assuming the arguments match the parameters of the tool
-                            result = tool.use_tool(**arguments_json)
-                            last_tool_results = result
+                            result = tool.use_tool(client2,model2,client_embed,arguments_text,logcallback=print)
+                            last_tool_results = str(result)
                         except Exception as e:
+                            review+=1
                             last_tool_results = f"Error using tool {action}: {str(e)}"
                     elif action == "FinalizeIdea":
                         # Parse arguments
@@ -446,6 +510,20 @@ if __name__ == "__main__":
         help="Model to use for AI Scientist.",
     )
     parser.add_argument(
+        "--model2",
+        type=str,
+        default="LGAI-EXAONE",
+        choices=AVAILABLE_LLMS,
+        help="Model to use for AI Scientist.",
+    )
+    parser.add_argument(
+        "--emb_model",
+        type=str,
+        default="Qwen3-Embedding",
+        choices=AVAILABLE_LLMS,
+        help="Model to use for AI Scientist.",
+    )
+    parser.add_argument(
         "--max-num-generations",
         type=int,
         default=1,
@@ -467,6 +545,8 @@ if __name__ == "__main__":
 
     # Create the LLM client
     client, client_model = create_client(args.model)
+    client2, client_model2 = create_client(args.model2)
+    client_emd, _ = create_client(args.emb_model)
 
     with open(args.workshop_file, "r") as f:
         workshop_description = f.read()
@@ -480,8 +560,13 @@ if __name__ == "__main__":
         idea_fname=idea_fname,
         client=client,
         model=client_model,
+        client_embed=client_emd,
+        idea_fname2=idea_fname ,
+        client2= client2,
+        model2= client_model2,
         workshop_description=workshop_description,
         max_num_generations=args.max_num_generations,
         num_reflections=args.num_reflections,
     )
     print(f"{args.workshop_file} generated {len(ideas)} ideas.")
+    
