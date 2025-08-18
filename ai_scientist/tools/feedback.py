@@ -7,9 +7,6 @@ import backoff
 
 import json
 import numpy as np
-from pypdf import PdfReader
-import pymupdf
-import pymupdf4llm
 from ai_scientist.llm import (
     get_response_from_llm,
     get_batch_responses_from_llm,
@@ -62,7 +59,8 @@ class ReviewbyLLM_tool(BaseTool):
             f.write(json.dumps(review_text, ensure_ascii=False, indent=4))
         return review_text
     
-    def perform_review(self, text, model: str, client, client_embed, log_callback, temperature=0.75,msg_history=None) -> str:
+    def perform_review(self, text, model: str, client, client_embed, log_callback,llm_reviewer_option=None, temperature=0.75,msg_history=None) -> str:
+        
         mynewprompt =f"""
         아이디어는 다음과 같습니다. 
         '''
@@ -79,14 +77,17 @@ class ReviewbyLLM_tool(BaseTool):
         '''
         주의: 1번과 2번에 대한 답변외에는 생성하지 마세요.
         """
-        
-        
+        reviewer_system_prompt = self.reviewer_system_prompt_base.format(idea=text)
+        if llm_reviewer_option is 'conservative':
+            reviewer_system_prompt += "\n\n주의: 보수적인 관점에서 피드백을 작성하세요."
+        elif llm_reviewer_option is 'futuristic':
+            reviewer_system_prompt += "\n\n주의: 미래지향적인 관점에서 피드백을 작성하세요."
 
         response, msg_history = get_response_from_llm(
             prompt=mynewprompt,
             client=client,
             model=model,
-            system_message=self.reviewer_system_prompt_base,
+            system_message=reviewer_system_prompt,
             print_debug=False,
             msg_history=msg_history,
             temperature=temperature
