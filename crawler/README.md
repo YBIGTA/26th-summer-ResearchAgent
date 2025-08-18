@@ -7,7 +7,7 @@ A Python-based web crawler designed to fetch comprehensive Pokémon data from th
 
 ## Some Features ✨
 
-  * **Data Extraction** Scrapes information (types, species, height, weight, etc.), descriptions, evolution chains, abilities, and full movesets.
+  * **Data Extraction:** Scrapes information (types, species, height, weight, etc.), descriptions, evolution chains, abilities, and full movesets.
   * **Output:** Saves data for each Pokémon in a separate file within a `json/` directory (e.g., `이상해씨.json`).
   * **Miscellaneous:** Allows resume from the last Pokémon using the `--continue_from` command-line argument, and saves `crawler.log` file for debug logs.
 
@@ -16,7 +16,7 @@ A Python-based web crawler designed to fetch comprehensive Pokémon data from th
 ## Project Structure
 
 ```
-.
+crawler/
 ├── crawl_nat_pokedex.py    # Main driver script to run the full scrape
 ├── web_crawler.py          # Core helper functions (driver setup, page fetching)
 ├── extract/                # Modules for scraping specific page sections
