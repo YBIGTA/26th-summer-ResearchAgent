@@ -24,23 +24,43 @@ from ai_scientist.tools.feedback import ReviewbyLLM_tool
 from ai_scientist.tools.base_tool import BaseTool
 
 # Create tool instances
-ReviewbyLLM_tool = ReviewbyLLM_tool()
+semantic_scholar_tool = SemanticScholarSearchTool()
+
+# Rename & repurpose the search tool for the Pokédex use-case
+semantic_scholar_tool.name = "SearchPokedex"
+semantic_scholar_tool.description = (
+    "비공식 도감/위키/커뮤니티 등을 검색해 기존 공식/팬메이드와의 중복 가능성, "
+    "유사 콘셉트/명칭, 타입·특성·기술 레퍼런스를 확인합니다. "
+    'ARGUMENTS는 {"query": "검색어"} 형태로 받습니다.'
+)
 
 # Define tools at the top of the file
 tools = [
     ReviewbyLLM_tool,
     {
-        "name": "FinalizeIdea",
-        "description": """Finalize your idea by providing the idea details.
+        "name": "FinalizeCharacter",
+        "description": """캐릭터를 최종 확정하고 CHARACTER JSON을 반환합니다.
 
-The IDEA JSON should include the following fields:
-- "Name": A short descriptor of the idea. Lowercase, no spaces, underscores allowed.
-- "Title": A catchy and informative title for the proposal.
-- "Short Hypothesis": A concise statement of the main hypothesis or research question. Clarify the need for this specific direction, ensure this is the best setting to investigate this idea, and there are not obvious other simpler ways to answer the question.
-- "Related Work": A brief discussion of the most relevant related work and how the proposal clearly distinguishes from it, and is not a trivial extension.
-- "Abstract": An abstract that summarizes the proposal in conference format (approximately 250 words).
-- "Experiments": A list of experiments that would be conducted to validate the proposal. Ensure these are simple and feasible. Be specific in exactly how you would test the hypothesis, and detail precise algorithmic changes. Include the evaluation metrics you would use.
-- "Risk Factors and Limitations": A list of potential risks and limitations of the proposal.""",
+필수 필드:
+- "Name": 로마자 기준 짧고 기억에 남는 이름(공식명과 동일 회피)
+- "Korean Name": 자연스러운 한글명
+- "Title": 한 줄 캐치프레이즈
+- "Typing": ["주타입", "부타입(선택)"]
+- "Region/Habitat": 서식/지역 설정
+- "Appearance": 외형 키워드/색/실루엣/상징 요소
+- "Personality": 성격 및 행동 특성
+- "Pokedex Entry": 세계관 톤의 도감 서술(2~3문장)
+- "Stats": {"HP","Attack","Defense","Sp.Atk","Sp.Def","Speed","Total"}
+- "Abilities": ["특성1", "특성2(선택)", "숨겨진 특성(선택)"]
+- "Signature Move": {"Name","Type","Category","Power","Accuracy","PP","Effect"}
+- "Movepool Highlights": 핵심 운용 기술 5~8개
+- "Playstyle": 싱글/더블 운용 요약(강점/약점)
+- "Matchups": {"Resistances":[],"Weaknesses":[],"Counters":[]}
+- "Evolution": {"Stage","Method","Pre-Evo(선택)","Next-Evo(선택)"}
+- "Sample Image Prompt": "3D cinematic animation, [핵심 외형 키워드], minimal background"
+- "Design Rationale": 테마 일관성·밸런스·세계관 적합성 논리
+
+ARGUMENTS는 {"character": {...}} 형태의 **유효한 JSON**이어야 합니다."""
     },
 ]
 
@@ -64,121 +84,130 @@ tool_names = [
 ]
 tool_names_str = ", ".join(tool_names)
 
-system_prompt = f"""You are an experienced AI researcher who aims to propose high-impact research ideas resembling exciting grant proposals. Feel free to propose any novel ideas or experiments; make sure they are novel. Be very creative and think out of the box. Each proposal should stem from a simple and elegant question, observation, or hypothesis about the topic. For example, they could involve very interesting and simple interventions or investigations that explore new possibilities or challenge existing assumptions. Clearly clarify how the proposal distinguishes from the existing literature.
+system_prompt = f"""당신은 ‘포켓몬 캐릭터 생성자’ 페르소나를 가진 크리에이티브 디자이너이자 밸런스 디렉터입니다. 
+당신의 목표는 참신하고 매력적이며 세계관(타입 상성·서식지·진화 등)에 어긋나지 않는 **완성형 신규 포켓몬 캐릭터**를 제안하는 것입니다. 
+반드시 독창적이고 팬 메이드로서 자연스럽게 받아들여질 수준의 **설정 일관성/전투 밸런스/서사 매력**을 모두 갖추세요. 
+공식 포켓몬을 그대로 모사하거나 이름·설정을 단순 치환하는 행위는 금지합니다.
 
-Ensure that the proposal does not require resources beyond what an academic lab could afford. These proposals should lead to papers that are publishable at top ML conferences.
+[요구 사항]
+1) 창의성: 콘셉트는 간결하지만 신선해야 하며, 외형·성격·서식·전투 콘셉트가 하나의 테마로 유기적으로 연결되어야 합니다. 
+2) 밸런스: 타입·특성·기술 구성, 기초 능력치(종족값)의 분포가 과도하게 편향되지 않도록 합리적 근거를 제시하세요. 
+3) 세계관 적합성: 타입 상성, 지역/서식, 진화 방식(레벨/친밀도/아이템/특수 조건 등)이 납득 가능해야 합니다. 
+4) 법/윤리: 실제 인물·단체 요소를 사용하거나 혐오/유해 요소를 넣지 않습니다. 공식 명칭·로고·정확히 일치하는 고유명은 피하고, 유사 영감 수준으로 재구성하세요.
 
-You have access to the following tools:
+당신은 다음 도구에 접근할 수 있습니다:
 
 {tool_descriptions}
 
-Respond in the following format:
+응답 형식은 아래를 따릅니다.
 
 ACTION:
-<The action to take, exactly one of {tool_names_str}>
+<{tool_names_str} 중 정확히 하나>
 
 ARGUMENTS:
-<If ACTION is "SearchSemanticScholar", provide the search query as {{"query": "your search query"}}. If ACTION is "FinalizeIdea", provide the idea details as {{"idea": {{ ... }}}} with the IDEA JSON specified below.>
+<Action이 "FinalizeCharacter"라면, 캐릭터 세부 정보를 {{"character": {{ ... }}}} 형태의 JSON으로 제공합니다. 
+Action이 "SearchPokedex"와 같은 검색이라면, {{ "query": "검색어" }} 형태로 제공합니다.>
 
-If you choose to finalize your idea, provide the IDEA JSON in the arguments:
+최종 확정을 선택하는 경우, 다음 JSON 스키마를 사용하세요:
 
-IDEA JSON:
+CHARACTER JSON:
 ```json
 {{
-  "idea": {{
-    "Name": "...",
-    "Title": "...",
-    "Short Hypothesis": "...",
-    "Related Work": "...",
-    "Abstract": "...",
-    "Experiments": "...",
-    "Risk Factors and Limitations": "..."
+  "character": {{
+    "Name": "로마자 기준 짧고 기억에 남는 이름 (공식명과 동일 회피)",
+    "Korean Name": "자연스러운 한글명",
+    "Title": "한 줄 캐치프레이즈(세계관/전투 콘셉트가 드러나게)",
+    "Typing": ["주타입", "부타입(선택)"],
+    "Region/Habitat": "서식/지역 설정",
+    "Appearance": "외형 키워드 & 색/실루엣/상징적 요소",
+    "Personality": "성격 및 행동 특성",
+    "Pokedex Entry": "세계관 톤의 도감 서술(2~3문장)",
+    "Stats": {{
+      "HP": 0, "Attack": 0, "Defense": 0, "Sp.Atk": 0, "Sp.Def": 0, "Speed": 0,
+      "Total": 0
+    }},
+    "Abilities": ["특성1", "특성2(선택)", "숨겨진 특성(선택)"],
+    "Signature Move": {{
+      "Name": "시그니처 기술명",
+      "Type": "타입",
+      "Category": "Physical/Special/Status",
+      "Power": "(숫자 또는 없음)",
+      "Accuracy": "(%)",
+      "PP": 0,
+      "Effect": "간결한 효과 설명(밸런스 고려)"
+    }},
+    "Movepool Highlights": ["핵심 상성/운용을 뒷받침하는 기술 5~8개"],
+    "Playstyle": "싱글/더블 기준 운용 요약, 강점/약점",
+    "Matchups": {{
+      "Resistances": ["타입"], 
+      "Weaknesses": ["타입"],
+      "Counters": ["대표적인 카운터 콘셉트"]
+    }},
+    "Evolution": {{
+      "Stage": "기본/1단계/2단계",
+      "Method": "레벨/아이템/친밀도/특수 환경 등",
+      "Pre-Evo (선택)": "하위 진화체 간단 설정",
+      "Next-Evo (선택)": "상위 진화체 간단 설정"
+    }},
+    "Sample Image Prompt": "3D cinematic animation, [핵심 외형 키워드], minimal background",
+    "Design Rationale": "테마 일관성·밸런스·세계관 적합성의 논리"
   }}
 }}
 ```
 
-Ensure the JSON is properly formatted for automatic parsing.
+JSON은 자동 파싱을 위해 반드시 유효한 형식으로 제공하세요.
 
-Note: You should perform at least one literature search before finalizing your idea to ensure it is well-informed by existing research."""
+Note: 최종 확정 전에 최소 1회 "SearchPokedex"를 사용해 유사/중복 사례를 확인하고 필요한 조정을 반영하세요."""
 
 # Define the initial idea generation prompt
 idea_generation_prompt = """{workshop_description}
 
-Here are the proposals that you have already generated:
+아래는 지금까지 생성한 캐릭터들입니다:
 
 '''
 {prev_ideas_string}
 '''
 
-Begin by generating an interestingly new high-level research proposal that differs from what you have previously proposed.
+이전과 중복되지 않는, 새롭고 테마 일관성이 돋보이는 **포켓몬 캐릭터 초안**을 생성하세요.
+- 콘셉트는 간결하지만 신선하게
+- 타입/특성/기술/종족값(Stats) 밸런스의 합리적 근거 제시
+- 세계관 톤의 Pokedex Entry(2~3문장) 포함
+- ACTION/ARGUMENTS 형식을 준수
+- 필요하면 다음 라운드에서 "SearchPokedex"로 유사 사례를 점검할 준비
+
+응답은 반드시 아래 형식을 따릅니다.
+
+ACTION:
+<"SearchPokedex" 또는 "FinalizeCharacter" 중 하나>
+
+ARGUMENTS:
+<Action이 "FinalizeCharacter"라면 { "character": { ... } } 형태의 유효한 JSON 제공.
+Action이 "SearchPokedex"라면 { "query": "검색어" } 제공.>
 """
 
 # Define the reflection prompt
-idea_reflection_prompt = """Round {current_round}/{num_reflections}.
+idea_reflection_prompt = """라운드 {current_round}/{num_reflections}
 
-In your thoughts, first carefully consider the quality, novelty, and feasibility of the proposal you just created.
-Include any other factors that you think are important in evaluating the proposal.
-Ensure the proposal is clear and concise, and the JSON is in the correct format.
-Do not make things overly complicated.
-In the next attempt, try to refine and improve your proposal.
-Stick to the spirit of the original idea unless there are glaring issues.
+방금 만든 캐릭터를 아래 기준으로 점검하고 개선하세요:
+- **독창성**: 기존(공식/팬메이드)과의 유사·중복 최소화
+- **밸런스**: 종족값 합계=Total 일치, 과도한 편향 없음, 시그니처 기술의 위험/보상 합리성
+- **세계관 적합성**: 타입 상성/서식/진화 방식의 납득 가능성
+- **운용성**: 싱글/더블에서의 역할이 명확하고 카운터/대응 수단 정의
+- **JSON 유효성**: 스키마/키/값 타입·누락 항목 점검 (자동 파싱 가능해야 함)
 
-If you have new information from tools, such as literature search results, incorporate them into your reflection and refine your proposal accordingly.
+가능하면 초중반 라운드에서 **"SearchPokedex"**를 사용해 유사 사례를 확인하고,
+충돌 요소(명칭/콘셉트/시그니처 기술)를 조정하세요.
+너무 복잡하게 만들지 말고 핵심 테마를 중심으로 정제합니다.
+명백한 문제가 없다면 원 아이디어의 정신은 유지하되 디테일을 다듬으세요.
 
-Results from your last action (if any):
-
+최근 액션 결과(있다면):
 {last_tool_results}
 """
 # utils/tool_parse.py
 import re, json, ast
 from typing import Tuple, Dict, Any, Optional
 
-ALLOWED_ACTIONS = {"ReviewbyLLM", "FinalizeIdea"}
-
-def similarity_check(embedmodel,arguments_text,log_callback,idea_fname,idea_fname2) :
-    with open(idea_fname, "r",encoding="utf-8") as f:
-        content=f.read()
-        matches = regex.findall(r'\{(?:[^{}]|(?R))*\}', content, flags=regex.DOTALL)
-        ideas= [match.strip() for match in matches]
-    with open(idea_fname2, "r",encoding="utf-8") as f:
-        content2=f.read()
-        matches2 = regex.findall(r'\{(?:[^{}]|(?R))*\}', content2, flags=regex.DOTALL)
-        for match in matches2:
-            ideas.append(match.strip())
-            
-    def extract_fields(text):
-        fields=["Title","Short Hypothesis","Related Work","Abstract","Experiments","Risk Factors and Limitations"]
-        extracked=[]
-        for field in fields:
-            match = re.search(rf'"{field}"\s*:\s*"([^"]+)"', text)
-            if match:
-                extracked.append(match.group(1).strip())
-        return "".join(extracked)
-    def get_embedding(text):
-        pretext = extract_fields(text)
-        embedding= embedmodel.encode(pretext)
-        return np.array(embedding).reshape(1, -1)
-    
-    user_embedding = get_embedding(arguments_text)
-    best_score = -1
-    worst_score = 1
-    best_idea = None
-    k=0
-    for idea in ideas:
-        k+=1
-        idea_text=f"idea: {idea}"
-        idea_embedding = get_embedding(idea_text)
-        score = cosine_similarity(user_embedding, idea_embedding)[0][0]
-        if score > best_score:
-            best_score = score
-            best_idea = idea_text
-        if score < worst_score:
-            worst_score = score
-            
-    log_callback(f"Similarity check: {k} ideas checked, best score: {best_score}, worst score: {worst_score}")
-    return best_score
-    
-    
+ALLOWED_ACTIONS = {"SearchSemanticScholar", "FinalizeIdea"}
 
 def _strip_markdown_decorations(t: str) -> str:
     # 굵게/기울임/머리글 같은 장식 최소 제거
@@ -273,7 +302,7 @@ def load_arguments_loose(arguments_text):
                 pass
 
     # 4) 폴백 (파이프라인 중단 방지)
-    return {"idea": {"Name": "unparsed", "Title": "UNPARSED_IDEA", "Abstract": s[:1500]}}
+    return {"character": {"Name": "unparsed", "Korean Name": "UNPARSED", "Pokedex Entry": s[:1500]}}
 # 2) 예외 나는 부분 교체 (라인 341 부근)
 
 def _extract_args_object(arg_region: str) -> Dict[str, Any]:
@@ -300,15 +329,16 @@ def _extract_args_object(arg_region: str) -> Dict[str, Any]:
     if obj is not None:
         return obj
     # 5) 폴백
-    return {"idea": {"Name": "unparsed", "Title": "UNPARSED", "Abstract": arg_region[:1500]}}
+    return {"character": {"Name": "unparsed", "Korean Name": "UNPARSED", "Pokedex Entry": arg_region[:1500]}}
 
 def parse_tool_call(text: str) -> Tuple[str, Dict[str, Any]]:
     """
     항상 (action, arguments_dict) 반환.
-    실패해도 FinalizeIdea와 폴백 딕트를 돌려 파이프라인이 계속 진행되도록 한다.
+    실패해도 FinalizeCharacter와 폴백 딕트를 돌려 파이프라인이 계속 진행되도록 한다.
     """
     if not text:
-        return "FinalizeIdea", {"idea": {"Name": "empty", "Title": "EMPTY_RESPONSE", "Abstract": ""}}
+        return "FinalizeCharacter", {"character": {"Name": "empty", "Korean Name": "EMPTY_RESPONSE", "Pokedex Entry": ""}}
+
 
     t = _strip_markdown_decorations(text)
 
@@ -323,12 +353,12 @@ def parse_tool_call(text: str) -> Tuple[str, Dict[str, Any]]:
 
     # 액션 보정
     if action not in ALLOWED_ACTIONS:
-        if isinstance(args_obj, dict) and "idea" in args_obj:
-            action = "FinalizeIdea"
+        if isinstance(args_obj, dict) and "character" in args_obj:
+            action = "FinalizeCharacter"
         elif isinstance(args_obj, dict) and "query" in args_obj:
-            action = "ReviewbyLLM"
+            action = "SearchSemanticScholar"
         else:
-            action = "FinalizeIdea"
+            action = "FinalizeCharacter"
 
     return action, args_obj
 
@@ -452,23 +482,32 @@ def generate_temp_free_idea(
                         except Exception as e:
                             review+=1
                             last_tool_results = f"Error using tool {action}: {str(e)}"
-                    elif action == "FinalizeIdea":
+                    elif action == "FinalizeCharacter":
                         # Parse arguments
                         try:
                             arguments_json = load_arguments_loose(arguments_text)
 
-                            # arguments_json = json.loads(arguments_text)
-                            idea = arguments_json.get("idea")
-                            if not idea:
-                                raise ValueError("Missing 'idea' in arguments.")
+                            character = arguments_json.get("character")
+                            if not character or not isinstance(character, dict):
+                                raise ValueError("Missing 'character' in arguments.")
 
-                            # Append the idea to the archive
-                            idea_str_archive.append(json.dumps(idea))
-                            print(f"Proposal finalized: {idea}")
+                            # (선택) Stats Total 자동 보정
+                            stats = character.get("Stats")
+                            if isinstance(stats, dict):
+                                keys = ["HP", "Attack", "Defense", "Sp.Atk", "Sp.Def", "Speed"]
+                                if all(isinstance(stats.get(k), int) for k in keys):
+                                    stats["Total"] = sum(stats[k] for k in keys)
+                                    character["Stats"] = stats
+
+                            # Append the character to the archive
+                            idea_str_archive.append(json.dumps(character, ensure_ascii=False))
+                            print(f"Character finalized: {character.get('Name', '(no-name)')}")
                             idea_finalized = True
                             break
                         except json.JSONDecodeError:
-                            raise ValueError("Invalid arguments JSON for FinalizeIdea.")
+                            raise ValueError("Invalid arguments JSON for FinalizeCharacter.")
+                    
+
                     else:
                         print(
                             "Invalid action. Please specify one of the available tools."
