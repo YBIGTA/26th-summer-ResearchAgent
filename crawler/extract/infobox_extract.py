@@ -32,7 +32,7 @@ def extract_infobox(soup: BeautifulSoup) -> dict:
         
         # --- SPECIAL HANDLING: POKEDEX NUMBERS ---
         # This section has a nested table that needs unique logic.
-        if '도감 번호' in header_texts:
+        if '보이기도감 번호' in header_texts:
             pokedex_entries = []
 
             target_tr = headers[0].find_parent('table').find_all('td')
@@ -44,7 +44,7 @@ def extract_infobox(soup: BeautifulSoup) -> dict:
                     text = '칼로스#' + text[3:]
                 pokedex_entries.append(text.replace('\n', ''))
 
-            data['pokedex_entries'] = pokedex_entries
+            data['도감 번호'] = pokedex_entries
             continue # Done with this row, move to the next
 
         # --- GENERAL HANDLING FOR ALL OTHER ROWS ---

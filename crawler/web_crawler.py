@@ -89,7 +89,7 @@ def scrape_pokemon_data(driver: WebDriver, url: str):
         data['explanations'] = extract_explanations(soup)
         data['evolutions'] = extract_evolutions(soup)
         data['abilities'] = extract_abilities(soup)
-        data['moveset'] = extract_moveset(soup) # Pass driver only if needed
+        data['moveset'] = extract_moveset(soup)
         
         return data
         
@@ -148,37 +148,27 @@ def print_json(data: dict, tab_space = "") -> None:
             print(f"{value}", end=",\n")
 
 def print_usage() -> None:
-    print("Usage: python run_test.py [url] [infobox|explanations|evolutions|abilities|moveset|all]")
+    print("Usage: python web_crawler.py [url] [infobox|explanations|evolutions|abilities|moveset|all]")
 
 if __name__ == "__main__":
     if len(sys.argv) < 3:
         print_usage()
         sys.exit(1)
 
+    url = sys.argv[1]
     choice = sys.argv[2]
-    use_local = None
-
-    if "--use_local" in sys.argv:
-        idx = sys.argv.index("--use_local")
-        if idx + 1 < len(sys.argv):
-            use_local = sys.argv[idx + 1]
-        else:
-            logger.error("Error: --use_local requires a filename")
-            sys.exit(1)
 
     driver = get_driver()
-
-    if use_local:
+    
+    if "-local" in sys.argv:
         # Convert file to file:// URI
-        absolute_path = Path(use_local).resolve()
+        absolute_path = Path(url).resolve()
         url = absolute_path.as_uri()
-    else:
-        url = sys.argv[1]
 
     logger.info("Fetching URL=" + url)
     soup = fetch_url(driver, url)
 
-    if not "--use_local" in sys.argv and "--save" in sys.argv:
+    if not "-local" in sys.argv and "--save" in sys.argv:
         idx = sys.argv.index("--save")
         if idx + 1 < len(sys.argv):
             save_file = sys.argv[idx + 1]
@@ -205,7 +195,11 @@ if __name__ == "__main__":
         data = scrape_pokemon_data(driver, url)
 
         folder_name = 'json'
-        file_name = urllib.parse.unquote(url.split('/')[-1]) + '.json'
+        
+        if not "-local" in sys.argv:
+            file_name = urllib.parse.unquote(url.split('/')[-1]) + '.json'
+        else:
+            file_name = urllib.parse.unquote(url.split('.')[0]) + '.json'
         full_path = os.path.join(DIRECTORY, folder_name, file_name)
 
         with open(full_path, "w", encoding="utf-8") as f:
