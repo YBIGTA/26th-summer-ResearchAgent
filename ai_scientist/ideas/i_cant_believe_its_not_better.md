@@ -1,10 +1,34 @@
-# Title: I Can't Believe It's Not Better: Challenges in Applied Deep Learning
-
+# Title: 믿기지 않게 완벽하지 않다?! 포켓몬 창작의 도전과 실패담
 ## Keywords
-negative results, deep learning, failure modes
+
+포켓몬 디자인, 실패 사례, 밸런스 조정, 세계관 몰입
 
 ## TL;DR
-Why don't deep learning approaches always deliver as expected in the real world? Dive deep into the pitfalls and challenges of applied deep learning.
+
+왜 포켓몬 창작은 항상 기대한 대로 멋지게 나오지 않을까? 창작 과정에서 마주치는 함정과 도전을 깊이 탐구한다.
 
 ## Abstract
-The goal of the I Can’t Believe It’s Not Better (ICBINB) workshop series is to promote slow science and build a community to discuss surprising and negative results, thereby encouraging a culture of transparency and shared learning. In recent years, we have witnessed a remarkable rise of Deep Learning (DL), whose impressive performance on benchmark tasks has led to increasing ambitions to deploy DL in real-world applications across all fields and disciplines. However, despite its potential, DL still faces many challenges during deployment in dynamic, real-world conditions, thus exposing practical limitations that are often overlooked in controlled benchmarks. Therefore, in this year’s ICBINB workshop, we aim to explore the challenges, unexpected outcomes, and common principles underlying similar issues and failure modes encountered across various fields and disciplines when deploying DL models in real-world scenarios. We will invite contributions and discussions from diverse fields including, but not limited to, healthcare, scientific discovery, robotics, education, equality & fairness, and social sciences. The failure modes may include suboptimal performance, concerns with the safety and reliability of applying DL models in unpredictable real-world applications, as well as ethical and societal challenges. More importantly, we aim to discuss common reasons or patterns in challenges and failure modes across disciplines. By creating a platform for researchers from different domains to interact and share insights, we hope to accelerate research by translating findings from one field to another, and also deepen DL researchers’ understanding of the universal fundamental issues that should be addressed within the current theoretical and empirical research paradigms. Embracing negative results as valuable learning opportunities will, therefore, help the community learn from past mistakes, and drive the development of more robust, reliable, and applicable AI models.
+
+“믿기지 않게 완벽하지 않다(IBINB)” 포켓몬 창작 워크숍의 목표는 빠른 양산보다 천천히 깊게 설계하는 창작 문화를 장려하고, 예상치 못한 디자인 실패나 밸런스 문제를 공유하면서 투명성과 학습의 장을 마련하는 것이다.
+
+최근 포켓몬 디자인은 게임, 만화, 팬 커뮤니티 등 다양한 영역에서 빠르게 발전하며, 독창적인 설정과 개성 있는 타입 조합으로 주목을 받고 있다. 그러나 현실적으로는 다음과 같은 어려움이 자주 발생한다:
+
+밸런스 붕괴: 너무 강하거나 약해 메타에 어울리지 않음
+
+세계관 부조화: 지역·전설·스토리와 연결성이 떨어짐
+
+실패한 콘셉트 전달: 외형과 스토리가 의도와 다르게 받아들여짐
+
+이번 워크숍에서는 예상과 달리 실패하거나 조율이 필요한 포켓몬 디자인 사례를 탐구한다. 참가자들은 창작 과정에서 겪은 어려움, 밸런스 문제, 그리고 예상치 못한 반응을 공유할 수 있다. 구체적으로는:
+
+전투용 포켓몬의 능력치와 기술군 설계에서 발생하는 밸런스 실패
+
+생태계·지역·전설적 요소를 담으려 했지만 세계관에 어울리지 않았던 사례
+
+귀여움·공포·장엄함을 의도했지만 플레이어에게 다른 인상을 준 경우
+
+나아가 포켓몬의 사회적·윤리적 해석 문제(예: 특정 문화 모티프 사용의 민감성)
+
+중요한 것은 실패 자체가 아니라, 다른 창작자들이 공통적으로 겪는 패턴과 교훈을 정리하는 것이다. 이를 통해 한 분야(예: 드래곤 디자인의 실패 사례)에서 얻은 교훈을 다른 분야(예: 요정 타입 창작)에도 적용할 수 있으며, 나아가 창작자들이 더 탄탄하고 몰입감 있는 포켓몬을 설계하는 데 도움을 줄 수 있다.
+
+결국, 실패 사례를 부끄럽게 숨기지 않고 공유함으로써 더 강하고 아름다운 포켓몬 창작 문화를 발전시킬 수 있을 것이다.

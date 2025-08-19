@@ -1,62 +1,125 @@
 [
-    {
-        "Name": "compositional_regularization_nn",
-        "Title": "Enhancing Compositional Generalization in Neural Networks via Compositional Regularization",
-        "Short Hypothesis": "Introducing a compositional regularization term during training can encourage neural networks to develop compositional representations, thereby improving their ability to generalize to novel combinations of known components.",
-        "Related Work": "Previous work has highlighted the challenges neural networks face in achieving compositional generalization. Studies such as 'Compositional Generalization through Abstract Representations in Human and Artificial Neural Networks' (Ito et al., NeurIPS 2022) have explored abstract representations to tackle this issue. However, limited research focuses on directly incorporating explicit regularization terms into the training objective to enforce compositional structures. Our proposal distinguishes itself by introducing a novel regularization approach that penalizes deviations from predefined compositional patterns during training, encouraging the network to internalize compositional rules.",
-        "Abstract": "Neural networks excel in many tasks but often struggle with compositional generalization\u2014the ability to understand and generate novel combinations of familiar components. This limitation hampers their performance on tasks requiring systematic generalization beyond the training data. In this proposal, we introduce a novel training method that incorporates an explicit compositional regularization term into the loss function of neural networks. This regularization term is designed to encourage the formation of compositional representations by penalizing the network when its internal representations deviate from expected compositional structures. We hypothesize that this approach will enhance the network's ability to generalize to unseen combinations, mimicking human-like compositional reasoning. We will test our method on synthetic benchmarks like the SCAN and COGS datasets, which are specifically designed to evaluate compositional generalization, as well as on real-world tasks such as machine translation and semantic parsing. By comparing our method to baseline models and existing approaches, we aim to demonstrate significant improvements in generalization performance. This work offers a new avenue for enforcing compositionality in neural networks through regularization, potentially bridging the gap between neural network capabilities and human cognitive flexibility.",
-        "Experiments": [
-            "Implement the compositional regularization term and integrate it into the loss function of standard sequence-to-sequence neural network architectures with attention mechanisms.",
-            "Train models on synthetic datasets like SCAN and COGS, evaluating performance on compositional generalization tasks with and without the regularization term.",
-            "Apply the method to real-world tasks such as machine translation using the IWSLT dataset and semantic parsing with the GeoQuery dataset, assessing improvements in generalization to new language constructs.",
-            "Analyze the learned representations by visualizing embedding spaces and utilizing compositionality metrics to assess how the regularization affects internal representations.",
-            "Conduct ablation studies to determine the impact of different strengths of the regularization term, identifying the optimal balance between enforcing compositionality and maintaining overall performance.",
-            "Compare the proposed method against other approaches aimed at improving compositional generalization, such as meta-learning techniques and specialized architectures."
-        ],
-        "Risk Factors and Limitations": [
-            "The effectiveness of the compositional regularization may vary across different datasets and tasks, potentially limiting its generalizability.",
-            "An improperly balanced regularization term could negatively impact model performance on the primary task, leading to lower accuracy.",
-            "Additional computational overhead from calculating the regularization term may increase training time and resource requirements.",
-            "Defining appropriate compositional structures for complex or less-understood domains may be challenging, affecting the applicability of the method.",
-            "The approach may face scalability issues when applied to very large models or datasets common in industrial applications."
-        ]
-    },
-    {
-        "Name": "interpretability_failure_modes",
-        "Title": "When Interpretability Fails: Investigating the Limitations of Explanation Methods in Deep Learning",
-        "Short Hypothesis": "Explanation methods for deep learning models may not always provide accurate or reliable interpretations of model behavior; identifying when these methods fail can inform better application and development of interpretability techniques.",
-        "Related Work": "Previous studies, such as 'Sanity Checks for Saliency Maps' (Adebayo et al., 2018) and 'The (Un)reliability of Saliency Methods' (Kindermans et al., 2017), have highlighted issues with the reliability of certain interpretability methods. However, there is a lack of systematic investigation into the failure modes of explanation techniques across different models and tasks, especially in practical, real-world settings. Our proposal distinguishes itself by providing a comprehensive analysis of when and why interpretability methods fail, and how they may mislead users.",
-        "Abstract": "Interpretability methods are essential for understanding and trusting deep learning models, especially in critical applications where insight into model decisions is necessary. However, these methods may not always provide accurate or meaningful explanations of a model's behavior, and can sometimes be misleading. This proposal aims to investigate the limitations and failure modes of popular interpretability techniques in deep learning, such as saliency maps, attribution methods, and concept activation vectors. We hypothesize that these methods can fail due to factors like model architecture, data biases, or adversarial manipulations, leading to explanations that do not reflect the true decision-making processes of the models. Through systematic experiments across various tasks and models, we will analyze the reliability of interpretability methods, identify conditions under which they fail, and propose metrics to assess explanation fidelity. The findings will inform practitioners about the potential pitfalls of relying on current interpretability techniques and guide the development of more robust methods to enhance the trustworthiness of AI systems.",
-        "Experiments": [
-            "Select a diverse set of pretrained models across different domains (e.g., image classification models like ResNet, NLP models like BERT).",
-            "Apply various interpretability methods (e.g., Grad-CAM, Integrated Gradients, LIME, SHAP) to these models on standard benchmarks.",
-            "Design controlled experiments where we introduce factors that may cause interpretability methods to fail, such as adding irrelevant but salient features, using adversarial examples, or modifying model architectures.",
-            "Evaluate the explanations generated by interpretability methods for accuracy and consistency, comparing them to known model behaviors or ground truth where available.",
-            "Develop quantitative metrics to assess the fidelity and reliability of explanations, such as explanation invariance and sensitivity.",
-            "Conduct user studies to understand how misleading or unreliable explanations impact human trust and decision-making.",
-            "Propose guidelines or improvements for the application of interpretability methods based on the findings."
-        ],
-        "Risk Factors and Limitations": [
-            "Defining ground truth for explanations is challenging due to the complexity of deep models.",
-            "Findings may be specific to the selected models or tasks, limiting generalizability.",
-            "Evaluating interpretability is inherently subjective, and metrics may not capture all aspects of explanation quality.",
-            "User studies require careful design and sufficient participants to yield meaningful results.",
-            "Computational resource constraints may limit the scale of experiments."
-        ]
-    },
-    {
-        "Name": "real_world_pest_detection",
-        "Title": "Real-World Challenges in Pest Detection Using Deep Learning: An Investigation into Failures and Solutions",
-        "Short Hypothesis": "Deep learning models for pest detection often fail to generalize in real-world agricultural settings due to data quality issues, environmental variability, and model limitations. Investigating these failures can lead to more robust solutions.",
-        "Related Work": "Several studies, such as those by Agarwal et al. (2023) and Dong et al. (2024), have explored deep learning for pest detection in agriculture. These studies generally report high accuracy in controlled settings but often do not address real-world deployment challenges. Our proposal distinguishes itself by focusing on the negative outcomes and the underlying reasons behind these failures.",
-        "Abstract": "Accurate pest detection is vital for protecting crops and ensuring food security. While deep learning models have shown promise in controlled environments, their performance often degrades in real-world applications. This proposal aims to investigate the reasons behind these failures. We hypothesize that data quality issues, environmental variability, and model limitations are significant factors. By conducting a series of experiments, we will explore these challenges in depth and propose robust solutions to improve the generalizability of deep learning models for pest detection. Our research will provide valuable insights for the agricultural community and contribute to the development of more reliable AI tools for precision farming.",
-        "Experiments": [
-            "1. **Data Quality Analysis**: Collect a diverse dataset of pest images from different agricultural environments and analyze its quality. Identify common issues such as label noise, class imbalance, and distribution shift.",
-            "2. **Model Robustness Testing**: Train state-of-the-art deep learning models (e.g., YOLOv8, EfficientNetB3) on the collected dataset and evaluate their performance in controlled vs. real-world settings. Metrics: Mean Average Precision (mAP), F1 Score.",
-            "3. **Environmental Variability Study**: Evaluate model performance under different environmental conditions (e.g., lighting, weather). Identify which conditions most significantly impact model accuracy.",
-            "4. **Failure Mode Analysis**: Conduct a detailed analysis of misclassifications to identify common patterns and potential causes (e.g., feature overlap between pests and background).",
-            "5. **Improvement Strategies**: Implement and test various strategies to mitigate identified challenges, such as data augmentation, domain adaptation, and model ensembling. Evaluate their effectiveness in improving model robustness."
-        ],
-        "Risk Factors and Limitations": "Potential risks include the availability and quality of real-world data, the computational demands of training and testing multiple deep learning models, and the generalizability of the findings to different types of pests and crops. Additionally, environmental factors may introduce variability that is challenging to control."
+  {
+    "character": {
+      "Name": "Voltryn",
+      "Korean Name": "볼트린",
+      "Title": "폭풍을 가르는 번개의 창",
+      "Typing": ["Electric", "Steel"],
+      "Region/Habitat": "산맥의 정상, 폭풍우가 자주 치는 지역",
+      "Appearance": "창 모양 뿔, 금속성 날개, 노란 번개 문양, 날렵한 실루엣",
+      "Personality": "용감하고 호전적이며 전투에서 결코 물러서지 않는다.",
+      "Pokedex Entry": "볼트린은 거대한 폭풍우 속에서 날개를 펼치며 번개를 끌어모아 적을 꿰뚫는다. 산 정상에 나타날 때마다 하늘이 푸른빛으로 갈라진다고 한다.",
+      "Stats": {
+        "HP": 75, "Attack": 115, "Defense": 90, "Sp.Atk": 95, "Sp.Def": 80, "Speed": 110,
+        "Total": 565
+      },
+      "Abilities": ["Lightning Rod", "Inner Focus", "Motor Drive"],
+      "Signature Move": {
+        "Name": "Storm Lance",
+        "Type": "Electric",
+        "Category": "Physical",
+        "Power": 100,
+        "Accuracy": "95%",
+        "PP": 10,
+        "Effect": "공격 시 30% 확률로 상대를 마비시킨다."
+      },
+      "Movepool Highlights": ["Wild Charge", "Iron Head", "Volt Switch", "Thunder Wave", "Flash Cannon", "Close Combat"],
+      "Playstyle": "싱글에서 빠른 속도로 돌파형 에이스 역할, 더블에서는 볼트 체인지로 유연한 전개 가능. 지상 타입이 큰 약점.",
+      "Matchups": {
+        "Resistances": ["Electric", "Flying", "Steel", "Fairy"],
+        "Weaknesses": ["Ground", "Fighting", "Fire"],
+        "Counters": ["Ground 타입 탱커와 불꽃 타입 스페셜 어태커"]
+      },
+      "Evolution": {
+        "Stage": "2단계",
+        "Method": "레벨 40 진화",
+        "Pre-Evo (선택)": "Voltine - 작은 번개구 모양",
+        "Next-Evo (선택)": ""
+      },
+      "Sample Image Prompt": "3D cinematic animation, metallic bird with lightning spear horns, minimal background",
+      "Design Rationale": "폭풍·전기·강철을 융합한 디자인. 전투에서 공격적인 고속 돌파 역할에 맞게 스탯과 기술 설계."
     }
+  },
+  {
+    "character": {
+      "Name": "Floralis",
+      "Korean Name": "플로라리스",
+      "Title": "꽃잎으로 꿈을 수놓는 수호자",
+      "Typing": ["Grass", "Fairy"],
+      "Region/Habitat": "푸른 숲 속의 신비한 꽃밭",
+      "Appearance": "긴 꽃잎 망토, 연한 분홍과 초록 색상, 부드러운 실루엣",
+      "Personality": "온화하고 상냥하며 동료를 지키려는 성향이 강하다.",
+      "Pokedex Entry": "플로라리스는 숲을 지키는 수호자라 불린다. 향기로운 꽃가루를 흩뿌려 동료를 치유하며, 침입자를 평화롭게 물리친다.",
+      "Stats": {
+        "HP": 95, "Attack": 60, "Defense": 85, "Sp.Atk": 105, "Sp.Def": 115, "Speed": 70,
+        "Total": 530
+      },
+      "Abilities": ["Natural Cure", "Aroma Veil", "Regenerator"],
+      "Signature Move": {
+        "Name": "Petal Dream",
+        "Type": "Fairy",
+        "Category": "Status",
+        "Power": "",
+        "Accuracy": "100%",
+        "PP": 10,
+        "Effect": "자신과 동료 포켓몬의 HP를 소량 회복하고 상태 이상을 치유한다."
+      },
+      "Movepool Highlights": ["Moonblast", "Giga Drain", "Leech Seed", "Calm Mind", "Aromatherapy", "Protect", "Energy Ball"],
+      "Playstyle": "더블 배틀에서 서포터로 활약하며 회복과 보조를 동시에 수행. 강한 물리 공격에는 약하다.",
+      "Matchups": {
+        "Resistances": ["Water", "Dark", "Fighting", "Ground"],
+        "Weaknesses": ["Steel", "Poison", "Fire"],
+        "Counters": ["강철 타입 벽 포켓몬과 독 타입 스위퍼"]
+      },
+      "Evolution": {
+        "Stage": "최종진화",
+        "Method": "친밀도+진화의 꽃 아이템",
+        "Pre-Evo (선택)": "Budinia - 작은 봉오리 형태",
+        "Next-Evo (선택)": ""
+      },
+      "Sample Image Prompt": "3D cinematic animation, fairy flower guardian with glowing petals, minimal background",
+      "Design Rationale": "숲 수호자 컨셉으로 힐러/서포터 역할에 맞는 기술군과 페어리-풀 조합을 선택."
+    }
+  },
+  {
+    "character": {
+      "Name": "Pyrox",
+      "Korean Name": "파이록스",
+      "Title": "불꽃의 분노를 두른 화산의 야수",
+      "Typing": ["Fire", "Rock"],
+      "Region/Habitat": "활화산 지대와 용암 동굴",
+      "Appearance": "용암 갑옷, 불타는 갈기, 붉은빛의 강렬한 실루엣",
+      "Personality": "거칠고 고집 세지만, 약속을 지키는 강한 정의감을 지녔다.",
+      "Pokedex Entry": "파이록스는 화산의 분노가 형상화된 존재다. 땅속에서 끓어오르는 마그마를 불러내어 적을 압도한다.",
+      "Stats": {
+        "HP": 90, "Attack": 120, "Defense": 100, "Sp.Atk": 80, "Sp.Def": 70, "Speed": 65,
+        "Total": 525
+      },
+      "Abilities": ["Flame Body", "Solid Rock", "Intimidate"],
+      "Signature Move": {
+        "Name": "Magma Roar",
+        "Type": "Fire",
+        "Category": "Special",
+        "Power": 110,
+        "Accuracy": "85%",
+        "PP": 5,
+        "Effect": "화상 상태를 30% 확률로 유발."
+      },
+      "Movepool Highlights": ["Flare Blitz", "Stone Edge", "Earthquake", "Heat Crash", "Stealth Rock", "Roar"],
+      "Playstyle": "싱글에서 스텔스록 설치와 물리 공격으로 압박. 더블에서는 위협(Intimidate)으로 견제. 물 타입과 땅 타입에게 크게 불리하다.",
+      "Matchups": {
+        "Resistances": ["Fire", "Flying", "Bug", "Normal"],
+        "Weaknesses": ["Water", "Ground", "Fighting", "Rock"],
+        "Counters": ["물 타입 탱커와 땅 타입 스위퍼"]
+      },
+      "Evolution": {
+        "Stage": "최종진화",
+        "Method": "레벨 45 진화",
+        "Pre-Evo (선택)": "Pyrite - 작은 용암 코어",
+        "Next-Evo (선택)": ""
+      },
+      "Sample Image Prompt": "3D cinematic animation, volcanic beast with magma armor, minimal background",
+      "Design Rationale": "불+암석 조합으로 화산 테마를 극대화. 공격적이면서도 스텔스록 전개용으로 밸런스 맞춤."
+    }
+  }
 ]
