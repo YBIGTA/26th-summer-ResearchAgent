@@ -65,7 +65,7 @@ pip install -r requirements.txt
 
 **C. ChromeDriver Configuration**
 
-Selenium requires a [browser driver](https://developer.chrome.com/docs/chromedriver/downloads) to interact with Google Chrome.
+Selenium requires a [browser driver](https://googlechromelabs.github.io/chrome-for-testing/) to interact with Google Chrome.
 
 ### 3\. Run the Crawler
 
