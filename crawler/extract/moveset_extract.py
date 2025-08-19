@@ -108,7 +108,7 @@ def parse_moves_table(table_element):
                 elif key == "LV" or key == "레벨":
                     cell_data = cell.get_text(strip=True)
 
-                    if cell_data != '최초':
+                    if cell_data != '최초' or cell_data != '진화':
                         move_data[key] = int(cell_data)
                     else:
                         move_data['레벨'] = -1
@@ -116,10 +116,21 @@ def parse_moves_table(table_element):
                 elif key in ['위력', 'PP']:
                     cell_data = cell.get_text(strip=True)
 
-                    if '—' in cell_data:
+                    if '—' in cell_data or '-' in cell_data:
                         move_data[key] = -1
                     else:
-                        move_data[key] = int(cell_data)
+                        try:
+                            move_data[key] = int(cell_data)
+                        except ValueError:
+                            # Try removing non integer chars
+                            logger.warning(f"ValueError detected for {key} {cell_data} pair")
+                            try:
+                                result = re.sub("[^0-9\.]", "", cell_data)
+
+                                move_data[key] = int(result)
+                            except Exception:
+                                logger.warning(f"Number filter failed, fallback to normal string")
+                                move_data[key] = cell_data
                 else:
                     move_data[key] = cell.get_text(strip=True)
             moves_list.append(move_data)
@@ -176,6 +187,8 @@ def scrape_generation_url(gen_name: str, url: str) -> dict:
         if tm_header:
             move_table = tm_header.find_parent(['h3', 'h4']).find_next_sibling('table')
             gen_moves['교배로 배우는 기술'] = parse_moves_table(move_table)
+        
+        ## Skip 이벤트로 배우는 기술
 
     except Exception as e:
         logger.info(f"An error occurred for generation={gen_name}, url={url}: {e}")
