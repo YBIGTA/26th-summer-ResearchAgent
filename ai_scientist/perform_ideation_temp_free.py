@@ -24,15 +24,7 @@ from ai_scientist.tools.feedback import ReviewbyLLM_tool
 from ai_scientist.tools.base_tool import BaseTool
 
 # Create tool instances
-semantic_scholar_tool = SemanticScholarSearchTool()
-
-# Rename & repurpose the search tool for the Pokédex use-case
-semantic_scholar_tool.name = "SearchPokedex"
-semantic_scholar_tool.description = (
-    "비공식 도감/위키/커뮤니티 등을 검색해 기존 공식/팬메이드와의 중복 가능성, "
-    "유사 콘셉트/명칭, 타입·특성·기술 레퍼런스를 확인합니다. "
-    'ARGUMENTS는 {"query": "검색어"} 형태로 받습니다.'
-)
+ReviewbyLLM_tool = ReviewbyLLM_tool()
 
 # Define tools at the top of the file
 tools = [
@@ -157,7 +149,7 @@ CHARACTER JSON:
 
 JSON은 자동 파싱을 위해 반드시 유효한 형식으로 제공하세요.
 
-Note: 최종 확정 전에 최소 1회 "SearchPokedex"를 사용해 유사/중복 사례를 확인하고 필요한 조정을 반영하세요."""
+Note: 최종 확정 전에 최소 1회 "ReviewbyLLM_tool"를 사용해 필요한 조정을 반영하세요."""
 
 # Define the initial idea generation prompt
 idea_generation_prompt = """{workshop_description}
@@ -207,7 +199,51 @@ idea_reflection_prompt = """라운드 {current_round}/{num_reflections}
 import re, json, ast
 from typing import Tuple, Dict, Any, Optional
 
-ALLOWED_ACTIONS = {"SearchSemanticScholar", "FinalizeIdea"}
+ALLOWED_ACTIONS = {"ReviewbyLLM", "FinalizeIdea"}
+
+def similarity_check(embedmodel,arguments_text,log_callback,idea_fname,idea_fname2) :
+    with open(idea_fname, "r",encoding="utf-8") as f:
+        content=f.read()
+        matches = regex.findall(r'\{(?:[^{}]|(?R))*\}', content, flags=regex.DOTALL)
+        ideas= [match.strip() for match in matches]
+    with open(idea_fname2, "r",encoding="utf-8") as f:
+        content2=f.read()
+        matches2 = regex.findall(r'\{(?:[^{}]|(?R))*\}', content2, flags=regex.DOTALL)
+        for match in matches2:
+            ideas.append(match.strip())
+            
+    def extract_fields(text):
+        fields=["Title","Short Hypothesis","Related Work","Abstract","Experiments","Risk Factors and Limitations"]
+        extracked=[]
+        for field in fields:
+            match = re.search(rf'"{field}"\s*:\s*"([^"]+)"', text)
+            if match:
+                extracked.append(match.group(1).strip())
+        return "".join(extracked)
+    def get_embedding(text):
+        pretext = extract_fields(text)
+        embedding= embedmodel.encode(pretext)
+        return np.array(embedding).reshape(1, -1)
+    
+    user_embedding = get_embedding(arguments_text)
+    best_score = -1
+    worst_score = 1
+    best_idea = None
+    k=0
+    for idea in ideas:
+        k+=1
+        idea_text=f"idea: {idea}"
+        idea_embedding = get_embedding(idea_text)
+        score = cosine_similarity(user_embedding, idea_embedding)[0][0]
+        if score > best_score:
+            best_score = score
+            best_idea = idea_text
+        if score < worst_score:
+            worst_score = score
+            
+    log_callback(f"Similarity check: {k} ideas checked, best score: {best_score}, worst score: {worst_score}")
+    return best_score
+    
 
 def _strip_markdown_decorations(t: str) -> str:
     # 굵게/기울임/머리글 같은 장식 최소 제거
@@ -350,15 +386,6 @@ def parse_tool_call(text: str) -> Tuple[str, Dict[str, Any]]:
     # Arguments 영역 파싱
     arg_region = _extract_args_region(t)
     args_obj = _extract_args_object(arg_region)
-
-    # 액션 보정
-    if action not in ALLOWED_ACTIONS:
-        if isinstance(args_obj, dict) and "character" in args_obj:
-            action = "FinalizeCharacter"
-        elif isinstance(args_obj, dict) and "query" in args_obj:
-            action = "SearchSemanticScholar"
-        else:
-            action = "FinalizeCharacter"
 
     return action, args_obj
 
