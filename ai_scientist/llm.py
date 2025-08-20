@@ -6,6 +6,8 @@ from dataclasses import dataclass
 from typing import Any, List, Dict, Tuple, Optional, Union
 import copy  # get_response_from_llm에서 deepcopy용으로 이미 사용 중
 from dotenv import load_dotenv # pip install dotenv
+from sentence_transformers import SentenceTransformer
+
 
 # 환경 변수 로드
 load_dotenv()
@@ -30,7 +32,7 @@ HF_REPO_MAP: Dict[str, str] = {
     "qwen-7b": "Qwen/Qwen2.5-3B-Instruct",
     "gpt-oss-20b": "LGAI-EXAONE/EXAONE-3.5-7.8B-Instruct",  
     "LGAI-EXAONE"  : "LGAI-EXAONE/EXAONE-3.5-7.8B-Instruct",
-    "Qwen3-Embedding" : "Qwen/Qwen3-Embedding-0.6B",
+    "all-MiniLM-L6-v2": "sentence-transformers/all-MiniLM-L6-v2",  # <-- 임베딩 alias
 }
 
 
@@ -156,6 +158,16 @@ def _build_chat_prompt(
                 joined.append(f"[{role.upper()}]\n{content}\n")
         joined.append(f"[USER]\n{user_msg}\n[ASSISTANT]\n")
         return {"text": "\n".join(joined), "messages": messages}
+        
+def create_embed_client(model_name_or_repo: str = "all-MiniLM-L6-v2") -> SentenceTransformer:
+    """
+    SentenceTransformer 임베딩 모델을 생성해서 반환.
+    - model_name_or_repo: alias 또는 HF repo id
+    """
+    repo = HF_REPO_MAP.get(model_name_or_repo, model_name_or_repo)
+    device = "cuda" if torch.cuda.is_available() else "cpu"
+    print(f"Loading embedding model: {repo} on {device}")
+    return SentenceTransformer(repo, device=device)
 
 def create_client(model_name_or_repo: str,
                   config: Optional[LocalModelConfig] = None) -> Tuple[LocalClient, str]:
