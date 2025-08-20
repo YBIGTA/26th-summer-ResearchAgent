@@ -1,0 +1,52 @@
+{
+  "Summary": "Voltorrent is a spherical Electric/Water-type Pokémon that generates electromagnetic storms, featuring the 'Storm Surge' ability and signature move 'Hydro Surge'.",
+  "Strengths": [
+    "Innovative storm generation mechanics",
+    "Unique type combination",
+    "Strategic weather interaction potential",
+    "Interesting signature move 'Hydro Surge'"
+  ],
+  "Weaknesses": [
+    "4x weakness to Grass",
+    "Complex ability might confuse casual players",
+    "Risk of visual design similarity to existing Pokémon"
+  ],
+  "Originality": 3,
+  "ThematicConsistency": 4,
+  "VisualDesign": 3,
+  "CompetitiveViability": 3,
+  "TypeBalance": 2,
+  "MovesetDesign": 4,
+  "EvolutionLogic": 2,
+  "Accessibility": 3,
+  "Marketability": 3,
+  "LoreIntegration": 3,
+  "WeightedBreakdown": {
+    "Originality": 1.0,
+    "ThematicConsistency": 1.2,
+    "VisualDesign": 0.8,
+    "CompetitiveViability": 1.2,
+    "TypeBalance": 0.5,
+    "MovesetDesign": 1.0,
+    "EvolutionLogic": 0.27,
+    "Accessibility": 0.33,
+    "Marketability": 0.2,
+    "LoreIntegration": 0.13
+  },
+  "Questions": [
+    "How does 'Storm Surge' ability interact with other weather-altering moves and abilities?",
+    "What specific design elements distinguish Voltorrent from other round Electric types?"
+  ],
+  "Limitations": [
+    "High vulnerability to Grass types",
+    "Potential complexity for new players",
+    "Risk of visual design being too derivative"
+  ],
+  "EthicalConcerns": false,
+  "Soundness": 3,
+  "Presentation": 4,
+  "Contribution": 3,
+  "Overall": 8,
+  "Confidence": 4,
+  "Decision": "Accept"
+}

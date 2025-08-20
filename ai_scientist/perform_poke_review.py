@@ -9,6 +9,7 @@ from ai_scientist.llm import (
     get_response_from_llm,
     get_batch_responses_from_llm,
     extract_json_between_markers,
+    create_client, ## 처음 업스테이지 client 호출 시 필요
 )
 
 # 1) 루브릭 & 가중치 정의
@@ -480,41 +481,54 @@ def get_pokemon_tier_prediction(review: Dict[str, Any]) -> str:
         return "PU (PU) - Bottom Tier"
 
 # 8) 최종 실행 예시
-
-if __name__ == "__main__":
-# 예시 포켓몬 IDEA JSON (기존 포켓몬 데이터 + 형식에 맞춤)
+def main():
+    # 예시 포켓몬 아이디어 JSON (크롤링 데이터 보고 만들어달라고함 -> 나중에 실제 genereate된 json과 일치시킬것)
     example_pokemon_idea = {
-    "idea": {
-        "Name": "Voltorrent",
-        "Title": "Electric Torrent Pokémon",
-        "Short Hypothesis": "Electric/Water type with ability to create electromagnetic whirlpools",
-        "Related Work": "Similar to Lanturn and Rotom-Wash but with unique storm generation mechanics",
-        "Abstract": "A spherical Pokémon that resembles a fusion of Voltorb and a water vortex. Can generate powerful electromagnetic storms in aquatic environments. Ability 'Storm Surge' boosts Electric moves in rain and Water moves in Electric Terrain.",
-        "Experiments": "Base stats: 60/75/70/120/80/95 (500 BST). Signature move 'Hydro Surge' - Electric/Water hybrid move. Access to Thunder, Surf, Rain Dance, Electric Terrain.",
-        "Risk Factors and Limitations": "Electric/Water typing creates 4x weakness to Grass. Storm Surge ability might be too complex for casual players. Visual design might be too similar to existing round Electric types."
+        "idea": {
+            "Name": "Voltorrent",
+            "Title": "Electric Torrent Pokémon",
+            "Short Hypothesis": "Electric/Water type with ability to create electromagnetic whirlpools",
+            "Related Work": "Similar to Lanturn and Rotom-Wash but with unique storm generation mechanics",
+            "Abstract": (
+                "A spherical Pokémon that resembles a fusion of Voltorb and a water vortex. "
+                "Can generate powerful electromagnetic storms in aquatic environments. "
+                "Ability 'Storm Surge' boosts Electric moves in rain and Water moves in Electric Terrain."
+            ),
+            "Experiments": (
+                "Base stats: 60/75/70/120/80/95 (500 BST). Signature move 'Hydro Surge' - "
+                "Electric/Water hybrid move. Access to Thunder, Surf, Rain Dance, Electric Terrain."
+            ),
+            "Risk Factors and Limitations": (
+                "Electric/Water typing creates 4x weakness to Grass. "
+                "Storm Surge ability might be too complex for casual players. "
+                "Visual design might be too similar to existing round Electric types."
+            ),
         }
     }
 
-# --- append this to the very end of perform_llm_poke.py ---
-from ai_scientist.llm import create_client
-
-if __name__ == "__main__":
-    # 1) 클라이언트 준비 (원하는 모델로 교체 가능)
-    client, client_model = create_client("openai/gpt-oss-20b")
-
-    # 2) 예시 아이디어 JSON 문자열화
+    # 입력단 문자열화
     text = json.dumps(example_pokemon_idea, ensure_ascii=False)
 
-    # 3) 리뷰 실행
+    # Upstage 클라이언트 생성 (환경변수 UPSTAGE_API_KEY 필요)
+    client, client_model = create_client("upstage:solar-1-mini-chat")
+
+    # 리뷰 실행 
     review, _ = perform_review(
         text=text,
         model=client_model,
         client=client,
         num_reflections=1,
-        use_persona_ensemble=True,  # 4 페르소나 앙상블
+        use_persona_ensemble=True, # 페르소나 앙상블 on
+        temperature=0.7,
     )
 
-    # 4) 출력/저장
+    # 5) 결과 출력 및 저장
     print(json.dumps(review, ensure_ascii=False, indent=2))
-    save_review_result(review, "tmp_review_result.json")
-    print("Saved to tmp_review_result.json")
+    os.makedirs('ai_scientist/ideas/reviews/', exist_ok=True)
+    out_path = "ai_scientist/ideas/reviews/eng_tmp_review_result.json"
+    save_review_result(review, out_path)
+    print(f"Saved to {out_path}")
+
+if __name__ == "__main__":
+    # env 파일 내부에 UPSTAGE_API_KEY 집어넣을 것. 
+    main()
