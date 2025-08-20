@@ -1,8 +1,14 @@
 import os
 import re
+import requests
 import json
 from dataclasses import dataclass
-from typing import Any, List, Dict, Tuple, Optional
+from typing import Any, List, Dict, Tuple, Optional, Union
+import copy  # get_response_from_llm에서 deepcopy용으로 이미 사용 중
+from dotenv import load_dotenv # pip install dotenv
+
+# 환경 변수 로드
+load_dotenv()
 
 import torch
 from transformers import (
@@ -30,6 +36,49 @@ HF_REPO_MAP: Dict[str, str] = {
 
 AVAILABLE_LLMS = list(HF_REPO_MAP.keys())
 
+## 업스테이지 client
+@dataclass
+class UpstageClient:
+    model: str = "solar-1-mini-chat"   # 원하는 Upstage 모델명 (우선 chat으로 해둠 필요하면 solar-2등으로 변경해서 호출)
+    api_key: Optional[str] = None
+    base_url: str = "https://api.upstage.ai/v1/chat/completions"
+    temperature: float = 0.7
+    top_p: float = 0.9
+    max_new_tokens: int = 1024
+
+    def __post_init__(self):
+        if self.api_key is None:
+            self.api_key = os.getenv("UPSTAGE_API_KEY")
+        if not self.api_key:
+            raise RuntimeError("UPSTAGE_API_KEY가 설정되어 있지 않습니다.")
+
+    def generate(self, system_message: str, msg_history: Optional[List[Dict[str, Any]]], user_msg: str) -> Tuple[str, List[Dict[str, Any]]]:
+        # Upstage는 OpenAI 호환 messages 포맷을 사용
+        messages: List[Dict[str, Any]] = []
+        if system_message:
+            messages.append({"role": "system", "content": system_message})
+        if msg_history:
+            messages.extend(msg_history)
+        messages.append({"role": "user", "content": user_msg})
+
+        payload = {
+            "model": self.model,
+            "messages": messages,
+            "temperature": self.temperature,
+            "top_p": self.top_p,
+            "max_tokens": self.max_new_tokens,  # Upstage는 max_tokens 사용
+        }
+        headers = {
+            "Authorization": f"Bearer {self.api_key}",
+            "Content-Type": "application/json",
+        }
+        resp = requests.post(self.base_url, headers=headers, json=payload, timeout=60)
+        resp.raise_for_status()
+        data = resp.json()
+        content = data["choices"][0]["message"]["content"]
+        # history 업데이트
+        new_history = messages + [{"role": "assistant", "content": content}]
+        return content, new_history
 
 # 로컬 로딩 옵
 @dataclass
@@ -114,6 +163,13 @@ def create_client(model_name_or_repo: str,
     OpenAI/Anthropic client 대신 로컬 HF 모델 로더를 반환.
     model_name_or_repo: "qwen-7b" 같은 별칭 또는 HF repo_id
     """
+    # Upstage 분기: "upstage" 또는 "upstage:solar-1-mini-chat" 형태
+    if model_name_or_repo.lower().startswith("upstage"):
+        parts = model_name_or_repo.split(":", 1)
+        upstage_model = parts[1] if len(parts) == 2 and parts[1].strip() else "solar-1-mini-chat"
+        client = UpstageClient(model=upstage_model)
+        return client, f"upstage/{upstage_model}"
+
     repo_id = _ensure_repo_id(model_name_or_repo)
     cfg = config or LocalModelConfig(repo_id=repo_id)
 
@@ -156,6 +212,16 @@ def get_response_from_llm(
     temperature: float = 0.7,
 ) -> Tuple[str, List[Dict[str, Any]]]:
     
+    # Upstage 경로
+    if isinstance(client, UpstageClient):
+        # runtime temperature 반영
+        client.temperature = temperature
+        content, new_history = client.generate(system_message=system_message,
+                                               msg_history=msg_history,
+                                               user_msg=prompt)
+        return content, new_history
+
+    # 기존 허깅페이스 경로    
     try:
         gen_cfg = copy.deepcopy(client.gen_cfg)
     except Exception:
@@ -283,3 +349,28 @@ def extract_json_between_markers(llm_output: str) -> Optional[dict]:
             except json.JSONDecodeError:
                 continue
     return None
+
+## 호출 테스트용
+if __name__ == "__main__":
+    # (1) Upstage 사용 예시
+    client, tag = create_client("upstage:solar-1-mini-chat")  # 또는 "upstage"
+    resp, hist = get_response_from_llm(
+        prompt="한국의 웹소설 해외 유사 플랫폼 알려줘.",
+        client=client,
+        model=tag,
+        system_message="You are a helpful assistant.",
+        msg_history=None,
+        temperature=0.5,
+    )
+    print(resp)
+
+    # (2) 기존 로컬 HF 사용(qwen 버전)
+    # pip install accelerate 
+    # local_client, repo = create_client("Qwen/Qwen2.5-3B-Instruct")
+    # resp2, hist2 = get_response_from_llm(
+    #     prompt="안녕!",
+    #     client=local_client,
+    #     model=repo,
+    #     system_message="You are a helpful assistant.",
+    # )
+    # print(resp2)
