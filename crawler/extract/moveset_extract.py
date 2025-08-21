@@ -146,7 +146,7 @@ def scrape_generation_url(gen_name: str, url: str) -> dict:
     
     # Each worker needs its own driver
     options = Options()
-    # options.page_load_strategy = 'eager'
+    options.page_load_strategy = 'eager'
     options.add_argument("--headless") # Headless is best for parallel workers
     service = Service(os.path.join(DIRECTORY, "chromedriver.exe"))
     driver = webdriver.Chrome(service=service, options=options)

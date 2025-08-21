@@ -41,7 +41,7 @@ logging.basicConfig(
 def get_driver() -> WebDriver:
     options = Options()
     options.add_argument("--headless")
-    # options.page_load_strategy = 'eager'
+    options.page_load_strategy = 'eager'
 
     service = Service(os.path.join(DIRECTORY, "chromedriver.exe"))
     driver = wb.Chrome(service=service, options=options)
