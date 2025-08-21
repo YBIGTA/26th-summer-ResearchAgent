@@ -58,6 +58,7 @@ def parse_moves_table(table_element):
         return []
 
     header_row = None
+    th_tags = []
     header_keys = []
     data_start_index = 0
 
@@ -66,71 +67,99 @@ def parse_moves_table(table_element):
 
     if inner_table == None:
         # Find all potential rows from either tbody or the table itself
-        all_rows = table_element.find('tbody').find_all('tr', recursive=False)
+        all_rows = table_element.find("tbody").find_all("tr", recursive=False)
+
+        if not all_rows:
+            return []
 
         # Identify the header row
         for i, row in enumerate(all_rows):
-            th_tags = row.find_all('th', recursive=False)
+            th_tags = row.find_all("th", recursive=False)
             row_text = row.get_text()
 
-            if len(th_tags) > 2 and '기술' in row_text and '타입' in row_text:
+            if len(th_tags) > 2 and "기술" in row_text and "타입" in row_text:
                 header_row = row
-                header_keys = [h.get_text(strip=True) for h in th_tags]
+
                 data_start_index = i + 1
-                break # stop once we've found our he
+                break # stop once we've found our header
     else:
         # Edge case for inner table with jquery sortable
-        all_rows = inner_table.find('tbody').find_all('tr', recursive=False)
-        header_row = inner_table.find('thead').find('tr')
+        all_rows = inner_table.find("tbody").find_all("tr", recursive=False)
 
-        th_tags = header_row.find_all('th', recursive=False)
-        header_keys = [h.get_text(strip=True) for h in th_tags]
-    
-    if not all_rows:
+        if not all_rows:
             return []
-            
-    if not header_row:
-        return [] # if no valid header is found, exit
+        header_row = inner_table.find("thead").find("tr")
+
+        if not header_row:
+            return [] # if no valid header is found, exit
+
+        th_tags = header_row.find_all("th", recursive=False)
+
+    header_keys = []
+    for h in th_tags:
+        header_text = h.get_text(strip=True)
+        span_count = int(h.get('colspan', 1))
+        header_keys.extend([header_text] * span_count) # add based on colspan count
 
     moves_list = []
     # Process rows that match number of cells as the header row
     for row in all_rows[data_start_index:]:
-        cells = row.find_all(['td', 'th'], recursive=False)
+        cells = row.find_all(["td", "th"], recursive=False)
 
         if len(cells) == len(header_keys):
             move_data = {}
             for key, cell in zip(header_keys, cells):
+                # Special handling for colspan header keys
+                if key in move_data:
+                    # Special handling within special handling for "게임" fields
+                    if key == "게임":
+                        styles = cell.get("style").lower().split()
+
+                        if not 'background:#FFF;' in styles and not 'white' in styles:
+                            move_data[key] += f", {cell.get_text(strip=True)}" # only append if colored
+                    else:
+                        move_data[key] += f", {cell.get_text(strip=True)}" # append normally
+                elif key == "게임":
+                    styles = cell.get("style").lower().split()
+
+                    if not 'background:#FFF;' in styles and not 'white' in styles:
+                        move_data[key] = cell.get_text(strip=True) # only set if colored
                 # Special handling for the '父' (Parent) column in egg move tables
-                if key == '父':
-                    parent_names = [a.get('title') for a in cell.find_all('a', title=True)]
-                    move_data[key] = parent_names
+                elif key == "父" or key == "부모":
+                    parent_names = [a.get("title") for a in cell.find_all("a", title=True)]
+                    move_data["부모"] = parent_names
                 # Handle level integer data
                 elif key == "LV" or key == "레벨":
                     cell_data = cell.get_text(strip=True)
 
-                    if cell_data != '최초' or cell_data != '진화':
-                        move_data[key] = int(cell_data)
-                    else:
-                        move_data['레벨'] = -1
+                    try:
+                        if cell_data == "최초" or cell_data == "진화" or cell_data == "떠올리기":
+                            move_data["레벨"] = cell_data
+                        else:
+                            move_data[key] = int(cell_data)
+                    except Exception:
+                        logger.warning(f"Error handling level integer data {cell_data}")
+                        move_data["레벨"] = cell_data
                 # Handle other integer data
-                elif key in ['위력', 'PP']:
+                elif key in ["위력", "PP"]:
                     cell_data = cell.get_text(strip=True)
 
-                    if '—' in cell_data or '-' in cell_data:
-                        move_data[key] = -1
-                    else:
-                        try:
+                    
+                    try:
+                        if '—' in cell_data or '-' in cell_data:
+                            move_data[key] = '-'
+                        else:
                             move_data[key] = int(cell_data)
-                        except ValueError:
-                            # Try removing non integer chars
-                            logger.warning(f"ValueError detected for {key} {cell_data} pair")
-                            try:
-                                result = re.sub("[^0-9\.]", "", cell_data)
+                    except ValueError:
+                        # Try removing non integer chars
+                        logger.warning(f"ValueError detected for {key} {cell_data} pair")
+                        try:
+                            result = re.sub(r"[^0-9\.]", "", cell_data)
 
-                                move_data[key] = int(result)
-                            except Exception:
-                                logger.warning(f"Number filter failed, fallback to normal string")
-                                move_data[key] = cell_data
+                            move_data[key] = int(result)
+                        except Exception:
+                            logger.warning(f"Number filter failed, fallback to normal string")
+                            move_data[key] = cell_data
                 else:
                     move_data[key] = cell.get_text(strip=True)
             moves_list.append(move_data)
