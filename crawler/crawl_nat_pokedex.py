@@ -29,9 +29,10 @@ logging.basicConfig(
     level=logging.INFO,
     format='[%(asctime)s/%(name)s/%(levelname)s] %(message)s',
     handlers=[
-        logging.FileHandler("crawler.log", mode='w'),
+        logging.FileHandler('crawler.log', mode='w', encoding='utf-8'),
         logging.StreamHandler()
-    ]
+    ],
+    encoding='utf-8'
 )
 
 logger = logging.getLogger(__name__)
@@ -92,6 +93,7 @@ if __name__ == "__main__":
 
     # --- Main Scraping Loop ---
     pokemon_url = None
+    init_time = time.time()
 
     try:
         total_links = len(all_pokemon_links)
@@ -99,6 +101,8 @@ if __name__ == "__main__":
             pokemon_name = link_info['name']
             pokemon_url = link_info['url']
             
+            start_time = time.time()
+
             logger.info(f"[{i+1}/{total_links}] Processing: {pokemon_name}")
 
             # Scrape all data for the Pokémon using the imported function
@@ -112,14 +116,16 @@ if __name__ == "__main__":
                 with open(file_path, 'w', encoding='utf-8') as f:
                     json.dump(pokemon_data, f, ensure_ascii=False, indent=4)
                 
-                logger.info(f"Successfully saved data to {file_path}")
+                end_time = time.time()
+                logger.info(f"Successfully saved data to {file_path} (took {end_time - start_time:.2f} seconds)")
             else:
-                logger.error(f"Failed to scrape data for {pokemon_name}.")
+                logger.error(f"Failed to scrape data for {pokemon_name}: Returned no data")
             
             time.sleep(1) # politeness delay
-
-        logger.info("Job complete!")
-        driver.quit()
     except Exception as e:
         logger.error(f'Error fetching URL={pokemon_url}: {e}')
+    
+    finish_time = time.time()
+    driver.quit()
+    logger.info(f"Job complete! Took {finish_time - init_time:.2f} seconds")
         
