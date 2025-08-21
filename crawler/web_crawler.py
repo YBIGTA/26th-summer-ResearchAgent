@@ -89,7 +89,7 @@ def scrape_pokemon_data(driver: WebDriver, url: str):
         data['explanations'] = extract_explanations(soup)
         data['evolutions'] = extract_evolutions(soup)
         data['abilities'] = extract_abilities(soup)
-        data['moveset'] = extract_moveset(soup)
+        data['moveset'] = extract_moveset(soup, driver)
         
         return data
         
@@ -190,7 +190,7 @@ if __name__ == "__main__":
     elif choice == "abilities":
         print_json(extract_abilities(soup))
     elif choice == "moveset":
-        print_json(extract_moveset(soup))
+        print_json(extract_moveset(soup, driver))
     elif choice == "all":
         data = scrape_pokemon_data(driver, url)
 

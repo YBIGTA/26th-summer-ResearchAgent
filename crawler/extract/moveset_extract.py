@@ -1,17 +1,12 @@
-from concurrent.futures import ThreadPoolExecutor
-import time
 import re
 import os
 
 from bs4 import BeautifulSoup
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import TimeoutException
+from selenium.common.exceptions import NoSuchElementException, TimeoutException
 
 import logging
 
@@ -19,34 +14,101 @@ logger = logging.getLogger(__name__)
 DIRECTORY = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
-def extract_moveset(soup: BeautifulSoup):
+def extract_moveset(soup: BeautifulSoup, driver: WebDriver):
     """
     Finds all generation tabs and extracts level-up and TM moves for each.
     """
     data = {}
-    moveset_div = None
 
-    # --- 1. Find header with table
+    # --- 1. Find the moveset container
+    # Find header with table
     moveset_header = soup.find("span", id="배우는_기술")
     tab_links = []
 
-    if moveset_header:
-        # --- 2. The main evolution table is the next sibling of the <h3> tag
-        moveset_div = moveset_header.find_parent("h3").find_next_sibling("div")
-        tab_links = moveset_div.find('ul', class_='tabs').find_all('a')
-        gen_names = [a.get_text(strip=True) for a in tab_links]
-        
-        urls_to_scrape = [link['href'] for link in tab_links]
+    if not moveset_header:
+        return data
+    
+    try:
+        moveset_container = WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, "div[data-tabview-id]"))
+        )
 
-        with ThreadPoolExecutor(max_workers=3) as executor:
-            results = executor.map(scrape_generation_url, gen_names, urls_to_scrape)
+        tab_links = moveset_container.find_elements(By.CSS_SELECTOR, "ul.tabs > li > a")
+        gen_names = [link.text.strip() for link in tab_links if link.text.strip()]
+
+        # The `data-tab` attribute in the parent `li` helps us target the content
+        parent_lis = moveset_container.find_elements(By.CSS_SELECTOR, "ul.tabs > li")
+        tab_ids = [li.get_attribute("data-tab") for li in parent_lis if li.get_attribute("data-tab")]
+
+        if not gen_names or not tab_ids:
+            logger.warning("No generation tabs were found.")
+            return {}
+
+        for i, gen_name in enumerate(gen_names):
+            logger.info(f"Processing moves for: {gen_name}")
+
+            current_tab_links = driver.find_elements(By.CSS_SELECTOR, "div[data-tabview-id] ul.tabs > li > a")
+            if i >= len(current_tab_links):
+                logger.error(f"Could not re-find tab for {gen_name}.")
+                continue
             
-            # --- 3. Collect the results as they complete
-            for result in results:
-                data[result["generation"]] = result["moveset"]
+            tab_to_click = current_tab_links[i]
 
-    logger.info("\n--- All moveset Scraping Complete")
+            # --- 2. Click each tab to load its content via JavaScript
+            driver.execute_script("arguments[0].click();", tab_to_click)
 
+            tab_body_id = tab_ids[i]
+            WebDriverWait(driver, 10).until(
+                EC.presence_of_element_located(
+                    (By.CSS_SELECTOR, f"div.tabBody[data-tab-body='{tab_body_id}'].selected div.mw-parser-output")
+                )
+            )
+
+            soup = BeautifulSoup(driver.page_source, 'html.parser')
+
+            # Scope the search to only the active tab's content for accuracy
+            active_tab_content = soup.select_one(f"div.tabBody[data-tab-body='{tab_body_id}'].selected")
+            if not active_tab_content:
+                logger.warning(f"Could not find content for active tab: {gen_name}")
+                continue
+
+            gen_moves = {}
+
+            # --- 3. Find and parse tables within the active tab's content
+            # Find and parse "Level Up" moves
+            levelup_header = active_tab_content.find("span", id="레벨업으로_배우는_기술")
+            if levelup_header:
+                move_table = levelup_header.find_parent(['h3', 'h4']).find_next_sibling('table')
+                gen_moves['레벨업으로 배우는 기술'] = parse_moves_table(move_table)
+
+            # Find and parse "TM/HM" moves
+            tm_header = active_tab_content.find('span', id='기술/비전머신으로_배우는_기술')
+            if tm_header:
+                move_table = tm_header.find_parent(['h3', 'h4']).find_next_sibling('table')
+                gen_moves['기술머신으로 배우는 기술'] = parse_moves_table(move_table)
+
+            # Find and parse "Taught" moves
+            tm_header = active_tab_content.find('span', id='가르침기술로_배우는_기술')
+            if tm_header:
+                move_table = tm_header.find_parent(['h3', 'h4']).find_next_sibling('table')
+                gen_moves['가르침기술로 배우는 기술'] = parse_moves_table(move_table)
+
+            # Find and parse "Hatched" moves
+            tm_header = active_tab_content.find('span', id='교배로_배우는_기술')
+            if tm_header:
+                move_table = tm_header.find_parent(['h3', 'h4']).find_next_sibling('table')
+                gen_moves['교배로 배우는 기술'] = parse_moves_table(move_table)
+        
+            ## Skip 이벤트로 배우는 기술
+
+            data[gen_name] = gen_moves
+        
+    except (NoSuchElementException, TimeoutException):
+        logger.warning("Could not find or interact with the moveset tabs on the page.")
+    except Exception as e:
+        logger.error(f"An unexpected error occurred during moveset extraction: {e}", exc_info=True)
+
+    logger.info("All moveset Scraping Complete")
     return data
 
 def parse_moves_table(table_element):
@@ -88,10 +150,13 @@ def parse_moves_table(table_element):
 
         if not all_rows:
             return []
-        header_row = inner_table.find("thead").find("tr")
+        header = inner_table.find("thead")
 
-        if not header_row:
-            return [] # if no valid header is found, exit
+        if header:
+            header_row = header.find("tr")
+        else:
+            header_row = all_rows[0]
+            data_start_index = 1
 
         th_tags = header_row.find_all("th", recursive=False)
 
@@ -165,64 +230,3 @@ def parse_moves_table(table_element):
             moves_list.append(move_data)
 
     return moves_list
-
-def scrape_generation_url(gen_name: str, url: str) -> dict:
-    """
-    Worker function: Scrapes all move data from a single generation URL.
-    It creates and destroys its own driver instance.
-    """
-    logger.info(f"Worker starting for URL: {url}")
-    
-    # Each worker needs its own driver
-    options = Options()
-    options.page_load_strategy = 'eager'
-    options.add_argument("--headless") # Headless is best for parallel workers
-    service = Service(os.path.join(DIRECTORY, "chromedriver.exe"))
-    driver = webdriver.Chrome(service=service, options=options)
-    driver.set_page_load_timeout(60)
-    
-    gen_moves = {}
-    try:
-        driver.get(url)
-        # Wait for the main infobox to be present before parsing
-        WebDriverWait(driver, 20).until(
-            EC.presence_of_element_located((By.CSS_SELECTOR, "div.mw-parser-output"))
-        )
-        
-        time.sleep(1) # give a little extra time for JS-heavy elements like movesets to render
-
-        soup = BeautifulSoup(driver.page_source, 'html.parser')
-
-        # Find and parse "Level Up" moves
-        levelup_header = soup.find("span", id="레벨업으로_배우는_기술")
-        if levelup_header:
-            move_table = levelup_header.find_parent(['h3', 'h4']).find_next_sibling('table')
-            gen_moves['레벨업으로 배우는 기술'] = parse_moves_table(move_table)
-
-        # Find and parse "TM/HM" moves
-        tm_header = soup.find('span', id='기술/비전머신으로_배우는_기술')
-        if tm_header:
-            move_table = tm_header.find_parent(['h3', 'h4']).find_next_sibling('table')
-            gen_moves['기술머신으로 배우는 기술'] = parse_moves_table(move_table)
-
-        # Find and parse "Taught" moves
-        tm_header = soup.find('span', id='가르침기술로_배우는_기술')
-        if tm_header:
-            move_table = tm_header.find_parent(['h3', 'h4']).find_next_sibling('table')
-            gen_moves['가르침기술로 배우는 기술'] = parse_moves_table(move_table)
-
-        # Find and parse "Hatched" moves
-        tm_header = soup.find('span', id='교배로_배우는_기술')
-        if tm_header:
-            move_table = tm_header.find_parent(['h3', 'h4']).find_next_sibling('table')
-            gen_moves['교배로 배우는 기술'] = parse_moves_table(move_table)
-        
-        ## Skip 이벤트로 배우는 기술
-
-    except Exception as e:
-        logger.info(f"An error occurred for generation={gen_name}, url={url}: {e}")
-    finally:
-        driver.quit()
-    
-    time.sleep(1) # add a small polite delay
-    return {"generation": gen_name, "moveset": gen_moves}
