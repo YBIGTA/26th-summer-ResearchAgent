@@ -78,6 +78,8 @@ if __name__ == "__main__":
         logger.error(f"Error fetching Pokedex page: {e}")
 
     # --- Handle "Continue From" Feature ---
+    links_to_process = []
+    start_index = 0
     if "--continue_from" in sys.argv:
         try:
             pokemon_name_to_find = sys.argv[sys.argv.index("--continue_from") + 1]
@@ -88,22 +90,26 @@ if __name__ == "__main__":
                 links_to_process = all_pokemon_links[start_index:]
             else:
                 logger.warning(f"Could not find Pokemon '{pokemon_name_to_find}'. Starting from the beginning.")
+                start_index = 0
         except IndexError:
             logger.error("--continue_from requires a Pokemon name. Starting from the beginning.")
+    else:
+        links_to_process = all_pokemon_links
 
     # --- Main Scraping Loop ---
     pokemon_url = None
     init_time = time.time()
 
     try:
+        index = start_index
         total_links = len(all_pokemon_links)
-        for i, link_info in enumerate(all_pokemon_links):
+        for i, link_info in enumerate(links_to_process):
             pokemon_name = link_info['name']
             pokemon_url = link_info['url']
             
             start_time = time.time()
 
-            logger.info(f"[{i+1}/{total_links}] Processing: {pokemon_name}")
+            logger.info(f"[{index+1}/{total_links}] Processing: {pokemon_name}")
 
             # Scrape all data for the Pokémon using the imported function
             pokemon_data = scrape_pokemon_data(driver, pokemon_url)
@@ -122,6 +128,7 @@ if __name__ == "__main__":
                 logger.error(f"Failed to scrape data for {pokemon_name}: Returned no data")
             
             time.sleep(1) # politeness delay
+            index += 1
     except Exception as e:
         logger.error(f'Error fetching URL={pokemon_url}: {e}')
     
