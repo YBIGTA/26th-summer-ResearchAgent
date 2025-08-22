@@ -33,9 +33,10 @@ logging.basicConfig(
     level=logging.INFO,
     format='[%(asctime)s/%(name)s/%(levelname)s] %(message)s',
     handlers=[
-        logging.FileHandler("crawler.log", mode='w'),
+        logging.FileHandler("crawler.log", mode='w', encoding="utf-8"),
         logging.StreamHandler()
-    ]
+    ],
+    encoding="utf-8"
 )
 
 def get_driver() -> WebDriver:
