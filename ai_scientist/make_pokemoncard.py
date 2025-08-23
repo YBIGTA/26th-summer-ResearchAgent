@@ -135,7 +135,7 @@ class PokemonCard:
         }
 
 # JSON 로딩 및 카드 객체 생성
-with open('i_cant_believe_its_not_better.json') as f:
+with open('i_cant_believe_its_not_better_image.json') as f:
     raw = json.load(f)
 cards = [PokemonCard(entry) for entry in raw]
 
@@ -171,5 +171,5 @@ for c in cards:
 # cards 데이터를 JSON으로 저장
 output_data = [c.as_dict() for c in cards]
 
-with open('"ideas/pokemon_cards_output.json', 'w', encoding='utf-8') as f:
+with open('ideas/pokemon_cards_output.json', 'w', encoding='utf-8') as f:
     json.dump(output_data, f, ensure_ascii=False, indent=2)
