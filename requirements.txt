@@ -29,3 +29,4 @@ botocore
 boto3
 sentence_transformers
 accelerate
+PIL
