@@ -130,12 +130,12 @@ class PokemonCard:
             "Retreat Cost": self.retreat,
             "Rarity": self.rarity,
             "Abilities": self.abilities,
-            "Skills": [sk.as_dict() for sk in self.skills],
+            "Skills": [sk.as_dict() for sk in self.skills[:2]],
             "Image": self.image  # 이미지도 함께 저장
         }
 
 # JSON 로딩 및 카드 객체 생성
-with open('i_cant_believe_its_not_better_image.json') as f:
+with open('ideas/i_cant_believe_its_not_better_image.json') as f:
     raw = json.load(f)
 cards = [PokemonCard(entry) for entry in raw]
 
