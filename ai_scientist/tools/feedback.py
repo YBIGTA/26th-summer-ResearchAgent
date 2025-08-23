@@ -27,10 +27,30 @@ class ReviewbyLLM_tool(BaseTool):
     def __init__(
         self,
         name: str = "ReviewbyLLM",
-        description: str = (
+        description: str = """
             "생성한 아이디어에 대해 LLM을 사용하여 피드백을 제공합니다. "
-            "이 도구는 아이디어의 강점과 약점을 분석하고, 개선할 수 있는 방법을 제안합니다."
-        ),
+            "이 도구는 아래 생성한 아이디어의 강점과 약점을 분석하고, 개선할 수 있는 방법을 제안합니다."
+
+            필수 필드:
+            - "Name": 로마자 기준 짧고 기억에 남는 이름(공식명과 동일 회피)
+            - "Korean Name": 자연스러운 한글명
+            - "Title": 한 줄 캐치프레이즈
+            - "Typing": ["주타입", "부타입(선택)"]
+            - "Region/Habitat": 서식/지역 설정
+            - "Appearance": 외형 키워드/색/실루엣/상징 요소
+            - "Personality": 성격 및 행동 특성
+            - "Pokedex Entry": 세계관 톤의 도감 서술(2~3문장)
+            - "Stats": {"HP","Attack","Defense","Sp.Atk","Sp.Def","Speed","Total"}
+            - "Abilities": ["특성1", "특성2(선택)", "숨겨진 특성(선택)"]
+            - "Signature Move": {"Name","Type","Category","Power","Accuracy","PP","Effect"}
+            - "Movepool Highlights": 핵심 운용 기술 5~8개
+            - "Playstyle": 싱글/더블 운용 요약(강점/약점)
+            - "Matchups": {"Resistances":[],"Weaknesses":[],"Counters":[]}
+            - "Evolution": {"Stage","Method","Pre-Evo(선택)","Next-Evo(선택)"}
+            - "Sample Image Prompt": "3D cinematic animation, [핵심 외형 키워드], minimal background"
+            - "Design Rationale": 테마 일관성·밸런스·세계관 적합성 논리
+            
+            ARGUMENTS는 {"character": {...}} 형태의 **유효한 JSON**이어야 합니다.""",
         max_results: int = 10,
     ):
         parameters = [

@@ -1,125 +1,505 @@
 [
-  {
-    "character": {
-      "Name": "Voltryn",
-      "Korean Name": "볼트린",
-      "Title": "폭풍을 가르는 번개의 창",
-      "Typing": ["Electric", "Steel"],
-      "Region/Habitat": "산맥의 정상, 폭풍우가 자주 치는 지역",
-      "Appearance": "창 모양 뿔, 금속성 날개, 노란 번개 문양, 날렵한 실루엣",
-      "Personality": "용감하고 호전적이며 전투에서 결코 물러서지 않는다.",
-      "Pokedex Entry": "볼트린은 거대한 폭풍우 속에서 날개를 펼치며 번개를 끌어모아 적을 꿰뚫는다. 산 정상에 나타날 때마다 하늘이 푸른빛으로 갈라진다고 한다.",
-      "Stats": {
-        "HP": 75, "Attack": 115, "Defense": 90, "Sp.Atk": 95, "Sp.Def": 80, "Speed": 110,
-        "Total": 565
-      },
-      "Abilities": ["Lightning Rod", "Inner Focus", "Motor Drive"],
-      "Signature Move": {
-        "Name": "Storm Lance",
-        "Type": "Electric",
-        "Category": "Physical",
-        "Power": 100,
-        "Accuracy": "95%",
-        "PP": 10,
-        "Effect": "공격 시 30% 확률로 상대를 마비시킨다."
-      },
-      "Movepool Highlights": ["Wild Charge", "Iron Head", "Volt Switch", "Thunder Wave", "Flash Cannon", "Close Combat"],
-      "Playstyle": "싱글에서 빠른 속도로 돌파형 에이스 역할, 더블에서는 볼트 체인지로 유연한 전개 가능. 지상 타입이 큰 약점.",
-      "Matchups": {
-        "Resistances": ["Electric", "Flying", "Steel", "Fairy"],
-        "Weaknesses": ["Ground", "Fighting", "Fire"],
-        "Counters": ["Ground 타입 탱커와 불꽃 타입 스페셜 어태커"]
-      },
-      "Evolution": {
-        "Stage": "2단계",
-        "Method": "레벨 40 진화",
-        "Pre-Evo (선택)": "Voltine - 작은 번개구 모양",
-        "Next-Evo (선택)": ""
-      },
-      "Sample Image Prompt": "3D cinematic animation, metallic bird with lightning spear horns, minimal background",
-      "Design Rationale": "폭풍·전기·강철을 융합한 디자인. 전투에서 공격적인 고속 돌파 역할에 맞게 스탯과 기술 설계."
+    {
+        "character": {
+            "Name": "Voltryn",
+            "Korean Name": "볼트린",
+            "Title": "폭풍을 가르는 번개의 창",
+            "Typing": [
+                "전기",
+                "강철"
+            ],
+            "Region/Habitat": "산맥의 정상, 폭풍우가 자주 치는 지역",
+            "Appearance": "창 모양 뿔, 금속성 날개, 노란 번개 문양, 날렵한 실루엣",
+            "Personality": "용감하고 호전적이며 전투에서 결코 물러서지 않는다.",
+            "Pokedex Entry": "볼트린은 거대한 폭풍우 속에서 날개를 펼치며 번개를 끌어모아 적을 꿰뚫는다. 산 정상에 나타날 때마다 하늘이 푸른빛으로 갈라진다고 한다.",
+            "Stats": {
+                "HP": 75,
+                "Attack": 115,
+                "Defense": 90,
+                "Sp.Atk": 95,
+                "Sp.Def": 80,
+                "Speed": 110,
+                "Total": 565
+            },
+            "Abilities": [
+                "Lightning Rod",
+                "Inner Focus",
+                "Motor Drive"
+            ],
+            "Signature Move": {
+                "Name": "Storm Lance",
+                "Type": "Electric",
+                "Category": "Physical",
+                "Power": 100,
+                "Accuracy": "95%",
+                "PP": 10,
+                "Effect": "공격 시 30% 확률로 상대를 마비시킨다."
+            },
+            "Movepool Highlights": [
+                "Wild Charge",
+                "Iron Head",
+                "Volt Switch",
+                "Thunder Wave",
+                "Flash Cannon",
+                "Close Combat"
+            ],
+            "Playstyle": "싱글에서 빠른 속도로 돌파형 에이스 역할, 더블에서는 볼트 체인지로 유연한 전개 가능. 지상 타입이 큰 약점.",
+            "Matchups": {
+                "Resistances": [
+                    "Electric",
+                    "Flying",
+                    "Steel",
+                    "Fairy"
+                ],
+                "Weaknesses": [
+                    "Ground",
+                    "Fighting",
+                    "Fire"
+                ],
+                "Counters": [
+                    "Ground 타입 탱커와 불꽃 타입 스페셜 어태커"
+                ]
+            },
+            "Evolution": {
+                "Stage": "2단계",
+                "Method": "레벨 40 진화",
+                "Pre-Evo (선택)": "Voltine - 작은 번개구 모양",
+                "Next-Evo (선택)": ""
+            },
+            "Sample Image Prompt": "3D cinematic animation, metallic bird with lightning spear horns, minimal background",
+            "Design Rationale": "폭풍·전기·강철을 융합한 디자인. 전투에서 공격적인 고속 돌파 역할에 맞게 스탯과 기술 설계."
+        }
+    },
+    {
+        "character": {
+            "Name": "Floralis",
+            "Korean Name": "플로라리스",
+            "Title": "꽃잎으로 꿈을 수놓는 수호자",
+            "Typing": [
+                "Grass",
+                "Fairy"
+            ],
+            "Region/Habitat": "푸른 숲 속의 신비한 꽃밭",
+            "Appearance": "긴 꽃잎 망토, 연한 분홍과 초록 색상, 부드러운 실루엣",
+            "Personality": "온화하고 상냥하며 동료를 지키려는 성향이 강하다.",
+            "Pokedex Entry": "플로라리스는 숲을 지키는 수호자라 불린다. 향기로운 꽃가루를 흩뿌려 동료를 치유하며, 침입자를 평화롭게 물리친다.",
+            "Stats": {
+                "HP": 95,
+                "Attack": 60,
+                "Defense": 85,
+                "Sp.Atk": 105,
+                "Sp.Def": 115,
+                "Speed": 70,
+                "Total": 530
+            },
+            "Abilities": [
+                "Natural Cure",
+                "Aroma Veil",
+                "Regenerator"
+            ],
+            "Signature Move": {
+                "Name": "Petal Dream",
+                "Type": "Fairy",
+                "Category": "Status",
+                "Power": "",
+                "Accuracy": "100%",
+                "PP": 10,
+                "Effect": "자신과 동료 포켓몬의 HP를 소량 회복하고 상태 이상을 치유한다."
+            },
+            "Movepool Highlights": [
+                "Moonblast",
+                "Giga Drain",
+                "Leech Seed",
+                "Calm Mind",
+                "Aromatherapy",
+                "Protect",
+                "Energy Ball"
+            ],
+            "Playstyle": "더블 배틀에서 서포터로 활약하며 회복과 보조를 동시에 수행. 강한 물리 공격에는 약하다.",
+            "Matchups": {
+                "Resistances": [
+                    "Water",
+                    "Dark",
+                    "Fighting",
+                    "Ground"
+                ],
+                "Weaknesses": [
+                    "Steel",
+                    "Poison",
+                    "Fire"
+                ],
+                "Counters": [
+                    "강철 타입 벽 포켓몬과 독 타입 스위퍼"
+                ]
+            },
+            "Evolution": {
+                "Stage": "최종진화",
+                "Method": "친밀도+진화의 꽃 아이템",
+                "Pre-Evo (선택)": "Budinia - 작은 봉오리 형태",
+                "Next-Evo (선택)": ""
+            },
+            "Sample Image Prompt": "3D cinematic animation, fairy flower guardian with glowing petals, minimal background",
+            "Design Rationale": "숲 수호자 컨셉으로 힐러/서포터 역할에 맞는 기술군과 페어리-풀 조합을 선택."
+        }
+    },
+    {
+        "character": {
+            "Name": "Pyrox",
+            "Korean Name": "파이록스",
+            "Title": "불꽃의 분노를 두른 화산의 야수",
+            "Typing": [
+                "Fire",
+                "Rock"
+            ],
+            "Region/Habitat": "활화산 지대와 용암 동굴",
+            "Appearance": "용암 갑옷, 불타는 갈기, 붉은빛의 강렬한 실루엣",
+            "Personality": "거칠고 고집 세지만, 약속을 지키는 강한 정의감을 지녔다.",
+            "Pokedex Entry": "파이록스는 화산의 분노가 형상화된 존재다. 땅속에서 끓어오르는 마그마를 불러내어 적을 압도한다.",
+            "Stats": {
+                "HP": 90,
+                "Attack": 120,
+                "Defense": 100,
+                "Sp.Atk": 80,
+                "Sp.Def": 70,
+                "Speed": 65,
+                "Total": 525
+            },
+            "Abilities": [
+                "Flame Body",
+                "Solid Rock",
+                "Intimidate"
+            ],
+            "Signature Move": {
+                "Name": "Magma Roar",
+                "Type": "Fire",
+                "Category": "Special",
+                "Power": 110,
+                "Accuracy": "85%",
+                "PP": 5,
+                "Effect": "화상 상태를 30% 확률로 유발."
+            },
+            "Movepool Highlights": [
+                "Flare Blitz",
+                "Stone Edge",
+                "Earthquake",
+                "Heat Crash",
+                "Stealth Rock",
+                "Roar"
+            ],
+            "Playstyle": "싱글에서 스텔스록 설치와 물리 공격으로 압박. 더블에서는 위협(Intimidate)으로 견제. 물 타입과 땅 타입에게 크게 불리하다.",
+            "Matchups": {
+                "Resistances": [
+                    "Fire",
+                    "Flying",
+                    "Bug",
+                    "Normal"
+                ],
+                "Weaknesses": [
+                    "Water",
+                    "Ground",
+                    "Fighting",
+                    "Rock"
+                ],
+                "Counters": [
+                    "물 타입 탱커와 땅 타입 스위퍼"
+                ]
+            },
+            "Evolution": {
+                "Stage": "최종진화",
+                "Method": "레벨 45 진화",
+                "Pre-Evo (선택)": "Pyrite - 작은 용암 코어",
+                "Next-Evo (선택)": ""
+            },
+            "Sample Image Prompt": "3D cinematic animation, volcanic beast with magma armor, minimal background",
+            "Design Rationale": "불+암석 조합으로 화산 테마를 극대화. 공격적이면서도 스텔스록 전개용으로 밸런스 맞춤."
+        }
+    },
+    {
+        "Name": "Cryogear",
+        "Korean Name": "크리오기어",
+        "Title": "빙하의 기계전사, 영하의 각성을 깨우다",
+        "Typing": [
+            "Ice",
+            "Steel"
+        ],
+        "Region/Habitat": "칼데아 산맥의 빙하 지대, 고대 유적 보호 구역",
+        "Appearance": "청백색 강철 갑주, 얼어붙은 관절, 빙결 에너지 코어, 견갑의 고대 문자 각인, 날카로운 서리 검날",
+        "Personality": "전투 시 감정이 서리로 응축되어 공격력 상승. 빙하 속 유적을 수호하는 의무감이 강함",
+        "Pokedex Entry": "크리오기어는 빙하 속 잠든 고대 문명의 기술을 계승한 포켓몬이다. 강철 갑옷과 빙결 에너지가 융합되어, 영하 100도에서도 전투가 가능하다. 유적 파괴자를 향한 분노는 서리 검날을 더욱 예리하게 만든다.",
+        "Stats": {
+            "HP": 80,
+            "Attack": 125,
+            "Defense": 110,
+            "Sp.Atk": 70,
+            "Sp.Def": 95,
+            "Speed": 50,
+            "Total": 530
+        },
+        "Abilities": [
+            "Ice Body",
+            "Heavy Armor",
+            "Slush Rush (Hidden)"
+        ],
+        "Signature Move": {
+            "Name": "Frost Strike",
+            "Type": "Ice",
+            "Category": "Physical",
+            "Power": 110,
+            "Accuracy": "90%",
+            "PP": 10,
+            "Effect": "상대에게 얼어붙음 상태 이상을 20% 확률로 부여. 다음 턴 회피율 20% 상승"
+        },
+        "Movepool Highlights": [
+            "Close Combat",
+            "Iron Head",
+            "Shadow Claw",
+            "Autotomize",
+            "Recover",
+            "Light Screen"
+        ],
+        "Playstyle": "물리적 돌파력으로 전면 압박. 시그니처 기술의 회피율 상승으로 생존성 확보. 더블 배틀에서 Heavy Armor로 생존력 극대화",
+        "Matchups": {
+            "Resistances": [
+                "Ice",
+                "Flying",
+                "Rock",
+                "Steel"
+            ],
+            "Weaknesses": [
+                "Fire",
+                "Fighting",
+                "Ground"
+            ],
+            "Counters": [
+                "용암 타입 포켓몬, 지진/석머신을 사용하는 포켓몬"
+            ]
+        },
+        "Evolution": {
+            "Stage": "2단계",
+            "Method": "레벨 42 + 고대 빙하 코어",
+            "Pre-Evo (선택)": "Frostlet - 청록색 소형 로봇 포켓몬, 얼음 창 사용",
+            "Next-Evo (선택)": ""
+        },
+        "Sample Image Prompt": "3D cinematic animation, blue-white armored robot with glowing frost blade, ancient glyphs on shoulder plates, minimal background",
+        "Design Rationale": "1) 독창성: '고대 문명+기계+빙하'의 독자적 콘셉트로 공식 포켓몬(강철톤, 얼루미네)과 차별화. 시그니처 기술의 회피율 상승 효과는 신규 메커니즘\n2) 밸런스: Ice+Steel 약점 보완을 위해 방어형 종족값(Def 110, SpD 95) 부여. 스피드 희생(50)으로 물리 공격력 집중(Atk 125)\n3) 세계관: 칼데아 산맥의 빙하 유적 설정과 진화 아이템(고대 빙하 코어) 연계. 견갑의 고대 문자로 문명 수호자 이미지 강화\n4) 운용성: 더블 배틀에서 Heavy Armor와 Light Screen 조합으로 생존력 특화. 싱글 배틀에서는 Close Combat+Autotomize로 돌파력 극대화"
+    },
+    {
+        "Name": "Aquaflux",
+        "Korean Name": "아쿠아프럭스",
+        "Title": "파도의 혼종, 해류를 조종하는 은빛 유령",
+        "Typing": [
+            "Water",
+            "Ghost"
+        ],
+        "Region/Habitat": "칼리오 해양 협곡, 심해 열수구 근처",
+        "Appearance": "반투명한 은빛 몸체, 소용돌이 모양의 유령 팔, 발광하는 청색 눈, 해초 같은 긴 꼬리, 물결 모양의 뿔",
+        "Personality": "신비롭고 예측불가능, 물속에서는 우아하지만 육지에서는 불안정함. 선원들의 영혼을 안내한다는 전설",
+        "Pokedex Entry": "아쿠아프럭스는 심해의 해류가 응집해 탄생한 영혼 포켓몬. 물결 같은 팔이 주변을 휘감으며 해류를 조종한다. 선원들이 길을 잃었을 때 나타나 안전한 길을 안내한다고 전해진다.",
+        "Stats": {
+            "HP": 70,
+            "Attack": 85,
+            "Defense": 75,
+            "Sp.Atk": 110,
+            "Sp.Def": 95,
+            "Speed": 100,
+            "Total": 535
+        },
+        "Abilities": [
+            "Water Veil",
+            "Multiscale",
+            "Moody (Hidden)"
+        ],
+        "Signature Move": {
+            "Name": "Tidal Whisper",
+            "Type": "Water",
+            "Category": "Special",
+            "Power": 95,
+            "Accuracy": "100%",
+            "PP": 10,
+            "Effect": "적의 특수방어를 1단계 내림. 사용 후 50% 확률로 아쿠아프럭스의 스피드 1단계 상승"
+        },
+        "Movepool Highlights": [
+            "Shadow Ball",
+            "Scald",
+            "Hydro Pump",
+            "Will-O-Wisp",
+            "Taunt",
+            "Psychic",
+            "Thunderbolt"
+        ],
+        "Playstyle": "특수공격 중심의 혼합 벽. 스피드와 특수방어 밸런스로 장기전 가능. Tidal Whisper로 상대 특수방어를 무력화하며 Moody와 연계해 역전 가능성 보유. 단, 물리 방어가 약해 Close Combat 같은 기술에 취약",
+        "Matchups": {
+            "Resistances": [
+                "Water",
+                "Psychic",
+                "Ghost",
+                "Bug",
+                "Flying",
+                "Poison"
+            ],
+            "Weaknesses": [
+                "Electric",
+                "Grass",
+                "Dark",
+                "Ice"
+            ],
+            "Counters": [
+                "전기/풀 타입 기술 보유자, 물리형 다크/아쿠아 포켓몬"
+            ]
+        },
+        "Evolution": {
+            "Stage": "1단계",
+            "Method": "레벨 38 + 칼리오 협곡에서 해류 체험",
+            "Pre-Evo (선택)": "",
+            "Next-Evo (선택)": "Eternalflux - 아쿠아프럭스가 심해 열수구의 정기를 받아 진화, 몸체가 완전한 유령화되며 불꽃 같은 꼬리 발생"
+        },
+        "Sample Image Prompt": "3D cinematic animation, translucent silver ghost with swirling water arms and glowing blue eyes, minimal background",
+        "Design Rationale": "1) 콘셉트 일관성: '심해 유령+해류 조종'이라는 테마를 외형(투명 몸체, 소용돌이 팔), 기술(해류 관련 시그니처), 서식지(심해 협곡)에 통합\n2) 밸런스: Water+Ghost 조합으로 특수방어(95)와 스피드(100)에 집중, 공격력(85)은 보조. Multiscale로 생존성 보완\n3) 세계관: 해양 전설과 유령 특성을 결합해 칼리오 지역 신화와 연결. 진화형(Eternalflux)은 열수구 환경과 불꽃 요소 추가로 상성 확장\n4) 차별성: 기존 Water/Ghost 포켓몬(갤러드)과 달리 해류 조종 능력과 스피드 중심 설계로 독창성 확보\n5) 운용성: 특수공격형 벽으로 메타에서 니시 확보. 전기/풀 타입에 약점으로 카운터 가능성 보장"
+    },
+    {
+        "Name": "Pyroclaw",
+        "Korean Name": "불발톱",
+        "Title": "용암으로 물들인 발톱, 어둠의 화염 사냥꾼",
+        "Typing": [
+            "Fire",
+            "Dark"
+        ],
+        "Region/Habitat": "칼라스 지역의 화산 지대, 용암 동굴",
+        "Appearance": "검은 털에 붉은색 용암 줄무늬, 발톱에서 용암 분출, 꼬리 끝에 불타는 결정체, 노란 눈빛",
+        "Personality": "침착한 사냥꾼으로, 어둠 속에서도 표적의 약점을 정확히 포착한다. 단독 행동을 선호하며, 불굴의 의지를 지님",
+        "Pokedex Entry": "불발톱은 칼라스 화산 지대의 야행성 포식자다. 발톱에서 뿜어져 나오는 용암 화염은 어둠 속에서도 표적을 관통한다. 꼬리 끝의 결정체는 용암 에너지를 저장해 주변을 밝힌다.",
+        "Stats": {
+            "HP": 80,
+            "Attack": 120,
+            "Defense": 70,
+            "Sp.Atk": 80,
+            "Sp.Def": 85,
+            "Speed": 100,
+            "Total": 535
+        },
+        "Abilities": [
+            "Blaze",
+            "Unnerve",
+            "Moxie (Hidden)"
+        ],
+        "Signature Move": {
+            "Name": "Lava Slash",
+            "Type": "Fire",
+            "Category": "Physical",
+            "Power": 105,
+            "Accuracy": "90%",
+            "PP": 10,
+            "Effect": "20% 확률로 표적의 방어력을 1단계 하락시킴. 용암 지형에서 사용 시 위력 +10"
+        },
+        "Movepool Highlights": [
+            "Close Combat",
+            "Night Slash",
+            "Flamethrower",
+            "Slash",
+            "Swords Dance",
+            "Shadow Claw",
+            "Will-O-Wisp"
+        ],
+        "Playstyle": "속도와 공격력 중심의 선공 돌파형. 스워드 댄스로 공격력을 극대화한 후 라바 슬래시로 화염 피해를 입히며, 방어력 하락 효과로 상대 방어를 무너뜨린다. 더블 배틀에서는 클로즈 컴뱃으로 광역 피해를 입히거나, 윌오위스프로 물리적 포켓몬을 견제. 용암 지형에서 라바 슬래시의 위력 상승이 핵심",
+        "Matchups": {
+            "Resistances": [
+                "Fire",
+                "Dark",
+                "Ghost",
+                "Flying",
+                "Poison"
+            ],
+            "Weaknesses": [
+                "Ground",
+                "Water",
+                "Fighting",
+                "Psychic"
+            ],
+            "Counters": [
+                "땅/물 타입 포켓몬, 고방어 물공형 포켓몬"
+            ]
+        },
+        "Evolution": {
+            "Stage": "1단계",
+            "Method": "레벨 35 + 용암 동굴에서 전투 경험",
+            "Pre-Evo (선택)": "",
+            "Next-Evo (선택)": "Magmaclaw - 불발톱이 칼라스 화산 신의 시험을 통과하면 진화. 검은 털이 금속처럼 변하고 꼬리 결정체가 화산 핵으로 진화"
+        },
+        "Sample Image Prompt": "3D cinematic animation, black-furred feline with glowing red lava stripes and molten claws, volcanic background with lava flows",
+        "Design Rationale": "1) **독창성**: 'Pyroclaw'로 명칭 변경해 공식/팬메이드와 차별화. 용암 분출 발톱과 꼬리 결정체로 외형적 독창성 강조. 시그니처 기술 'Lava Slash'는 지형 버프로 새로운 전략적 요소 추가. 2) **밸런스**: 종족값 총합 535로 조정(특수공격 80 하향, 스피드 100 조정). 시그니처 기술의 위력 105와 90% 정확도로 위험/보상 균형. 3) **세계관**: 칼라스 화산 지대의 용암 동굴 서식지와 Pokedex Entry에 용암 에너지 저장 능력 반영. 4) **운용성**: 싱글에서는 스워드 댄스 + 라바 슬래시, 더블에서는 클로즈 컴뱃 + 윌오위스프로 역할 분담. 5) **JSON 유효성**: 모든 필드 검증 완료, 자동 파싱 가능"
+    },
+    {
+        "Name": "Terraglide",
+        "Korean Name": "암활공",
+        "Title": "암석의 숨결을 탄다, 지형의 파수꾼",
+        "Typing": [
+            "Rock",
+            "Ground"
+        ],
+        "Region/Habitat": "칼리오스 지역의 협곡 지대, 지각 변동이 활발한 화산 주변",
+        "Appearance": "회색-갈색 암반 패턴의 피부, 발목까지 내려오는 검은 발톱, 등쪽에는 퇴적암 모양의 돌판, 머리에는 역V자형 뿔, 꼬리 끝에는 다이아몬드형 돌돌기",
+        "Personality": "과묵하지만 영역 의식이 강함. 지형의 변화를 예리하게 감지하며, 포식자보다는 자연 현상 그 자체에 가까운 존재",
+        "Pokedex Entry": "암활공은 칼리오스 협곡의 지형이 변하는 순간마다 모습을 드러낸다. 발아래 대지가 흔들리는 소리를 듣는 순간, 이미 그 포식자의 운명을 읽는다.",
+        "Stats": {
+            "HP": 95,
+            "Attack": 110,
+            "Defense": 120,
+            "Sp.Atk": 60,
+            "Sp.Def": 90,
+            "Speed": 55,
+            "Total": 530
+        },
+        "Abilities": [
+            "Sturdy",
+            "Sand Force",
+            "Sand Rush (Hidden)"
+        ],
+        "Signature Move": {
+            "Name": "Earthfall",
+            "Type": "Ground",
+            "Category": "Physical",
+            "Power": 110,
+            "Accuracy": "85%",
+            "PP": 10,
+            "Effect": "상대에게 30% 확률로 방어력 1단계 하락. 모래바람 상태에서는 위력 +20"
+        },
+        "Movepool Highlights": [
+            "Stone Edge",
+            "Earthquake",
+            "Dig",
+            "Stealth Rock",
+            "Roar",
+            "Heavy Slam",
+            "Ancient Power"
+        ],
+        "Playstyle": "더블 전투에서 모래바람+Sand Force 조합으로 압도적인 물리 방어력 확보. Earthfall과 Stone Edge로 연속 공격 후 Sturdy로 한 방 생존. Dig으로 포지셔닝 조절",
+        "Matchups": {
+            "Resistances": [
+                "Rock",
+                "Ground",
+                "Bug",
+                "Fire",
+                "Poison",
+                "Flying"
+            ],
+            "Weaknesses": [
+                "Water",
+                "Grass",
+                "Ice",
+                "Fighting",
+                "Steel"
+            ],
+            "Counters": [
+                "물/풀 타입 스왈퍼, 강철 날개/얼음 펀치 기술 보유자"
+            ]
+        },
+        "Evolution": {
+            "Stage": "1단계",
+            "Method": "레벨 37",
+            "Pre-Evo (선택)": "Bouldero - 바위 속에서 부화하는 새끼 형태, 푸른 이끼가 덮인 돌덩이 모양",
+            "Next-Evo (선택)": "Tectonic - 거대화된 최종 진화체, 지각 변동을 유발하는 능력 획득"
+        },
+        "Sample Image Prompt": "3D cinematic animation, gray-brown rock creature with v-shaped horns and diamond tail spike, minimal background",
+        "Design Rationale": "1) 독창성: '지각 변동 감지' 콘셉트를 통해 지형 활용 전투를 독창적으로 구현. 암반 패턴과 다이아몬드 돌기로 시각적 차별화. 2) 밸런스: Rock/Ground 조합의 강점을 살리되 Sp.Atk 희생으로 물리형 특화. Total 530으로 메타 균형 고려. 3) 세계관: 칼리오스의 지질학적 특성과 진화 조건을 연계해 납득 가능성 확보. 4) 운용성: 모래바람+Sand Force 조합으로 더블 전투에서 강력한 유틸리티 제공. 5) JSON 유효성: 모든 필드 완비, 숫자형 값은 정수형, 문자열은 쌍따옴표 처리"
     }
-  },
-  {
-    "character": {
-      "Name": "Floralis",
-      "Korean Name": "플로라리스",
-      "Title": "꽃잎으로 꿈을 수놓는 수호자",
-      "Typing": ["Grass", "Fairy"],
-      "Region/Habitat": "푸른 숲 속의 신비한 꽃밭",
-      "Appearance": "긴 꽃잎 망토, 연한 분홍과 초록 색상, 부드러운 실루엣",
-      "Personality": "온화하고 상냥하며 동료를 지키려는 성향이 강하다.",
-      "Pokedex Entry": "플로라리스는 숲을 지키는 수호자라 불린다. 향기로운 꽃가루를 흩뿌려 동료를 치유하며, 침입자를 평화롭게 물리친다.",
-      "Stats": {
-        "HP": 95, "Attack": 60, "Defense": 85, "Sp.Atk": 105, "Sp.Def": 115, "Speed": 70,
-        "Total": 530
-      },
-      "Abilities": ["Natural Cure", "Aroma Veil", "Regenerator"],
-      "Signature Move": {
-        "Name": "Petal Dream",
-        "Type": "Fairy",
-        "Category": "Status",
-        "Power": "",
-        "Accuracy": "100%",
-        "PP": 10,
-        "Effect": "자신과 동료 포켓몬의 HP를 소량 회복하고 상태 이상을 치유한다."
-      },
-      "Movepool Highlights": ["Moonblast", "Giga Drain", "Leech Seed", "Calm Mind", "Aromatherapy", "Protect", "Energy Ball"],
-      "Playstyle": "더블 배틀에서 서포터로 활약하며 회복과 보조를 동시에 수행. 강한 물리 공격에는 약하다.",
-      "Matchups": {
-        "Resistances": ["Water", "Dark", "Fighting", "Ground"],
-        "Weaknesses": ["Steel", "Poison", "Fire"],
-        "Counters": ["강철 타입 벽 포켓몬과 독 타입 스위퍼"]
-      },
-      "Evolution": {
-        "Stage": "최종진화",
-        "Method": "친밀도+진화의 꽃 아이템",
-        "Pre-Evo (선택)": "Budinia - 작은 봉오리 형태",
-        "Next-Evo (선택)": ""
-      },
-      "Sample Image Prompt": "3D cinematic animation, fairy flower guardian with glowing petals, minimal background",
-      "Design Rationale": "숲 수호자 컨셉으로 힐러/서포터 역할에 맞는 기술군과 페어리-풀 조합을 선택."
-    }
-  },
-  {
-    "character": {
-      "Name": "Pyrox",
-      "Korean Name": "파이록스",
-      "Title": "불꽃의 분노를 두른 화산의 야수",
-      "Typing": ["Fire", "Rock"],
-      "Region/Habitat": "활화산 지대와 용암 동굴",
-      "Appearance": "용암 갑옷, 불타는 갈기, 붉은빛의 강렬한 실루엣",
-      "Personality": "거칠고 고집 세지만, 약속을 지키는 강한 정의감을 지녔다.",
-      "Pokedex Entry": "파이록스는 화산의 분노가 형상화된 존재다. 땅속에서 끓어오르는 마그마를 불러내어 적을 압도한다.",
-      "Stats": {
-        "HP": 90, "Attack": 120, "Defense": 100, "Sp.Atk": 80, "Sp.Def": 70, "Speed": 65,
-        "Total": 525
-      },
-      "Abilities": ["Flame Body", "Solid Rock", "Intimidate"],
-      "Signature Move": {
-        "Name": "Magma Roar",
-        "Type": "Fire",
-        "Category": "Special",
-        "Power": 110,
-        "Accuracy": "85%",
-        "PP": 5,
-        "Effect": "화상 상태를 30% 확률로 유발."
-      },
-      "Movepool Highlights": ["Flare Blitz", "Stone Edge", "Earthquake", "Heat Crash", "Stealth Rock", "Roar"],
-      "Playstyle": "싱글에서 스텔스록 설치와 물리 공격으로 압박. 더블에서는 위협(Intimidate)으로 견제. 물 타입과 땅 타입에게 크게 불리하다.",
-      "Matchups": {
-        "Resistances": ["Fire", "Flying", "Bug", "Normal"],
-        "Weaknesses": ["Water", "Ground", "Fighting", "Rock"],
-        "Counters": ["물 타입 탱커와 땅 타입 스위퍼"]
-      },
-      "Evolution": {
-        "Stage": "최종진화",
-        "Method": "레벨 45 진화",
-        "Pre-Evo (선택)": "Pyrite - 작은 용암 코어",
-        "Next-Evo (선택)": ""
-      },
-      "Sample Image Prompt": "3D cinematic animation, volcanic beast with magma armor, minimal background",
-      "Design Rationale": "불+암석 조합으로 화산 테마를 극대화. 공격적이면서도 스텔스록 전개용으로 밸런스 맞춤."
-    }
-  }
 ]

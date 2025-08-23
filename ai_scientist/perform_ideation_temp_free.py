@@ -1,7 +1,8 @@
 import argparse
 import json
 import os.path as osp
-import re
+import os
+import re ,unicodedata
 import regex
 import traceback
 from typing import Any, Dict, List
@@ -16,12 +17,16 @@ sys.path.append(osp.join(osp.dirname(__file__), ".."))
 from ai_scientist.llm import (
     AVAILABLE_LLMS,
     create_client,
+    create_embed_client,
     get_response_from_llm,
     extract_json_object,
 )
+from ai_scientist.perform_poke_review import perform_review,save_review_result
 
 from ai_scientist.tools.feedback import ReviewbyLLM_tool
 from ai_scientist.tools.base_tool import BaseTool
+
+ALLOWED = {"finalizecharacter": "FinalizeCharacter", "reviewbyllm": "ReviewbyLLM"}
 
 # Create tool instances
 ReviewbyLLM_tool = ReviewbyLLM_tool()
@@ -92,13 +97,13 @@ system_prompt = f"""당신은 ‘포켓몬 캐릭터 생성자’ 페르소나�
 {tool_descriptions}
 
 응답 형식은 아래를 따릅니다.
+무조건 ACTION 다음으로 ARGUMENTS가 응답되어야 합니다.
 
 ACTION:
 <{tool_names_str} 중 정확히 하나>
 
 ARGUMENTS:
-<Action이 "FinalizeCharacter"라면, 캐릭터 세부 정보를 {{"character": {{ ... }}}} 형태의 JSON으로 제공합니다. 
-Action이 "SearchPokedex"와 같은 검색이라면, {{ "query": "검색어" }} 형태로 제공합니다.>
+<캐릭터 세부 정보를 {{"character": {{ ... }}}} 형태의 JSON으로 제공합니다. 
 
 최종 확정을 선택하는 경우, 다음 JSON 스키마를 사용하세요:
 
@@ -165,16 +170,6 @@ idea_generation_prompt = """{workshop_description}
 - 타입/특성/기술/종족값(Stats) 밸런스의 합리적 근거 제시
 - 세계관 톤의 Pokedex Entry(2~3문장) 포함
 - ACTION/ARGUMENTS 형식을 준수
-- 필요하면 다음 라운드에서 "SearchPokedex"로 유사 사례를 점검할 준비
-
-응답은 반드시 아래 형식을 따릅니다.
-
-ACTION:
-<"SearchPokedex" 또는 "FinalizeCharacter" 중 하나>
-
-ARGUMENTS:
-<Action이 "FinalizeCharacter"라면 { "character": { ... } } 형태의 유효한 JSON 제공.
-Action이 "SearchPokedex"라면 { "query": "검색어" } 제공.>
 """
 
 # Define the reflection prompt
@@ -187,7 +182,7 @@ idea_reflection_prompt = """라운드 {current_round}/{num_reflections}
 - **운용성**: 싱글/더블에서의 역할이 명확하고 카운터/대응 수단 정의
 - **JSON 유효성**: 스키마/키/값 타입·누락 항목 점검 (자동 파싱 가능해야 함)
 
-가능하면 초중반 라운드에서 **"SearchPokedex"**를 사용해 유사 사례를 확인하고,
+가능하면 초중반 라운드에서 **"ReviewbyLLM"**를 사용해 유사 사례를 확인하고,
 충돌 요소(명칭/콘셉트/시그니처 기술)를 조정하세요.
 너무 복잡하게 만들지 말고 핵심 테마를 중심으로 정제합니다.
 명백한 문제가 없다면 원 아이디어의 정신은 유지하되 디테일을 다듬으세요.
@@ -206,44 +201,88 @@ def similarity_check(embedmodel,arguments_text,log_callback,idea_fname,idea_fnam
         content=f.read()
         matches = regex.findall(r'\{(?:[^{}]|(?R))*\}', content, flags=regex.DOTALL)
         ideas= [match.strip() for match in matches]
-    with open(idea_fname2, "r",encoding="utf-8") as f:
-        content2=f.read()
-        matches2 = regex.findall(r'\{(?:[^{}]|(?R))*\}', content2, flags=regex.DOTALL)
-        for match in matches2:
-            ideas.append(match.strip())
+    # with open(idea_fname2, "r",encoding="utf-8") as f:
+    #     content2=f.read()
+    #     matches2 = regex.findall(r'\{(?:[^{}]|(?R))*\}', content2, flags=regex.DOTALL)
+    #     for match in matches2:
+    #         ideas.append(match.strip())
             
     def extract_fields(text):
-        fields=["Title","Short Hypothesis","Related Work","Abstract","Experiments","Risk Factors and Limitations"]
-        extracked=[]
-        for field in fields:
-            match = re.search(rf'"{field}"\s*:\s*"([^"]+)"', text)
-            if match:
-                extracked.append(match.group(1).strip())
-        return "".join(extracked)
-    def get_embedding(text):
-        pretext = extract_fields(text)
-        embedding= embedmodel.encode(pretext)
-        return np.array(embedding).reshape(1, -1)
+        fields = [
+        "Name","Korean Name","Title","Typing","Region/Habitat","Appearance",
+        "Personality","Pokedex Entry","Stats","Abilities","Signature Move",
+        "Movepool Highlights","Playstyle","Matchups","Evolution",
+        "Sample Image Prompt","Design Rationale"
+        ]
     
+        # JSON 파싱 시도
+        try:
+            obj = json.loads(text)
+            if "character" in obj:  # {"character": {...}} 형태
+                obj = obj["character"]
+            parts = []
+            for f in fields:
+                if f in obj:
+                    v = obj[f]
+                    # 배열/객체도 문자열로 요약
+                    if isinstance(v, (dict, list)):
+                        parts.append(json.dumps(v, ensure_ascii=False, separators=(",",":")))
+                    else:
+                        parts.append(str(v))
+            return " ".join(parts).strip()
+        except Exception:
+            pass
+    
+        # 백업: 기존 정규식(문자열 필드만)
+        parts = []
+        for field in fields:
+            m = re.search(rf'"{field}"\s*:\s*"([^"]+)"', text)
+            if m: parts.append(m.group(1).strip())
+        return " ".join(parts).strip()
+        
+    def get_embedding(text: str):
+    # 필드 요약 추출
+        pretext = extract_fields(text)
+        if not pretext:               # 비면 전체 본문 사용 (최소 방어)
+            pretext = text
+    
+        # ★ 정규화 사용 → 코사인 유사도 안정
+        vec = embedmodel.encode(
+            pretext,
+            convert_to_numpy=True,
+            normalize_embeddings=True  # 중요!
+        )
+        return np.asarray(vec, dtype=np.float32).reshape(1, -1)
+
+
+    # 아이디어 텍스트에 불필요한 프리픽스 제거 (동일 전처리 보장)
+    def idea_text_clean(s: str) -> str:
+        return s  # "idea: ..." 같은 접두어 붙이지 않기
+
     user_embedding = get_embedding(arguments_text)
-    best_score = -1
-    worst_score = 1
+
+    best_score = -1.0
+    worst_score = 1.0
     best_idea = None
-    k=0
+    k = 0
+
     for idea in ideas:
-        k+=1
-        idea_text=f"idea: {idea}"
+        k += 1
+        idea_text = idea_text_clean(idea)
         idea_embedding = get_embedding(idea_text)
-        score = cosine_similarity(user_embedding, idea_embedding)[0][0]
+
+        # 정규화했으므로 cosine ∈ [-1, 1], 보통 0~1 근처로 안정화됨
+        score = float(cosine_similarity(user_embedding, idea_embedding)[0][0])
+
         if score > best_score:
             best_score = score
             best_idea = idea_text
         if score < worst_score:
             worst_score = score
-            
+
     log_callback(f"Similarity check: {k} ideas checked, best score: {best_score}, worst score: {worst_score}")
     return best_score
-    
+
 
 def _strip_markdown_decorations(t: str) -> str:
     # 굵게/기울임/머리글 같은 장식 최소 제거
@@ -367,25 +406,58 @@ def _extract_args_object(arg_region: str) -> Dict[str, Any]:
     # 5) 폴백
     return {"character": {"Name": "unparsed", "Korean Name": "UNPARSED", "Pokedex Entry": arg_region[:1500]}}
 
+def normalize_action(s: str) -> str | None:
+    if s is None:
+        return None
+    s = str(s)
+
+    # 유니코드 정규화
+    s = unicodedata.normalize("NFKC", s)
+
+    # 앞뒤 공백/개행 제거
+    s = s.strip()
+
+    # 흔한 마크다운/장식 제거: 따옴표, 백틱, 별표, 밑줄
+    s = s.strip('"\''" `*_")
+
+    # 제로폭/비가시 문자 제거
+    s = re.sub(r"[\u200B-\u200D\uFEFF]", "", s)
+
+    # 라인 끝 캐리지리턴 제거
+    s = s.rstrip("\r")
+
+    return s
+
+def canonicalize_action(action_raw: str) -> str:
+    cleaned = normalize_action(action_raw)
+    key = (cleaned or "").lower()
+    return ALLOWED.get(key, "FinalizeCharacter")  # 폴백
+
+
 def parse_tool_call(text: str) -> Tuple[str, Dict[str, Any]]:
     """
     항상 (action, arguments_dict) 반환.
     실패해도 FinalizeCharacter와 폴백 딕트를 돌려 파이프라인이 계속 진행되도록 한다.
     """
-    if not text:
-        return "FinalizeCharacter", {"character": {"Name": "empty", "Korean Name": "EMPTY_RESPONSE", "Pokedex Entry": ""}}
-
+    
 
     t = _strip_markdown_decorations(text)
 
     # 마지막 Action 라인 채택
     action = None
+    args_obj=None
     for m in re.finditer(r"^[ \t]*Action:[ \t]*([A-Za-z_][A-Za-z0-9_]*)[ \t]*$", t, flags=re.M):
         action = m.group(1)
 
+    if action == '**"FinalizeCharacter"**':
+        action = "FinalizeCharacter"
+    elif action == '**"ReviewbyLLM"**':
+        action = "ReviewbyLLM"
+
+
     # Arguments 영역 파싱
     arg_region = _extract_args_region(t)
-    args_obj = _extract_args_object(arg_region)
+    #args_obj = _extract_args_object(arg_region)
 
     return action, args_obj
 
@@ -426,6 +498,7 @@ def generate_temp_free_idea(
             sim= 0
             review=0
             for reflection_round in range(num_reflections):
+                print("reflection_round",reflection_round)
                 if reflection_round == 0:
                     # Use the initial idea generation prompt
                     prompt_text = idea_generation_prompt.format(
@@ -469,9 +542,9 @@ def generate_temp_free_idea(
                     if not all([action, arguments_text]):
                         raise ValueError("Failed to parse the LLM response.")
 
-                    
+                    action = canonicalize_action(action)
+
                     print(f"Action: {action}")
-                    print(f"Arguments: {arguments_text}")
                     arguments_text=f"{arguments_text}"
                     # If arguments are wrapped in ```json blocks, extract the content
                     if arguments_text.startswith("```json"):
@@ -495,8 +568,13 @@ def generate_temp_free_idea(
                         tool = tools_dict[action]
                         # Parse arguments
                         try:
-                            arguments_json = load_arguments_loose(arguments_text)
-
+                            #arguments_json = load_arguments_loose(arguments_text)
+                            arguments_json = arguments_text
+                            match = re.search(r"\{[\s\S]*\}", arguments_text)
+                            if match:
+                                arguments_json = json.loads(match.group())
+                        # Parse arguments
+                            print(f"Arguments: {arguments_text}")
                             # arguments_json = json.loads(arguments_text)
                         except json.JSONDecodeError:
                             raise ValueError(f"Invalid arguments JSON for {action}.")
@@ -510,10 +588,13 @@ def generate_temp_free_idea(
                             review+=1
                             last_tool_results = f"Error using tool {action}: {str(e)}"
                     elif action == "FinalizeCharacter":
+                        arguments_json = arguments_text #load_arguments_loose(arguments_text)
+                        print(f"Arguments: {arguments_json}")
+                        match = re.search(r"\{[\s\S]*\}", arguments_text)
+                        if match:
+                            arguments_json = json.loads(match.group())
                         # Parse arguments
                         try:
-                            arguments_json = load_arguments_loose(arguments_text)
-
                             character = arguments_json.get("character")
                             if not character or not isinstance(character, dict):
                                 raise ValueError("Missing 'character' in arguments.")
@@ -525,7 +606,23 @@ def generate_temp_free_idea(
                                 if all(isinstance(stats.get(k), int) for k in keys):
                                     stats["Total"] = sum(stats[k] for k in keys)
                                     character["Stats"] = stats
+                                    
+                            review, _ = perform_review(
+                                        text=character,
+                                        model=client_model,
+                                        client=client,
+                                        num_reflections=1,
+                                        use_persona_ensemble=True, # 페르소나 앙상블 on
+                                        temperature=0.7,
+                                    )
 
+                             # 5) 결과 출력 및 저장
+                            print(json.dumps(review, ensure_ascii=False, indent=2))
+                            os.makedirs('ai_scientist/ideas/reviews/', exist_ok=True)
+                            out_path = "ai_scientist/ideas/reviews/eng_tmp_review_result.json"
+                            save_review_result(review, out_path)
+                            print(f"Saved to {out_path}")
+                            
                             # Append the character to the archive
                             idea_str_archive.append(json.dumps(character, ensure_ascii=False))
                             print(f"Character finalized: {character.get('Name', '(no-name)')}")
@@ -571,22 +668,22 @@ if __name__ == "__main__":
     parser.add_argument(
         "--model",
         type=str,
-        default="LGAI-EXAONE",
-        choices=AVAILABLE_LLMS,
+        default="upstage:solar-pro2",
+        #choices=AVAILABLE_LLMS,
         help="Model to use for AI Scientist.",
     )
     parser.add_argument(
         "--model2",
         type=str,
-        default="LGAI-EXAONE",
-        choices=AVAILABLE_LLMS,
+        default="upstage:solar-1-mini-chat",
+        #choices=AVAILABLE_LLMS,
         help="Model to use for AI Scientist.",
     )
     parser.add_argument(
         "--emb_model",
         type=str,
-        default="Qwen3-Embedding",
-        choices=AVAILABLE_LLMS,
+        default="all-MiniLM-L6-v2",
+        #choices=AVAILABLE_LLMS,
         help="Model to use for AI Scientist.",
     )
     parser.add_argument(
@@ -604,7 +701,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--num-reflections",
         type=int,
-        default=5,
+        default=3,
         help="Number of reflection rounds per proposal.",
     )
     args = parser.parse_args()
@@ -612,7 +709,7 @@ if __name__ == "__main__":
     # Create the LLM client
     client, client_model = create_client(args.model)
     client2, client_model2 = create_client(args.model2)
-    client_emd, _ = create_client(args.emb_model)
+    client_emd = create_embed_client(args.emb_model)
 
     with open(args.workshop_file, "r") as f:
         workshop_description = f.read()
