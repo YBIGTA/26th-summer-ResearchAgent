@@ -33,15 +33,16 @@ logging.basicConfig(
     level=logging.INFO,
     format='[%(asctime)s/%(name)s/%(levelname)s] %(message)s',
     handlers=[
-        logging.FileHandler("crawler.log", mode='w'),
+        logging.FileHandler("crawler.log", mode='w', encoding="utf-8"),
         logging.StreamHandler()
-    ]
+    ],
+    encoding="utf-8"
 )
 
 def get_driver() -> WebDriver:
     options = Options()
     options.add_argument("--headless")
-    # options.page_load_strategy = 'eager'
+    options.page_load_strategy = 'eager'
 
     service = Service(os.path.join(DIRECTORY, "chromedriver.exe"))
     driver = wb.Chrome(service=service, options=options)
@@ -89,7 +90,7 @@ def scrape_pokemon_data(driver: WebDriver, url: str):
         data['explanations'] = extract_explanations(soup)
         data['evolutions'] = extract_evolutions(soup)
         data['abilities'] = extract_abilities(soup)
-        data['moveset'] = extract_moveset(soup)
+        data['moveset'] = extract_moveset(soup, driver)
         
         return data
         
@@ -190,7 +191,7 @@ if __name__ == "__main__":
     elif choice == "abilities":
         print_json(extract_abilities(soup))
     elif choice == "moveset":
-        print_json(extract_moveset(soup))
+        print_json(extract_moveset(soup, driver))
     elif choice == "all":
         data = scrape_pokemon_data(driver, url)
 

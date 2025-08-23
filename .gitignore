@@ -194,3 +194,9 @@ final_papers/
 # HF
 cache/
 huggingface/
+
+# Crawler
+crawler/chromedriver.exe
+crawler/json
+crawler/save
+crawler/crawler.log
