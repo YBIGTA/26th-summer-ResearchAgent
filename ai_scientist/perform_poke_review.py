@@ -66,49 +66,68 @@ REFERENCE_SITES_TEXT = (
     "Do NOT fabricate specific URLs or quote fake pages; use them only as style/standard references."
 )
 
+# 영어 시스템 프롬프트
+# reviewer_system_prompt_base = (
+#     "You are an expert Pokémon game designer and competitive analyst reviewing a newly proposed Pokémon.\n"
+#     "Evaluate this Pokémon's design, competitive viability, and overall fit within the Pokémon universe.\n"
+#     "Be thorough, analytical, and consider both casual and competitive perspectives.\n"
+#     + REFERENCE_SITES_TEXT
+# )
+
+# 한글 시스템 프롬프트
 reviewer_system_prompt_base = (
-    "You are an expert Pokémon game designer and competitive analyst reviewing a newly proposed Pokémon.\n"
-    "Evaluate this Pokémon's design, competitive viability, and overall fit within the Pokémon universe.\n"
-    "Be thorough, analytical, and consider both casual and competitive perspectives.\n"
-    + REFERENCE_SITES_TEXT
+    "당신은 새로운 포켓몬을 검토하는 전문 게임 디자이너이자 대전 분석가입니다.\n"
+    "이 포켓몬의 디자인, 대전 적합성, 포켓몬 세계관 내의 일관성을 평가하세요.\n"
+    "철저하고 분석적으로 답하며, 캐주얼/경쟁적 관점을 모두 고려하세요.\n"
+    "평가할 때는 다음의 일반적인 지식 출처에서의 패턴을 참고해도 됩니다:\n"
+    "- Smogon University (대전 분석, 티어 리스트, 사용 통계)\n"
+    "- Bulbapedia/Serebii (공식 포켓덱스, 기술 메커니즘, 타입 상성)\n"
+    "- GamePress/Game8 (PvE 활용도, 레이드 카운터, 메타 분석)\n"
+    "- Reddit r/TheSilphRoad, r/CompetitivePokemon (커뮤니티 인사이트)\n"
+    "- 공식 포켓몬 웹사이트 (디자인 철학, 정식 설정)\n"
+    "가짜 URL을 만들거나 허위 페이지를 인용하지 마세요. 오직 스타일/기준 참조용으로만 활용하세요."
 )
 
 # 부정/긍정 바이어스(선택적으로 사용)
-reviewer_system_prompt_neg = (
-    reviewer_system_prompt_base + "\nIf the Pokémon design is flawed or questionable, assign low scores and Reject."
-)
-reviewer_system_prompt_pos = (
-    reviewer_system_prompt_base + "\nIf the Pokémon design is solid or shows potential, assign high scores and Accept."
-)
+# reviewer_system_prompt_neg = (
+#     reviewer_system_prompt_base + "\nIf the Pokémon design is flawed or questionable, assign low scores and Reject."
+# )
+# reviewer_system_prompt_pos = (
+#     reviewer_system_prompt_base + "\nIf the Pokémon design is solid or shows potential, assign high scores and Accept."
+# )
+
+reviewer_system_prompt_neg = reviewer_system_prompt_base + "\n만약 포켓몬 디자인에 결함이 있거나 의문점이 크다면, 낮은 점수를 주고 Reject으로 판정하세요."
+reviewer_system_prompt_pos = reviewer_system_prompt_base + "\n만약 포켓몬 디자인이 탄탄하거나 가능성이 보인다면, 높은 점수를 주고 Accept로 판정하세요."
+
 
 # ――― 페르소나 별 시점(여러 평가자 앙상블용)
 PERSONA_SYSTEM_PROMPTS = {
     "HardcoreCompetitive": (
         reviewer_system_prompt_base
-        + "\nPersona: Hardcore competitive Pokémon player who optimizes for tournament viability and meta impact."
-        + "\nBias: Prioritize competitive balance, tier placement potential, and strategic depth. Penalize overpowered or underpowered designs."
-        + "\nExpertise: VGC, Smogon tiers, usage statistics, team building, damage calculations."
+        + "\n페르소나: 하드코어 경쟁 포켓몬 플레이어. 대회 적합성과 메타 영향력을 최적화합니다."
+        + "\n편향: 경쟁 밸런스, 티어 배치 가능성, 전략적 깊이를 최우선시합니다. 과도하게 강하거나 약한 디자인은 감점합니다."
+        + "\n전문성: VGC, Smogon 티어, 사용 통계, 팀 빌딩, 대미지 계산."
     ),
-    
+
     "CreativeDesigner": (
         reviewer_system_prompt_base
-        + "\nPersona: Innovative Pokémon designer who values fresh concepts and creative mechanics."
-        + "\nBias: Reward unique type combinations, novel abilities, and creative movesets. Penalize generic or derivative designs."
-        + "\nExpertise: Game design principles, type interactions, ability mechanics, visual storytelling."
+        + "\n페르소나: 혁신적인 포켓몬 디자이너. 신선한 콘셉트와 창의적인 메커니즘을 중시합니다."
+        + "\n편향: 독특한 타입 조합, 새로운 특성, 창의적인 기술 구성을 높게 평가합니다. 평범하거나 모방적인 디자인은 감점합니다."
+        + "\n전문성: 게임 디자인 원리, 타입 상호작용, 특성 메커니즘, 시각적 스토리텔링."
     ),
-    
+
     "CasualKidPlayer": (
         reviewer_system_prompt_base
-        + "\nPersona: Elementary school Pokémon fan who loves cool-looking monsters and simple, fun gameplay."
-        + "\nBias: Reward visual appeal, memorable characteristics, and straightforward but exciting moves. Penalize overly complex mechanics."
-        + "\nExpertise: What makes Pokémon 'cool', anime/manga appeal, toy/merchandise potential, accessibility."
+        + "\n페르소나: 멋있는 몬스터와 단순하고 재미있는 게임플레이를 좋아하는 초등학생 포켓몬 팬."
+        + "\n편향: 시각적 매력, 기억에 남는 특징, 직관적이면서도 신나는 기술 구성을 높게 평가합니다. 지나치게 복잡한 메커니즘은 감점합니다."
+        + "\n전문성: 포켓몬을 '멋지게' 만드는 요소, 애니메이션/만화적 매력, 장난감/머천다이즈 흥행성, 접근성."
     ),
-    
+
     "SeriesVeteran": (
         reviewer_system_prompt_base
-        + "\nPersona: Long-time Pokémon series fan who deeply cares about lore consistency and franchise tradition."
-        + "\nBias: Reward adherence to established patterns, logical evolution lines, and world-building. Penalize lore-breaking elements."
-        + "\nExpertise: Pokémon history, regional themes, evolution patterns, canonical precedents, series continuity."
+        + "\n페르소나: 포켓몬 시리즈의 오랜 팬으로, 세계관의 일관성과 프랜차이즈 전통을 매우 중시합니다."
+        + "\n편향: 기존 패턴 준수, 논리적인 진화 라인, 설정과 세계관 구축에 충실한 디자인을 높게 평가합니다. 설정을 깨뜨리는 요소는 감점합니다."
+        + "\n전문성: 포켓몬 역사, 지역 테마, 진화 패턴, 공식 설정과의 연속성."
     ),
 }
 
@@ -123,59 +142,63 @@ REVIEW JSON:
 ```json
 <JSON>
 
-In <THOUGHT>, analyze this Pokémon's key strengths and weaknesses, competitive potential, design philosophy, and overall contribution to the Pokémon universe. Be specific about what makes this design work or fail.
-In <JSON>, provide fields in this exact order:
-"Summary": Brief overview of the Pokémon and its concept
-"Strengths": List of positive aspects
-"Weaknesses": List of negative aspects or concerns
-"Originality": 1–4 (how unique and creative is this design?)
-"ThematicConsistency": 1–4 (how well does it fit Pokémon universe themes?)
-"VisualDesign": 1–4 (visual appeal and design coherence)
-"CompetitiveViability": 1–4 (potential impact in competitive play)
-"TypeBalance": 1–4 (type combination balance and effectiveness)
-"MovesetDesign": 1–4 (quality and logic of available moves)
-"EvolutionLogic": 1–4 (sensibility of evolution line if applicable)
-"Accessibility": 1–4 (ease of understanding for new players)
-"Marketability": 1–4 (commercial and popular appeal)
-"LoreIntegration": 1–4 (fit with established Pokémon lore)
-"WeightedBreakdown": object with numeric subtotals per rubric key
-"Questions": array of clarifying questions
-"Limitations": array of design limitations or concerns
-"EthicalConcerns": boolean (any problematic elements?)
-"Soundness": 1–4 (internal consistency of the design)
-"Presentation": 1–4 (clarity of the design documentation)
-"Contribution": 1–4 (meaningful addition to Pokémon roster)
-"Overall": 1–10 (overall quality and acceptance recommendation)
-"Confidence": 1–5 (confidence in this evaluation)
-"Decision": "Accept" or "Reject"
-Ensure valid JSON with proper numeric ranges. Keep evaluation consistent with assigned scores.
+<THOUGHT>에는 이 포켓몬의 주요 강점과 약점, 대전 잠재력, 디자인 철학, 포켓몬 세계 전체에 대한 기여도를 분석하세요.  
+이 디자인이 성공하거나 실패하는 구체적인 이유를 서술하세요.  
+
+<JSON>에는 반드시 아래 순서로 필드를 포함하세요:
+"Summary": 포켓몬과 그 컨셉의 간단한 개요  
+"Strengths": 긍정적인 측면 리스트  
+"Weaknesses": 부정적인 측면이나 우려사항 리스트  
+"Originality": 1–4 (얼마나 독창적이고 창의적인가?)  
+"ThematicConsistency": 1–4 (포켓몬 세계관과 얼마나 잘 맞는가?)  
+"VisualDesign": 1–4 (시각적 매력과 디자인의 일관성)  
+"CompetitiveViability": 1–4 (대전에서의 잠재적 영향력)  
+"TypeBalance": 1–4 (타입 조합의 밸런스와 효과성)  
+"MovesetDesign": 1–4 (기술 구성의 합리성과 품질)  
+"EvolutionLogic": 1–4 (진화 라인이 자연스럽고 논리적인가?)  
+"Accessibility": 1–4 (신규 플레이어도 쉽게 이해할 수 있는가?)  
+"Marketability": 1–4 (상품성·대중적 매력)  
+"LoreIntegration": 1–4 (기존 포켓몬 설정과 잘 맞는가?)  
+"WeightedBreakdown": 각 평가 항목별 가중 점수 합산(object)  
+"Questions": 명확화를 위한 질문 리스트(array)  
+"Limitations": 디자인의 한계나 우려사항 리스트(array)  
+"EthicalConcerns": boolean (윤리적으로 문제가 있는 요소가 있는가?)  
+"Soundness": 1–4 (디자인의 내부적 일관성)  
+"Presentation": 1–4 (설계 문서의 명확성)  
+"Contribution": 1–4 (포켓몬 라인업에 의미 있는 기여인가?)  
+"Overall": 1–10 (전체적인 품질과 채택 권고)  
+"Confidence": 1–5 (이 평가에 대한 확신 정도)  
+"Decision": "Accept" 또는 "Reject"  
+
+반드시 유효한 JSON을 출력하고, 각 점수는 지정된 숫자 범위를 지켜야 합니다. 점수와 서술이 일관되도록 작성하세요.
 """
 pokemon_review_form = """
-Pokémon Design Review Form
-You are evaluating a newly proposed Pokémon design across multiple dimensions critical for game balance, player engagement, and franchise consistency.
-Evaluation Criteria (Rate 1–4):
-Originality & Creativity: How unique and innovative is this design? Does it bring fresh ideas to the Pokémon universe?
-Thematic Consistency: How well does this fit established Pokémon world themes, regional characteristics, and overall franchise tone?
-Visual Design: Is the design visually appealing, memorable, and cohesive? Does it have strong silhouette recognition?
-Competitive Viability: How would this perform in competitive play? Is it balanced, useful, but not overpowered?
-Type Balance: Is the type combination logical, balanced, and interesting? Does it create new strategic opportunities?
-Moveset Design: Are the available moves logical, balanced, and create interesting gameplay patterns?
-Evolution Logic: If part of an evolution line, does the progression make biological and thematic sense?
-Accessibility: Can new players easily understand and appreciate this Pokémon's role and appeal?
-Marketability: Does this have strong commercial appeal? Would it be popular in merchandise, anime, etc.?
-Lore Integration: How well does this fit with established Pokémon biology, ecology, and world-building?
-Consider competitive impact, design precedents, player psychology, and long-term meta health in your evaluation.
+포켓몬 디자인 리뷰 폼
+당신은 새롭게 제안된 포켓몬 디자인을 평가합니다. 평가는 게임 밸런스, 플레이어 흥미, 세계관 일관성을 고려해야 합니다.
+평가 기준 (점수 1–4):
+독창성과 창의성: 새로운 아이디어를 얼마나 잘 가져왔는가?
+세계관 일관성: 포켓몬 세계관, 지역 특성, 전체 톤과 얼마나 잘 맞는가?
+시각적 디자인: 디자인이 매력적이고 기억할 만하며, 형태가 뚜렷한가?
+경쟁적 활용성: 대전에서 얼마나 쓸모 있고, 밸런스가 맞는가?
+타입 밸런스: 타입 조합이 논리적이고 전략적 가치를 제공하는가?
+기술 구성: 기술들이 합리적이고 재미있는 패턴을 만드는가?
+진화 논리: 진화 라인이 있다면, 그 진행이 자연스럽고 설정에 맞는가?
+접근성: 신규 플레이어도 쉽게 이해하고 즐길 수 있는가?
+상품성: 머천다이즈, 애니 등에서 인기를 끌 수 있는가?
+세계관 통합성: 기존 포켓몬 생태/역사와 잘 맞는가?
+평가 시에는 대전 영향, 디자인 선례, 플레이어 심리, 장기적 메타 건강을 고려하세요.
 """ + template_instructions
-reviewer_reflection_prompt = """Round {current_round}/{num_reflections}.
-Re-examine your evaluation for consistency between scores and comments. Consider:
+reviewer_reflection_prompt = """라운드 {current_round}/{num_reflections}.
+당신의 평가가 점수와 코멘트 사이에서 일관성이 있는지 다시 검토하세요. 고려할 사항은 다음과 같습니다:
 
-Are the competitive analysis and tier predictions realistic?
-Does the design truly fit Pokémon conventions and quality standards?
-Are there any overlooked balance issues or design flaws?
-Is the overall recommendation justified by the individual scores?
+- 경쟁 분석과 티어 예측이 현실적인가?  
+- 이 디자인이 실제로 포켓몬의 규범과 품질 기준에 부합하는가?  
+- 간과된 밸런스 문제나 디자인 결함은 없는가?  
+- 개별 점수들이 전체 추천과 일치하는가?  
 
-If there is nothing to improve, repeat the previous JSON EXACTLY and include "I am done" before the JSON.
-Respond in the same format:
+만약 개선할 점이 없다면, 이전 JSON을 그대로 반복 출력하고 JSON 앞에 "I am done"을 포함하세요.  
+
+응답 형식은 동일하게 유지하세요:
 THOUGHT:
 <THOUGHT>
 REVIEW JSON:
@@ -183,8 +206,8 @@ REVIEW JSON:
 ```"""
 
 meta_reviewer_system_prompt = (
-    "You are a senior Pokémon game director aggregating {reviewer_count} design reviews "
-    "from different perspectives (competitive, creative, casual, veteran). Synthesize their insights into a balanced final decision."
+    "당신은 수석 포켓몬 게임 디렉터입니다. {reviewer_count}개의 서로 다른 시각(경쟁, 창의, 캐주얼, 시리즈 팬)에서 작성된 디자인 리뷰를 종합하세요. "
+    "각 리뷰의 통찰을 균형 잡힌 최종 결론으로 통합하세요."
 )
 
 # 4) 유틸: 스코어 정합성/가중합
@@ -249,9 +272,9 @@ def coerce_schema(review: Dict[str, Any]) -> Dict[str, Any]:
 
 def _make_review_prompt(pokemon_json_text: str, form_text: str) -> str:
     return form_text + f"""
-    Here is the Pokémon design JSON to review:
+    아래는 리뷰할 포켓몬 디자인 JSON입니다:
     {pokemon_json_text}
-    Please provide a thorough evaluation considering competitive viability, design coherence, franchise fit, and player appeal.
+    대전 적합성, 디자인의 일관성, 세계관과의 부합성, 플레이어 매력을 고려하여 철저하게 평가하세요.
     """
 
 def _parse_review_safely(llm_text: str) -> Optional[Dict[str, Any]]:
@@ -434,9 +457,9 @@ def get_meta_review(model: str, client: Any, temperature: float, reviews: List[D
     review_text = ""
     for i, r in enumerate(reviews):
         review_text += f"""
-Review {i + 1}/{len(reviews)}:
-{json.dumps(r, ensure_ascii=False, indent=2)}
-"""
+        리뷰 {i + 1}/{len(reviews)}:
+        {json.dumps(r, ensure_ascii=False, indent=2)}
+        """
     base_prompt = pokemon_review_form + review_text
     llm_review, _ = get_response_from_llm(
         base_prompt,
@@ -525,7 +548,7 @@ def main():
     # 5) 결과 출력 및 저장
     print(json.dumps(review, ensure_ascii=False, indent=2))
     os.makedirs('ai_scientist/ideas/reviews/', exist_ok=True)
-    out_path = "ai_scientist/ideas/reviews/eng_tmp_review_result.json"
+    out_path = "ai_scientist/ideas/reviews/kor_tmp_review_result.json"
     save_review_result(review, out_path)
     print(f"Saved to {out_path}")
 
