@@ -625,7 +625,7 @@ def generate_temp_free_idea(
                                 with open(out_path,"r",encoding="utf-8") as f:
                                     rankdic=json.load(f)  
                                     for rank in rankdic:
-                                        ranks.append(json.dumps(rank))
+                                        ranks.append(json.dumps(rank)) #이부분 관련 디버깅 필요
                                     print(f"Loaded {len(ranks)} ideas from {ranks}")
                             
                             idea_str_archive.append(json.dumps(character, ensure_ascii=False))
