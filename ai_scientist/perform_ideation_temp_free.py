@@ -491,7 +491,7 @@ def generate_temp_free_idea(
         print()
         print(f"Generating proposal {gen_idx + 1}/{max_num_generations}")
         try:
-            prev_ideas_string = "\n\n".join(idea_str_archive)
+            prev_ideas_string = "\n\n".join(idea_str_archive[:10])
 
             last_tool_results = ""
             idea_finalized = False
@@ -513,7 +513,8 @@ def generate_temp_free_idea(
                         num_reflections=num_reflections,
                         last_tool_results=last_tool_results or "No new results.",
                     )
-
+                print("prompt_text",prompt_text)
+                print("system_prompt",system_prompt)
                 response_text, msg_history = get_response_from_llm(
                     prompt=prompt_text,
                     client=client,
@@ -616,12 +617,12 @@ def generate_temp_free_idea(
                                         use_persona_ensemble=True, # 페르소나 앙상블 on
                                         temperature=0.7,
                                     )
-                            os.makedirs('ai_scientist/ideas/reviews/', exist_ok=True)
-                            out_path = "ai_scientist/ideas/reviews/eng_tmp_review_result.json"
+                            os.makedirs('ideas/reviews/', exist_ok=True)
+                            out_path = "ideas/reviews/eng_tmp_review_result.json"
                             with open(out_path,"r",encoding="utf-8") as f:
                                 ranks=json.load(f)  
                             idea_str_archive.append(json.dumps(character, ensure_ascii=False))
-                            save_ranks.append(review)
+                            ranks.append(review)
                                 
                                                      
                             sorted_indices=sorted(range(len(ranks)),key=lambda x:ranks[x]['Overall'],reverse=True)
