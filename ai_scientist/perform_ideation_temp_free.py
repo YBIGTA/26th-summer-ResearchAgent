@@ -23,7 +23,7 @@ from ai_scientist.llm import (
     extract_json_object,
 )
 from ai_scientist.perform_poke_review import perform_review,save_review_result
-
+from ai_scientist.vlm import encode_image_to_base64, generate_image_from_prompt
 from ai_scientist.tools.feedback import ReviewbyLLM_tool
 from ai_scientist.tools.base_tool import BaseTool
 
@@ -609,6 +609,45 @@ def generate_temp_free_idea(
                                     stats["Total"] = sum(stats[k] for k in keys)
                                     character["Stats"] = stats
                                     
+                            # # ★★★ 이 부분에 이미지 생성 및 저장 로직 추가 ★★★
+                            # # 1. 캐릭터 명세서에서 이미지 프롬프트 추출
+                            # image_prompt = character.get("Sample Image Prompt")
+                            # if image_prompt:
+                            #     # 2. 이미지 생성
+                            #     image_filename = f"ideas/{character['Name']}_temp.png"
+                            #     image_path = generate_image_from_prompt(image_prompt, image_filename)
+
+                            #     if os.path.exists(image_path):
+                            #         # 3. Base64 인코딩
+                            #         base64_string = encode_image_to_base64(image_path)
+                                    
+                            #         # 4. JSON 파일에 저장
+                            #         output_json_path = "ideas/i_cant_believe_its_not_better_image.json"
+                                    
+                            #         # 기존 데이터 불러오기 또는 새 리스트 생성
+                            #         if os.path.exists(output_json_path):
+                            #             with open(output_json_path, "r", encoding="utf-8") as f:
+                            #                 try:
+                            #                     image_data = json.load(f)
+                            #                 except json.JSONDecodeError:
+                            #                     image_data = [] # 파일이 비어있거나 손상된 경우
+                            #         else:
+                            #             image_data = []
+                                    
+                            #         # 새로운 데이터 추가
+                            #         new_entry = {
+                            #             "Name": character.get("Name"),
+                            #             "Korean Name": character.get("Korean Name"),
+                            #             "image_base64": base64_string
+                            #         }
+                            #         image_data.append(new_entry)
+                            #         # 업데이트된 리스트를 JSON 파일에 저장
+                            #         with open(output_json_path, "w", encoding="utf-8") as f:
+                            #             json.dump(image_data, f, indent=4, ensure_ascii=False)
+                                    
+                            #         print(f"Character image data saved to {output_json_path}")
+
+                            ## 기존에 저장하던 방식대로        
                             review, _ = perform_review(
                                         text=character,
                                         model=client_model,
@@ -619,32 +658,54 @@ def generate_temp_free_idea(
                                     )
                             os.makedirs('ideas/reviews/', exist_ok=True)
                             out_path = "ideas/reviews/eng_tmp_review_result.json"  
+
+                            # load ideas from file -> 기존 랭크 로딩
                             ranks = []
-                            # load ideas from file
                             if osp.exists(out_path):
                                 with open(out_path,"r",encoding="utf-8") as f:
-                                    rankdic=json.load(f)  
-                                    for rank in rankdic:
-                                        ranks.append(json.dumps(rank)) #이부분 관련 디버깅 필요
+                                    loaded = json.load(f)  
+
+                                    # loaded 가 리스트면 그대로 확장, 딕셔너리면 그대로 하나 추가
+                                    if isinstance(loaded, list):
+                                        ranks.extend(loaded)          # dict들의 리스트
+                                    elif isinstance(loaded, dict):
+                                        ranks.append(loaded)          # 단일 dict인 케이스
+                                    else:
+                                        print(f"Unexpected ranks format in {out_path}: {type(loaded)}")
+                                    
                                     print(f"Loaded {len(ranks)} ideas from {ranks}")
                             
-                            idea_str_archive.append(json.dumps(character, ensure_ascii=False))
+                            # 이번 리뷰 추가
+                            # review 가 dict(예: {"Overall": 4.2, ...}) 이어야 정렬 가능
                             ranks.append(review)
-                                
-                                                     
-                            sorted_indices=sorted(range(len(ranks)),key=lambda x:ranks[x]['Overall'],reverse=True)
-                            save_ranks=copy.deepcopy(ranks)
                             
-                            idea_str_archive=[idea_str_archive[i] for i in sorted_indices]
-                            save_ranks=[save_ranks[i] for i in sorted_indices]
+                            # 아이디어 아카이브에도 이번 캐릭터 추가
+                            idea_str_archive.append(json.dumps(character, ensure_ascii=False))
+
+                            # 정렬 전에 길이 정렬(짝 맞추기)
+                            def _overall_of(item):
+                                return item.get("Overall", float("-inf")) if isinstance(item, dict) else float("-inf")
+
+                            n = min(len(idea_str_archive), len(ranks))
+                            pairs = [(idea_str_archive[i], ranks[i]) for i in range(n)]
+                            pairs.sort(key=lambda p: _overall_of(p[1]), reverse=True)  
+                            
+                            idea_sorted = [p[0] for p in pairs]
+                            ranks_sorted = [p[1] for p in pairs]
+                            
+                            # sorted_indices=sorted(range(len(ranks)),key=lambda x:ranks[x]['Overall'],reverse=True)
+                            # save_ranks=copy.deepcopy(ranks)
+                            
+                            # idea_str_archive=[idea_str_archive[i] for i in sorted_indices]
+                            # save_ranks=[save_ranks[i] for i in sorted_indices]
                             
                             
-                            with open(idea_fname, "w") as f:
-                                json.dump(idea_str_archive, f, indent=4)
+                            with open(idea_fname, "w", encoding="utf-8") as f:
+                                json.dump(idea_sorted, f, indent=4, ensure_ascii=False)
                             
                 
-                            with open(out_path, "w") as f:
-                                json.dump(save_ranks, f, indent=4)
+                            with open(out_path, "w", encoding="utf-8") as f:
+                                json.dump(ranks_sorted, f, indent=4, ensure_ascii=False)
 
                             # Append the character to the archive
                             
