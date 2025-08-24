@@ -153,11 +153,17 @@ def generate_image_from_prompt(prompt: str, output_path: str) -> str:
         style_prompt = (
             "(official Pokémon artwork:1.4), (Ken Sugimori style:1.3), (Ohmura style:1.1), "
             "(single creature:1.4), (full body:1.3), (3/4 view:1.2), (centered:1.2), "
-            "(white background:1.5), (no background:1.5), "
-            "(clean thin black lineart:1.3), (flat cel shading, two-tone shadows:1.3), "
-            "(simple geometric shapes:1.2), (limited color palette 2-3 colors + accent:1.2), "
-            "(cute proportions, big expressive eyes, small mouth:1.2), "
-            "(no clothes, no armor, creature design not human:1.4)"
+            # "(white background:1.5), (no background:1.5), "
+            # "(clean thin black lineart:1.3), (flat cel shading, two-tone shadows:1.3), "
+            # "(simple geometric shapes:1.2), (limited color palette 2-3 colors + accent:1.2), "
+            # "(cute proportions, big expressive eyes, small mouth:1.2), "
+            # "(no clothes, no armor, creature design not human:1.4)"
+
+            "(white background:1.5), (light gray drop shadow:1.1), "
+            "(clean thick-thin black lineart:1.3), (flat cel shading:1.3), (two-tone shadows:1.2), "
+            "(simple geometric shapes:1.2), (limited 2-3 color palette + accent:1.2), "
+            "(cute proportions, big expressive eyes, small mouth:1.1), "
+            "(creature design not human:1.5), (matte finish:1.2)"
         )
         full_prompt = f"{style_prompt}, {prompt}, redesign as a creature, readable silhouette, minimal details"
 
