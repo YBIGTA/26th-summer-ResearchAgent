@@ -618,9 +618,16 @@ def generate_temp_free_idea(
                                         temperature=0.7,
                                     )
                             os.makedirs('ideas/reviews/', exist_ok=True)
-                            out_path = "ideas/reviews/eng_tmp_review_result.json"
-                            with open(out_path,"r",encoding="utf-8") as f:
-                                ranks=json.load(f)  
+                            out_path = "ideas/reviews/eng_tmp_review_result.json"  
+                            ranks = []
+                            # load ideas from file
+                            if osp.exists(out_path):
+                                with open(out_path,"r",encoding="utf-8") as f:
+                                    rankdic=json.load(f)  
+                                    for rank in rankdic:
+                                        ranks.append(json.dumps(rank))
+                                    print(f"Loaded {len(ranks)} ideas from {ranks}")
+                            
                             idea_str_archive.append(json.dumps(character, ensure_ascii=False))
                             ranks.append(review)
                                 
