@@ -6,6 +6,9 @@ import base64
 from typing import Any, List, Dict, Tuple, Optional
 from dataclasses import dataclass
 
+# 이미지 생성을 위한 라이브러리
+from diffusers import StableDiffusionPipeline # pip install diffusers
+
 import torch
 from PIL import Image
 
@@ -84,7 +87,34 @@ def _open_images(image_paths: List[str], max_images: int) -> List[Image.Image]:
         if img.mode == "RGBA":
             img = img.convert("RGB")
         imgs.append(img)
-    return imgs
+    return 
+
+def generate_image_from_prompt(prompt: str, output_path: str) -> str:
+    """
+    Stable Diffusion을 사용하여 프롬프트로부터 이미지를 생성하고 저장합니다.
+    """
+    try:
+        # Stable Diffusion 파이프라인 로드 (GPU 사용 권장)
+        # 1.5 버전은 VRAM 효율이 좋습니다. 'runwayml/stable-diffusion-v1-5'
+        # 또는 더 좋은 모델을 사용하려면 교체하세요. 예: 'stabilityai/stable-diffusion-xl-base-1.0'
+        # 로컬 경로에 모델을 다운로드했다면 해당 경로를 지정할 수 있습니다.
+        print("Loading Stable Diffusion pipeline...")
+        pipe = StableDiffusionPipeline.from_pretrained(
+            "runwayml/stable-diffusion-v1-5",
+            torch_dtype=torch.float16,
+        ).to("cuda")
+
+        print(f"Generating image for prompt: '{prompt}'")
+        image = pipe(prompt).images[0]
+        
+        # 이미지 저장
+        image.save(output_path)
+        print(f"Image saved to {output_path}")
+        return output_path
+
+    except Exception as e:
+        print(f"Image generation failed: {e}")
+        return ""
 
 def _has_chat_template(processor: Any) -> bool:
     # Qwen2-VL 등은 processor.apply_chat_template 제공
