@@ -609,43 +609,46 @@ def generate_temp_free_idea(
                                     stats["Total"] = sum(stats[k] for k in keys)
                                     character["Stats"] = stats
                                     
-                            # # ★★★ 이 부분에 이미지 생성 및 저장 로직 추가 ★★★
-                            # # 1. 캐릭터 명세서에서 이미지 프롬프트 추출
-                            # image_prompt = character.get("Sample Image Prompt")
-                            # if image_prompt:
-                            #     # 2. 이미지 생성
-                            #     image_filename = f"ideas/{character['Name']}_temp.png"
-                            #     image_path = generate_image_from_prompt(image_prompt, image_filename)
+                            # vlm 호출 로직
+                            # 1. 캐릭터 명세서에서 이미지 프롬프트 추출
+                            image_prompt = character.get("Sample Image Prompt")
+                            if image_prompt:
+                                # 2. 이미지 생성 (vlm.py의 강화된 함수가 스타일링을 모두 처리)
+                                # 불필요한 키워드 추가 로직을 제거하고 순수 프롬프트만 전달
+                                os.makedirs('ideas/img/', exist_ok=True)
+                                name_sanitized = "".join(c for c in character.get("Name", "unknown") if c.isalnum())
+                                image_filename = f"ideas/img/{name_sanitized}_temp.png"
+                                image_path = generate_image_from_prompt(image_prompt, image_filename)
 
-                            #     if os.path.exists(image_path):
-                            #         # 3. Base64 인코딩
-                            #         base64_string = encode_image_to_base64(image_path)
+                                if image_path and os.path.exists(image_path):
+                                    # 3. Base64 인코딩
+                                    base64_string = encode_image_to_base64(image_path)
                                     
-                            #         # 4. JSON 파일에 저장
-                            #         output_json_path = "ideas/i_cant_believe_its_not_better_image.json"
+                                    # 4. JSON 파일에 저장
+                                    output_json_path = "ideas/i_cant_believe_its_not_better_image.json"
+
+                                    # 기존 데이터 불러오기 또는 새 리스트 생성
+                                    if os.path.exists(output_json_path):
+                                        with open(output_json_path, "r", encoding="utf-8") as f:
+                                            try:
+                                                image_data = json.load(f)
+                                            except json.JSONDecodeError:
+                                                image_data = [] # 파일이 비어있거나 손상된 경우
+                                    else:
+                                        image_data = []
                                     
-                            #         # 기존 데이터 불러오기 또는 새 리스트 생성
-                            #         if os.path.exists(output_json_path):
-                            #             with open(output_json_path, "r", encoding="utf-8") as f:
-                            #                 try:
-                            #                     image_data = json.load(f)
-                            #                 except json.JSONDecodeError:
-                            #                     image_data = [] # 파일이 비어있거나 손상된 경우
-                            #         else:
-                            #             image_data = []
+                                    # 새로운 데이터 추가
+                                    new_entry = {
+                                        "Name": character.get("Name"),
+                                        "Korean Name": character.get("Korean Name"),
+                                        "image_base64": base64_string
+                                    }
+                                    image_data.append(new_entry)
+                                    # 업데이트된 리스트를 JSON 파일에 저장
+                                    with open(output_json_path, "w", encoding="utf-8") as f:
+                                        json.dump(image_data, f, indent=4, ensure_ascii=False)
                                     
-                            #         # 새로운 데이터 추가
-                            #         new_entry = {
-                            #             "Name": character.get("Name"),
-                            #             "Korean Name": character.get("Korean Name"),
-                            #             "image_base64": base64_string
-                            #         }
-                            #         image_data.append(new_entry)
-                            #         # 업데이트된 리스트를 JSON 파일에 저장
-                            #         with open(output_json_path, "w", encoding="utf-8") as f:
-                            #             json.dump(image_data, f, indent=4, ensure_ascii=False)
-                                    
-                            #         print(f"Character image data saved to {output_json_path}")
+                                    print(f"Character image data saved to {output_json_path}")
 
                             ## 기존에 저장하던 방식대로        
                             review, _ = perform_review(
@@ -657,7 +660,7 @@ def generate_temp_free_idea(
                                         temperature=0.7,
                                     )
                             os.makedirs('ideas/reviews/', exist_ok=True)
-                            out_path = "ideas/reviews/eng_tmp_review_result.json"  
+                            out_path = "ideas/reviews/kor_tmp_review_result.json"  
 
                             # load ideas from file -> 기존 랭크 로딩
                             ranks = []
