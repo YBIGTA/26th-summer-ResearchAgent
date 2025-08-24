@@ -12,6 +12,7 @@ from typing import Tuple, Dict, Any, Optional,List
 import sys
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
+import copy
 
 sys.path.append(osp.join(osp.dirname(__file__), ".."))
 from ai_scientist.llm import (
@@ -615,16 +616,30 @@ def generate_temp_free_idea(
                                         use_persona_ensemble=True, # 페르소나 앙상블 on
                                         temperature=0.7,
                                     )
-
-                             # 5) 결과 출력 및 저장
-                            print(json.dumps(review, ensure_ascii=False, indent=2))
                             os.makedirs('ai_scientist/ideas/reviews/', exist_ok=True)
                             out_path = "ai_scientist/ideas/reviews/eng_tmp_review_result.json"
-                            save_review_result(review, out_path)
-                            print(f"Saved to {out_path}")
-                            
-                            # Append the character to the archive
+                            with open(out_path,"r",encoding="utf-8") as f:
+                                ranks=json.load(f)  
                             idea_str_archive.append(json.dumps(character, ensure_ascii=False))
+                            save_ranks.append(review)
+                                
+                                                     
+                            sorted_indices=sorted(range(len(ranks)),key=lambda x:ranks[x]['Overall'],reverse=True)
+                            save_ranks=copy.deepcopy(ranks)
+                            
+                            idea_str_archive=[idea_str_archive[i] for i in sorted_indices]
+                            save_ranks=[save_ranks[i] for i in sorted_indices]
+                            
+                            
+                            with open(idea_fname, "w") as f:
+                                json.dump(idea_str_archive, f, indent=4)
+                            
+                
+                            with open(out_path, "w") as f:
+                                json.dump(save_ranks, f, indent=4)
+
+                            # Append the character to the archive
+                            
                             print(f"Character finalized: {character.get('Name', '(no-name)')}")
                             idea_finalized = True
                             break
