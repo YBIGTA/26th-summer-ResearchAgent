@@ -7,7 +7,9 @@ from typing import Any, List, Dict, Tuple, Optional
 from dataclasses import dataclass
 
 # 이미지 생성을 위한 라이브러리
-from diffusers import StableDiffusionPipeline # pip install diffusers
+# pip install diffusers
+# from diffusers import StableDiffusionPipeline #  구형 모델
+from diffusers import StableDiffusionXLPipeline # <<< SDXL용 파이프라인으로 변경
 
 import torch
 from PIL import Image
@@ -89,31 +91,112 @@ def _open_images(image_paths: List[str], max_images: int) -> List[Image.Image]:
         imgs.append(img)
     return 
 
+# 기존 일반 Stable diffusion
+# def generate_image_from_prompt(prompt: str, output_path: str) -> str:
+#     """
+#     Stable Diffusion을 사용하여 프롬프트로부터 이미지를 생성하고 저장합니다.
+#     """
+#     try:
+#         # Stable Diffusion 파이프라인 로드 (GPU 사용 권장)
+#         # 1.5 버전은 VRAM 효율이 좋습니다. 'runwayml/stable-diffusion-v1-5'
+#         # 또는 더 좋은 모델을 사용하려면 교체하세요. 예: 'stabilityai/stable-diffusion-xl-base-1.0'
+#         # 로컬 경로에 모델을 다운로드했다면 해당 경로를 지정할 수 있습니다.
+#         print("Loading Stable Diffusion pipeline...")
+#         pipe = StableDiffusionPipeline.from_pretrained(
+#             "runwayml/stable-diffusion-v1-5",
+#             torch_dtype=torch.float16,
+#         ).to("cuda")
+
+#         print(f"Generating image for prompt: '{prompt}'")
+#         image = pipe(prompt).images[0]
+        
+#         # 이미지 저장
+#         image.save(output_path)
+#         print(f"Image saved to {output_path}")
+#         return output_path
+
+#     except Exception as e:
+#         print(f"Image generation failed: {e}")
+#         return ""
+
 def generate_image_from_prompt(prompt: str, output_path: str) -> str:
     """
-    Stable Diffusion을 사용하여 프롬프트로부터 이미지를 생성하고 저장합니다.
+    Animagine XL 3.0을 사용하여 포켓몬 스타일의 이미지를 생성하고 저장합니다.
     """
     try:
-        # Stable Diffusion 파이프라인 로드 (GPU 사용 권장)
-        # 1.5 버전은 VRAM 효율이 좋습니다. 'runwayml/stable-diffusion-v1-5'
-        # 또는 더 좋은 모델을 사용하려면 교체하세요. 예: 'stabilityai/stable-diffusion-xl-base-1.0'
-        # 로컬 경로에 모델을 다운로드했다면 해당 경로를 지정할 수 있습니다.
-        print("Loading Stable Diffusion pipeline...")
-        pipe = StableDiffusionPipeline.from_pretrained(
-            "runwayml/stable-diffusion-v1-5",
+        # 1. 애니메이션/포켓몬 스타일에 특화된 고품질 모델로 변경
+        # 기존: "runwayml/stable-diffusion-v1-5"
+        model_id = "cagliostrolab/animagine-xl-3.0"
+        # pipe = StableDiffusionPipeline.from_pretrained(
+        #     model_id,
+        #     torch_dtype=torch.float16,
+        #     use_safetensors=True,
+        # ).to("cuda")
+
+        # <<< StableDiffusionPipeline -> StableDiffusionXLPipeline으로 클래스 이름 변경
+        pipe = StableDiffusionXLPipeline.from_pretrained(
+            model_id,
             torch_dtype=torch.float16,
+            use_safetensors=True,
         ).to("cuda")
 
-        print(f"Generating image for prompt: '{prompt}'")
-        image = pipe(prompt).images[0]
+        # GPU VRAM이 부족할 경우 아래 주석을 해제하여 메모리 사용량을 줄일 수 있습니다.
+        # pipe.enable_model_cpu_offload()
+
+        # 2. 포켓몬 공식 아트워크 스타일을 위한 프롬프트 엔지니어링
+        # 사용자의 기본 프롬프트(캐릭터 외형 묘사)에 스타일 키워드를 추가합니다.
+        # style_prompt = (
+        #     "masterpiece, best quality, official artwork, game character, "
+        #     "pokemon style, style of Ken Sugimori, vibrant colors, clean lineart, "
+        #     "white background"
+        # )
+        style_prompt = (
+            "(official Pokémon artwork:1.4), (Ken Sugimori style:1.3), (Ohmura style:1.1), "
+            "(single creature:1.4), (full body:1.3), (3/4 view:1.2), (centered:1.2), "
+            "(white background:1.5), (no background:1.5), "
+            "(clean thin black lineart:1.3), (flat cel shading, two-tone shadows:1.3), "
+            "(simple geometric shapes:1.2), (limited color palette 2-3 colors + accent:1.2), "
+            "(cute proportions, big expressive eyes, small mouth:1.2), "
+            "(no clothes, no armor, creature design not human:1.4)"
+        )
+        full_prompt = f"{style_prompt}, {prompt}, redesign as a creature, readable silhouette, minimal details"
+
+        # full_prompt = f"{style_prompt}, {prompt}"
+
+        # 3. 원치 않는 결과(실사, 3D 등)를 방지하기 위한 네거티브 프롬프트
+        negative_prompt = (
+            "nsfw, photorealistic, photograph, 3d, rendering, text, watermark, "
+            "signature, ugly, blurry, low quality, worst quality, monochrome"
+            "human, humanoid, girl, woman, man, realistic anatomy, fingers, hands,"
+            "armor, clothing, dress, stockings, heels, cleavage,"
+            "angel, angelic, goddess, halo,"
+            "photorealistic, photograph, 3d, cgi, rendering,"
+            "cinematic lighting, volumetric, bloom, lens flare, bokeh,"
+            "magic circle, particles, energy aura, effects, feathers storm,"
+            "background, sky, clouds, landscape,"
+            "text, logo, watermark, signature,"
+            "ugly, lowres, blurry, noisy, worst quality, monochrome"
+        )
+
+        print(f"Generating Pokemon-style image for prompt: '{prompt}'")
+        
+        # 4. 강화된 프롬프트로 이미지 생성
+        image = pipe(
+            prompt=full_prompt,
+            negative_prompt=negative_prompt,
+            num_inference_steps=28,  # 추론 스텝 수 (품질과 속도 조절)
+            guidance_scale=7.5,     # 프롬프트 충실도
+        ).images[0]
         
         # 이미지 저장
+        os.makedirs(os.path.dirname(output_path), exist_ok=True)
         image.save(output_path)
         print(f"Image saved to {output_path}")
         return output_path
 
     except Exception as e:
         print(f"Image generation failed: {e}")
+        # traceback.print_exc() # 더 자세한 에러를 보고 싶을 때 주석 해제
         return ""
 
 def _has_chat_template(processor: Any) -> bool:
