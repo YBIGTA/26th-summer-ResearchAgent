@@ -1,401 +1,504 @@
-[{
-  "Summary": "Voltorrent는 Voltorb와 물의 소용돌이를 결합한 전기/물 타입 포켓몬으로, 전기 폭풍 생성 능력을 가지고 있습니다. 'Storm Surge' 능력을 통해 비에서는 전기 기술을, 전기 지형에서는 물 기술을 강화할 수 있습니다.",
-  "Strengths": [
-    "유니크한 전기/물 하이브리드 타입",
-    "창의적인 'Storm Surge' 능력",
-    "전기/물 타입의 전략적 상호작용",
-    "매력적인 시각적 디자인",
-    "테마적 스토리텔링 및 로어 개발의 잠재력"
-  ],
-  "Weaknesses": [
-    "전기/물 타입의 4배 약점",
-    "Storm Surge 능력의 복잡성",
-    "기존 둥근 전기 타입 포켓몬과의 유사성",
-    "신규 플레이어에게의 접근성 문제",
-    "경쟁적 활용성 문제"
-  ],
-  "Originality": 3,
-  "ThematicConsistency": 3,
-  "VisualDesign": 3,
-  "CompetitiveViability": 3,
-  "TypeBalance": 3,
-  "MovesetDesign": 4,
-  "EvolutionLogic": 2,
-  "Accessibility": 2,
-  "Marketability": 3,
-  "LoreIntegration": 3,
-  "WeightedBreakdown": {
-    "Originality": 1.0,
-    "ThematicConsistency": 0.8,
-    "VisualDesign": 0.8,
-    "CompetitiveViability": 1.2,
-    "TypeBalance": 1.0,
-    "MovesetDesign": 1.0,
-    "EvolutionLogic": 0.27,
-    "Accessibility": 0.17,
-    "Marketability": 0.2,
-    "LoreIntegration": 0.13
-  },
-  "Questions": [
-    "Storm Surge 능력의 메커니즘이 게임 플레이에 어떤 영향을 미칠까요?",
-    "Voltorrent의 디자인이 기존 둥근 전기 타입 포켓몬과 어떻게 차별화될 수 있을까요?",
-    "Voltorrent의 로어가 기존 포켓몬 세계와 어떻게 연결되는지 설명해 주세요."
-  ],
-  "Limitations": [
-    "전기/물 타입의 4배 약점",
-    "Storm Surge 능력의 복잡성",
-    "시각적 디자인의 유사성",
-    "경쟁적 활용성 문제",
-    "로어 통합의 한계"
-  ],
-  "EthicalConcerns": false,
-  "Soundness": 3,
-  "Presentation": 4,
-  "Contribution": 3,
-  "Overall": 8,
-  "Confidence": 4,
-  "Decision": "Reject"
-},{
-  "Summary": "Voltorrent는 Voltorb와 물의 소용돌이를 결합한 전기/물 타입 포켓몬으로, 전기 폭풍 생성 능력을 가지고 있습니다. 'Storm Surge' 능력을 통해 비에서는 전기 기술을, 전기 지형에서는 물 기술을 강화할 수 있습니다.",
-  "Strengths": [
-    "유니크한 전기/물 하이브리드 타입",
-    "창의적인 'Storm Surge' 능력",
-    "전기/물 타입의 전략적 상호작용",
-    "매력적인 시각적 디자인",
-    "테마적 스토리텔링 및 로어 개발의 잠재력"
-  ],
-  "Weaknesses": [
-    "전기/물 타입의 4배 약점",
-    "Storm Surge 능력의 복잡성",
-    "기존 둥근 전기 타입 포켓몬과의 유사성",
-    "신규 플레이어에게의 접근성 문제",
-    "경쟁적 활용성 문제"
-  ],
-  "Originality": 3,
-  "ThematicConsistency": 3,
-  "VisualDesign": 3,
-  "CompetitiveViability": 3,
-  "TypeBalance": 3,
-  "MovesetDesign": 4,
-  "EvolutionLogic": 2,
-  "Accessibility": 2,
-  "Marketability": 3,
-  "LoreIntegration": 3,
-  "WeightedBreakdown": {
-    "Originality": 1.0,
-    "ThematicConsistency": 0.8,
-    "VisualDesign": 0.8,
-    "CompetitiveViability": 1.2,
-    "TypeBalance": 1.0,
-    "MovesetDesign": 1.0,
-    "EvolutionLogic": 0.27,
-    "Accessibility": 0.17,
-    "Marketability": 0.2,
-    "LoreIntegration": 0.13
-  },
-  "Questions": [
-    "Storm Surge 능력의 메커니즘이 게임 플레이에 어떤 영향을 미칠까요?",
-    "Voltorrent의 디자인이 기존 둥근 전기 타입 포켓몬과 어떻게 차별화될 수 있을까요?",
-    "Voltorrent의 로어가 기존 포켓몬 세계와 어떻게 연결되는지 설명해 주세요."
-  ],
-  "Limitations": [
-    "전기/물 타입의 4배 약점",
-    "Storm Surge 능력의 복잡성",
-    "시각적 디자인의 유사성",
-    "경쟁적 활용성 문제",
-    "로어 통합의 한계"
-  ],
-  "EthicalConcerns": false,
-  "Soundness": 3,
-  "Presentation": 4,
-  "Contribution": 3,
-  "Overall": 8,
-  "Confidence": 4,
-  "Decision": "Reject"
-},{
-  "Summary": "Voltorrent는 Voltorb와 물의 소용돌이를 결합한 전기/물 타입 포켓몬으로, 전기 폭풍 생성 능력을 가지고 있습니다. 'Storm Surge' 능력을 통해 비에서는 전기 기술을, 전기 지형에서는 물 기술을 강화할 수 있습니다.",
-  "Strengths": [
-    "유니크한 전기/물 하이브리드 타입",
-    "창의적인 'Storm Surge' 능력",
-    "전기/물 타입의 전략적 상호작용",
-    "매력적인 시각적 디자인",
-    "테마적 스토리텔링 및 로어 개발의 잠재력"
-  ],
-  "Weaknesses": [
-    "전기/물 타입의 4배 약점",
-    "Storm Surge 능력의 복잡성",
-    "기존 둥근 전기 타입 포켓몬과의 유사성",
-    "신규 플레이어에게의 접근성 문제",
-    "경쟁적 활용성 문제"
-  ],
-  "Originality": 3,
-  "ThematicConsistency": 3,
-  "VisualDesign": 3,
-  "CompetitiveViability": 3,
-  "TypeBalance": 3,
-  "MovesetDesign": 4,
-  "EvolutionLogic": 2,
-  "Accessibility": 2,
-  "Marketability": 3,
-  "LoreIntegration": 3,
-  "WeightedBreakdown": {
-    "Originality": 1.0,
-    "ThematicConsistency": 0.8,
-    "VisualDesign": 0.8,
-    "CompetitiveViability": 1.2,
-    "TypeBalance": 1.0,
-    "MovesetDesign": 1.0,
-    "EvolutionLogic": 0.27,
-    "Accessibility": 0.17,
-    "Marketability": 0.2,
-    "LoreIntegration": 0.13
-  },
-  "Questions": [
-    "Storm Surge 능력의 메커니즘이 게임 플레이에 어떤 영향을 미칠까요?",
-    "Voltorrent의 디자인이 기존 둥근 전기 타입 포켓몬과 어떻게 차별화될 수 있을까요?",
-    "Voltorrent의 로어가 기존 포켓몬 세계와 어떻게 연결되는지 설명해 주세요."
-  ],
-  "Limitations": [
-    "전기/물 타입의 4배 약점",
-    "Storm Surge 능력의 복잡성",
-    "시각적 디자인의 유사성",
-    "경쟁적 활용성 문제",
-    "로어 통합의 한계"
-  ],
-  "EthicalConcerns": false,
-  "Soundness": 3,
-  "Presentation": 4,
-  "Contribution": 3,
-  "Overall": 8,
-  "Confidence": 4,
-  "Decision": "Reject"
-},{
-  "Summary": "Voltorrent는 Voltorb와 물의 소용돌이를 결합한 전기/물 타입 포켓몬으로, 전기 폭풍 생성 능력을 가지고 있습니다. 'Storm Surge' 능력을 통해 비에서는 전기 기술을, 전기 지형에서는 물 기술을 강화할 수 있습니다.",
-  "Strengths": [
-    "유니크한 전기/물 하이브리드 타입",
-    "창의적인 'Storm Surge' 능력",
-    "전기/물 타입의 전략적 상호작용",
-    "매력적인 시각적 디자인",
-    "테마적 스토리텔링 및 로어 개발의 잠재력"
-  ],
-  "Weaknesses": [
-    "전기/물 타입의 4배 약점",
-    "Storm Surge 능력의 복잡성",
-    "기존 둥근 전기 타입 포켓몬과의 유사성",
-    "신규 플레이어에게의 접근성 문제",
-    "경쟁적 활용성 문제"
-  ],
-  "Originality": 3,
-  "ThematicConsistency": 3,
-  "VisualDesign": 3,
-  "CompetitiveViability": 3,
-  "TypeBalance": 3,
-  "MovesetDesign": 4,
-  "EvolutionLogic": 2,
-  "Accessibility": 2,
-  "Marketability": 3,
-  "LoreIntegration": 3,
-  "WeightedBreakdown": {
-    "Originality": 1.0,
-    "ThematicConsistency": 0.8,
-    "VisualDesign": 0.8,
-    "CompetitiveViability": 1.2,
-    "TypeBalance": 1.0,
-    "MovesetDesign": 1.0,
-    "EvolutionLogic": 0.27,
-    "Accessibility": 0.17,
-    "Marketability": 0.2,
-    "LoreIntegration": 0.13
-  },
-  "Questions": [
-    "Storm Surge 능력의 메커니즘이 게임 플레이에 어떤 영향을 미칠까요?",
-    "Voltorrent의 디자인이 기존 둥근 전기 타입 포켓몬과 어떻게 차별화될 수 있을까요?",
-    "Voltorrent의 로어가 기존 포켓몬 세계와 어떻게 연결되는지 설명해 주세요."
-  ],
-  "Limitations": [
-    "전기/물 타입의 4배 약점",
-    "Storm Surge 능력의 복잡성",
-    "시각적 디자인의 유사성",
-    "경쟁적 활용성 문제",
-    "로어 통합의 한계"
-  ],
-  "EthicalConcerns": false,
-  "Soundness": 3,
-  "Presentation": 4,
-  "Contribution": 3,
-  "Overall": 8,
-  "Confidence": 4,
-  "Decision": "Reject"
-},{
-  "Summary": "Voltorrent는 Voltorb와 물의 소용돌이를 결합한 전기/물 타입 포켓몬으로, 전기 폭풍 생성 능력을 가지고 있습니다. 'Storm Surge' 능력을 통해 비에서는 전기 기술을, 전기 지형에서는 물 기술을 강화할 수 있습니다.",
-  "Strengths": [
-    "유니크한 전기/물 하이브리드 타입",
-    "창의적인 'Storm Surge' 능력",
-    "전기/물 타입의 전략적 상호작용",
-    "매력적인 시각적 디자인",
-    "테마적 스토리텔링 및 로어 개발의 잠재력"
-  ],
-  "Weaknesses": [
-    "전기/물 타입의 4배 약점",
-    "Storm Surge 능력의 복잡성",
-    "기존 둥근 전기 타입 포켓몬과의 유사성",
-    "신규 플레이어에게의 접근성 문제",
-    "경쟁적 활용성 문제"
-  ],
-  "Originality": 3,
-  "ThematicConsistency": 3,
-  "VisualDesign": 3,
-  "CompetitiveViability": 3,
-  "TypeBalance": 3,
-  "MovesetDesign": 4,
-  "EvolutionLogic": 2,
-  "Accessibility": 2,
-  "Marketability": 3,
-  "LoreIntegration": 3,
-  "WeightedBreakdown": {
-    "Originality": 1.0,
-    "ThematicConsistency": 0.8,
-    "VisualDesign": 0.8,
-    "CompetitiveViability": 1.2,
-    "TypeBalance": 1.0,
-    "MovesetDesign": 1.0,
-    "EvolutionLogic": 0.27,
-    "Accessibility": 0.17,
-    "Marketability": 0.2,
-    "LoreIntegration": 0.13
-  },
-  "Questions": [
-    "Storm Surge 능력의 메커니즘이 게임 플레이에 어떤 영향을 미칠까요?",
-    "Voltorrent의 디자인이 기존 둥근 전기 타입 포켓몬과 어떻게 차별화될 수 있을까요?",
-    "Voltorrent의 로어가 기존 포켓몬 세계와 어떻게 연결되는지 설명해 주세요."
-  ],
-  "Limitations": [
-    "전기/물 타입의 4배 약점",
-    "Storm Surge 능력의 복잡성",
-    "시각적 디자인의 유사성",
-    "경쟁적 활용성 문제",
-    "로어 통합의 한계"
-  ],
-  "EthicalConcerns": false,
-  "Soundness": 3,
-  "Presentation": 4,
-  "Contribution": 3,
-  "Overall": 8,
-  "Confidence": 4,
-  "Decision": "Reject"
-},{
-  "Summary": "Voltorrent는 Voltorb와 물의 소용돌이를 결합한 전기/물 타입 포켓몬으로, 전기 폭풍 생성 능력을 가지고 있습니다. 'Storm Surge' 능력을 통해 비에서는 전기 기술을, 전기 지형에서는 물 기술을 강화할 수 있습니다.",
-  "Strengths": [
-    "유니크한 전기/물 하이브리드 타입",
-    "창의적인 'Storm Surge' 능력",
-    "전기/물 타입의 전략적 상호작용",
-    "매력적인 시각적 디자인",
-    "테마적 스토리텔링 및 로어 개발의 잠재력"
-  ],
-  "Weaknesses": [
-    "전기/물 타입의 4배 약점",
-    "Storm Surge 능력의 복잡성",
-    "기존 둥근 전기 타입 포켓몬과의 유사성",
-    "신규 플레이어에게의 접근성 문제",
-    "경쟁적 활용성 문제"
-  ],
-  "Originality": 3,
-  "ThematicConsistency": 3,
-  "VisualDesign": 3,
-  "CompetitiveViability": 3,
-  "TypeBalance": 3,
-  "MovesetDesign": 4,
-  "EvolutionLogic": 2,
-  "Accessibility": 2,
-  "Marketability": 3,
-  "LoreIntegration": 3,
-  "WeightedBreakdown": {
-    "Originality": 1.0,
-    "ThematicConsistency": 0.8,
-    "VisualDesign": 0.8,
-    "CompetitiveViability": 1.2,
-    "TypeBalance": 1.0,
-    "MovesetDesign": 1.0,
-    "EvolutionLogic": 0.27,
-    "Accessibility": 0.17,
-    "Marketability": 0.2,
-    "LoreIntegration": 0.13
-  },
-  "Questions": [
-    "Storm Surge 능력의 메커니즘이 게임 플레이에 어떤 영향을 미칠까요?",
-    "Voltorrent의 디자인이 기존 둥근 전기 타입 포켓몬과 어떻게 차별화될 수 있을까요?",
-    "Voltorrent의 로어가 기존 포켓몬 세계와 어떻게 연결되는지 설명해 주세요."
-  ],
-  "Limitations": [
-    "전기/물 타입의 4배 약점",
-    "Storm Surge 능력의 복잡성",
-    "시각적 디자인의 유사성",
-    "경쟁적 활용성 문제",
-    "로어 통합의 한계"
-  ],
-  "EthicalConcerns": false,
-  "Soundness": 3,
-  "Presentation": 4,
-  "Contribution": 3,
-  "Overall": 8,
-  "Confidence": 4,
-  "Decision": "Reject"
-},{
-  "Summary": "Voltorrent는 Voltorb와 물의 소용돌이를 결합한 전기/물 타입 포켓몬으로, 전기 폭풍 생성 능력을 가지고 있습니다. 'Storm Surge' 능력을 통해 비에서는 전기 기술을, 전기 지형에서는 물 기술을 강화할 수 있습니다.",
-  "Strengths": [
-    "유니크한 전기/물 하이브리드 타입",
-    "창의적인 'Storm Surge' 능력",
-    "전기/물 타입의 전략적 상호작용",
-    "매력적인 시각적 디자인",
-    "테마적 스토리텔링 및 로어 개발의 잠재력"
-  ],
-  "Weaknesses": [
-    "전기/물 타입의 4배 약점",
-    "Storm Surge 능력의 복잡성",
-    "기존 둥근 전기 타입 포켓몬과의 유사성",
-    "신규 플레이어에게의 접근성 문제",
-    "경쟁적 활용성 문제"
-  ],
-  "Originality": 3,
-  "ThematicConsistency": 3,
-  "VisualDesign": 3,
-  "CompetitiveViability": 3,
-  "TypeBalance": 3,
-  "MovesetDesign": 4,
-  "EvolutionLogic": 2,
-  "Accessibility": 2,
-  "Marketability": 3,
-  "LoreIntegration": 3,
-  "WeightedBreakdown": {
-    "Originality": 1.0,
-    "ThematicConsistency": 0.8,
-    "VisualDesign": 0.8,
-    "CompetitiveViability": 1.2,
-    "TypeBalance": 1.0,
-    "MovesetDesign": 1.0,
-    "EvolutionLogic": 0.27,
-    "Accessibility": 0.17,
-    "Marketability": 0.2,
-    "LoreIntegration": 0.13
-  },
-  "Questions": [
-    "Storm Surge 능력의 메커니즘이 게임 플레이에 어떤 영향을 미칠까요?",
-    "Voltorrent의 디자인이 기존 둥근 전기 타입 포켓몬과 어떻게 차별화될 수 있을까요?",
-    "Voltorrent의 로어가 기존 포켓몬 세계와 어떻게 연결되는지 설명해 주세요."
-  ],
-  "Limitations": [
-    "전기/물 타입의 4배 약점",
-    "Storm Surge 능력의 복잡성",
-    "시각적 디자인의 유사성",
-    "경쟁적 활용성 문제",
-    "로어 통합의 한계"
-  ],
-  "EthicalConcerns": false,
-  "Soundness": 3,
-  "Presentation": 4,
-  "Contribution": 3,
-  "Overall": 8,
-  "Confidence": 4,
-  "Decision": "Reject"
-}
+[
+    {
+        "Originality": 4,
+        "ThematicConsistency": 4,
+        "VisualDesign": 4,
+        "CompetitiveViability": 3,
+        "TypeBalance": 3,
+        "MovesetDesign": 4,
+        "EvolutionLogic": 3,
+        "Accessibility": 2,
+        "Marketability": 4,
+        "LoreIntegration": 4,
+        "Soundness": 4,
+        "Presentation": 4,
+        "Contribution": 4,
+        "Overall": 9,
+        "Confidence": 4,
+        "Summary": "Consensus review aggregated from multiple expert perspectives.",
+        "Strengths": [],
+        "Weaknesses": [],
+        "Questions": [],
+        "Limitations": [],
+        "EthicalConcerns": false,
+        "Decision": "Accept",
+        "WeightedBreakdown": {
+            "Originality": 1.5,
+            "ThematicConsistency": 1.2,
+            "VisualDesign": 1.2,
+            "CompetitiveViability": 1.2,
+            "TypeBalance": 1.0,
+            "MovesetDesign": 1.0,
+            "EvolutionLogic": 0.53,
+            "Accessibility": 0.17,
+            "Marketability": 0.3,
+            "LoreIntegration": 0.2
+        }
+    },
+    {
+        "Summary": "알로아 지역 성층권 구름 지대의 플라잉/전기 타입 포켓몬. 분극 방전 날개와 초고속 비행을 특징으로 하며, Thunder Cyclone의 다기능 기술로 특수형 스위퍼 및 서포터 역할을 수행합니다.",
+        "Strengths": [
+            "분극 방전 날개와 유선형 몸체의 독창적인 시각 디자인",
+            "Thunder Cyclone의 높은 화력(110) + 마비 확률(30%) + 바람 벽 생성(2턴) 복합 효과",
+            "Sp.Atk(110)/Speed(110) 집중 스탯 분배로 특수형 스위퍼 역할 최적화",
+            "Volt Absorb + Storm Warning 조합으로 날씨 전략 시너지 창출",
+            "알로아 지역 지형/날씨 시스템과의 세계관 일관성",
+            "발광 금색 눈 디자인으로 높은 상품성 확보"
+        ],
+        "Weaknesses": [
+            "HP(75)/Defense(70) 부족으로 물리 공격에 취약",
+            "Ground/Rock 타입 카운터(예: Landorus-T)에 대한 명확한 약점",
+            "번개 로드 진화 조건의 게임 구현 복잡성",
+            "히든 능력 'Wind Rider'의 모호한 메커니즘으로 신규 플레이어 진입 장벽",
+            "성층권 서식지의 추상성으로 인한 상품성 한계"
+        ],
+        "Originality": 4,
+        "ThematicConsistency": 4,
+        "VisualDesign": 4,
+        "CompetitiveViability": 3,
+        "TypeBalance": 3,
+        "MovesetDesign": 4,
+        "EvolutionLogic": 3,
+        "Accessibility": 3,
+        "Marketability": 3,
+        "LoreIntegration": 4,
+        "WeightedBreakdown": {
+            "Originality": 1.5,
+            "ThematicConsistency": 1.2,
+            "VisualDesign": 1.2,
+            "CompetitiveViability": 1.2,
+            "TypeBalance": 1.0,
+            "MovesetDesign": 1.0,
+            "EvolutionLogic": 0.53,
+            "Accessibility": 0.33,
+            "Marketability": 0.2,
+            "LoreIntegration": 0.2
+        },
+        "Questions": [
+            "Thunder Cyclone의 바람 벽 효과가 기존 Tailwind와 중복될 경우 밸런스 조정 방안은?",
+            "히든 능력 'Wind Rider'의 정확한 메커니즘(예: 바람 벽 지속 시간 감소?)은 무엇인가?",
+            "번개 로드 진화 조건을 게임 내에서 어떻게 구현할 계획인가?",
+            "성층권 서식지를 반영한 출현률/생태는 어떻게 설계되었는가?"
+        ],
+        "Limitations": [
+            "물리 방어력 부족으로 물리형 메타에 취약",
+            "Ground 타입 카운터 의존도 증가 가능성",
+            "진화 조건의 기술적 복잡성으로 인한 플레이어 불만 가능성",
+            "성층권 컨셉의 추상성으로 인한 머천다이즈 구현 한계"
+        ],
+        "EthicalConcerns": false,
+        "Soundness": 4,
+        "Presentation": 4,
+        "Contribution": 4,
+        "Overall": 9,
+        "Confidence": 4,
+        "Decision": "Accept"
+    },
+    {
+        "Summary": "칼리오 열대 우림의 정령적 수호자 Verdantide는 Grass/Fairy 타입과 포자 기반 서포트 기술로 더블 배틀 메타에 적합한 포켓몬. 높은 특수 스탯과 시그니처 기술 'Sporetide'로 전략적 가치를 지니지만, 다중 약점과 물리적 취약성이 존재.",
+        "Strengths": [
+            "반투명 에메랄드 체색과 포자 메커니즘의 시각적 독창성",
+            "칼리오 지역 및 고대 유적 서식지와 높은 세계관 일관성",
+            "시그니처 기술 'Sporetide'의 아군 버프/적 디버프 이중 효과",
+            "높은 Sp.Atk(100)/Sp.Def(95)로 장기전 대응 가능",
+            "진화 라인과 레벨업 진화 방식의 전통적 설계"
+        ],
+        "Weaknesses": [
+            "Fire/Ice/Poison/Flying/Bug에 대한 다중 약점으로 대전 취약성",
+            "물리적 방어(Def 80) 부족으로 카운터 포켓몬에 노출",
+            "Symbiosis 능력의 제한적 활용도와 기존 포켓몬과의 유사성",
+            "진화 최종형 Verdantium의 디자인/설정 모호성",
+            "복잡한 기술 조합(Calm Mind + Sporetide)의 신규 플레이어 진입 장벽"
+        ],
+        "Originality": 4,
+        "ThematicConsistency": 4,
+        "VisualDesign": 4,
+        "CompetitiveViability": 3,
+        "TypeBalance": 3,
+        "MovesetDesign": 3,
+        "EvolutionLogic": 4,
+        "Accessibility": 3,
+        "Marketability": 4,
+        "LoreIntegration": 4,
+        "WeightedBreakdown": {
+            "Originality": 1.5,
+            "ThematicConsistency": 1.2,
+            "VisualDesign": 1.2,
+            "CompetitiveViability": 1.2,
+            "TypeBalance": 1.0,
+            "MovesetDesign": 0.67,
+            "EvolutionLogic": 0.8,
+            "Accessibility": 0.33,
+            "Marketability": 0.3,
+            "LoreIntegration": 0.2
+        },
+        "Questions": [
+            "Verdantium의 디자인이 고대 유적과 어떻게 융합되는가?",
+            "'Sporetide'의 PP(15)와 3턴 지속시간이 더블 배틀 메타에 적절한가?",
+            "Fire 타입 카운터(예: Charizard)에 대한 구체적 대응 전략은?"
+        ],
+        "Limitations": [
+            "다중 약점으로 인한 대전 생존성 문제",
+            "물리적 공격 역할 부재로 싱글 배틀 활용도 감소",
+            "유사 타입 포켓몬(Tapu Bulu, 플로젯)과의 차별성 부족"
+        ],
+        "EthicalConcerns": false,
+        "Soundness": 3,
+        "Presentation": 4,
+        "Contribution": 4,
+        "Overall": 9,
+        "Confidence": 4,
+        "Decision": "Accept"
+    },
+    {
+        "Summary": "Ice/Ghost 타입의 유령 포켓몬. 산악 부족 영혼 컨셉과 눈보라 필드 생성 능력을 바탕으로 특수 공격형에 특화되었으며, Glacial Epitaph 시그니처 기술로 스피드 감소와 눈보라 유발이 가능.",
+        "Strengths": [
+            "Ice/Ghost 타입 조합의 전략적 유연성 (Psychic/Flying/Bug 타입에 강함)",
+            "시그니처 기술 Glacial Epitaph의 다기능성 (스피드 감소 + 눈보라 유발)",
+            "높은 Sp.Atk(110)와 Sp.Def(100)로 특수 전투 최적화",
+            "산악 부족 설화와 연계된 강력한 세계관 통합성",
+            "반투명 유령과 얼음 결정체 팔의 시각적 독창성 및 상품성",
+            "진화 라인의 자연스러운 논리성 (Frostlet → Frostwhisper → Frostlord)"
+        ],
+        "Weaknesses": [
+            "Fire/Rock/Steel/Dark 타입에 대한 4중 약점으로 카운터 명확",
+            "Frustration 히든 능력의 메커니즘 불명확성 및 실용성 논란",
+            "눈보라 필드 의존성으로 인한 변동성 리스크",
+            "Stealth Rock에 취약해 내구성 저하 가능성",
+            "Hypnosis의 낮은 명중률로 상태 이상 전략 신뢰성 부족",
+            "진화 전 단계(Frostlet) 디자인의 연결성 부족",
+            "Speed 95로 초고속 메타 대응력 약화"
+        ],
+        "Originality": 4,
+        "ThematicConsistency": 4,
+        "VisualDesign": 4,
+        "CompetitiveViability": 3,
+        "TypeBalance": 3,
+        "MovesetDesign": 3,
+        "EvolutionLogic": 4,
+        "Accessibility": 3,
+        "Marketability": 4,
+        "LoreIntegration": 4,
+        "WeightedBreakdown": {
+            "Originality": 1.5,
+            "ThematicConsistency": 1.2,
+            "VisualDesign": 1.2,
+            "CompetitiveViability": 1.2,
+            "TypeBalance": 1.0,
+            "MovesetDesign": 0.67,
+            "EvolutionLogic": 0.8,
+            "Accessibility": 0.33,
+            "Marketability": 0.3,
+            "LoreIntegration": 0.2
+        },
+        "Questions": [
+            "Frustration 히든 능력의 정확한 메커니즘과 게임플레이 적용 가능성",
+            "Glacial Epitaph의 눈보라 발동 확률(50%) 조정 필요성 검토",
+            "Frostlet 진화 전 단계의 디자인 연계성 강화 방안",
+            "Psychic 타입 기술 학습 가능성 및 Ghost 타입과의 시너지 검토"
+        ],
+        "Limitations": [
+            "Fire/Steel 타입에 대한 과도한 취약성",
+            "히든 능력의 전략적 가치 부재 가능성",
+            "진화 전 단계 디자인의 일관성 부족",
+            "눈보라 의존성으로 인한 비날씨 메타 효율성 감소"
+        ],
+        "EthicalConcerns": false,
+        "Soundness": 3,
+        "Presentation": 4,
+        "Contribution": 4,
+        "Overall": 9,
+        "Confidence": 4,
+        "Decision": "Accept"
+    },
+    {
+        "Summary": "극지방 빙하 지대에 서식하는 아이스/플라잉 타입 포켓몬. 날개짓으로 얼음 결정을 생성해 미세 기후를 조절하며, 눈보라 환경에서 스페셜 어태커/세미 탱크 역할을 수행합니다. 북극성 빛을 받아 진화 가능한 2단계 진화 라인과 시그니처 기술 'Glacial Gust'를 보유.",
+        "Strengths": [
+            "독창적인 환경 조절 메커니즘과 북극성 진화 설정",
+            "높은 특수공격/특수방어 스탯으로 안정적인 딜링 및 생존력",
+            "눈보라 필드와의 시너지 및 서포팅 기술(로스트, 라이트 스크린) 보유",
+            "극지방 서식지와의 완벽한 세계관 일관성",
+            "시각적 매력과 상품성(순백색 깃털 + 푸른 발광 날개)"
+        ],
+        "Weaknesses": [
+            "불/전기/강철 타입에 대한 4중 약점으로 전략적 다양성 부족",
+            "Hurricane/Blizzard의 낮은 정확도 문제",
+            "눈보라 의존성으로 인한 환경 제약",
+            "1단계 포켓몬으로서의 진화 라인 확장성 한계",
+            "신규 플레이어의 높은 스탯 이해도 요구"
+        ],
+        "Originality": 4,
+        "ThematicConsistency": 4,
+        "VisualDesign": 4,
+        "CompetitiveViability": 3,
+        "TypeBalance": 2,
+        "MovesetDesign": 3,
+        "EvolutionLogic": 3,
+        "Accessibility": 3,
+        "Marketability": 4,
+        "LoreIntegration": 4,
+        "WeightedBreakdown": {
+            "Originality": 1.5,
+            "ThematicConsistency": 1.2,
+            "VisualDesign": 1.2,
+            "CompetitiveViability": 1.2,
+            "TypeBalance": 0.5,
+            "MovesetDesign": 0.67,
+            "EvolutionLogic": 0.53,
+            "Accessibility": 0.33,
+            "Marketability": 0.3,
+            "LoreIntegration": 0.2
+        },
+        "Questions": [
+            "Frostqueen 진화 시 스탯 변화와 새로운 기술 구성 계획은?",
+            "Glacial Gust의 스피드 하락 효과가 눈보라 외 다른 필드 조건(예: Snow Warning)과 상호작용하는가?",
+            "4중 약점을 상쇄할 수 있는 추가 능력(예: 마법가방) 검토 여부?",
+            "시그니처 기술 대신 상태 이상 효과를 고려한 대체 디자인 검토 여부?"
+        ],
+        "Limitations": [
+            "타입 상성 한계로 인한 카운터 포켓몬의 단조화",
+            "눈보라 의존성으로 인한 전략적 유연성 저하",
+            "진화 메커니즘의 희귀성 문제 가능성",
+            "낮은 정확도 기술로 인한 메타 활용도 제한"
+        ],
+        "EthicalConcerns": false,
+        "Soundness": 4,
+        "Presentation": 4,
+        "Contribution": 3,
+        "Overall": 9,
+        "Confidence": 4,
+        "Decision": "Accept"
+    },
+    {
+        "Summary": "Voltorrent는 Voltorb와 물의 소용돌이를 결합한 전기/물 타입 포켓몬으로, 전기 폭풍 생성 능력을 가지고 있습니다. 'Storm Surge' 능력을 통해 비에서는 전기 기술을, 전기 지형에서는 물 기술을 강화할 수 있습니다.",
+        "Strengths": [
+            "유니크한 전기/물 하이브리드 타입",
+            "창의적인 'Storm Surge' 능력",
+            "전기/물 타입의 전략적 상호작용",
+            "매력적인 시각적 디자인",
+            "테마적 스토리텔링 및 로어 개발의 잠재력"
+        ],
+        "Weaknesses": [
+            "전기/물 타입의 4배 약점",
+            "Storm Surge 능력의 복잡성",
+            "기존 둥근 전기 타입 포켓몬과의 유사성",
+            "신규 플레이어에게의 접근성 문제",
+            "경쟁적 활용성 문제"
+        ],
+        "Originality": 3,
+        "ThematicConsistency": 3,
+        "VisualDesign": 3,
+        "CompetitiveViability": 3,
+        "TypeBalance": 3,
+        "MovesetDesign": 4,
+        "EvolutionLogic": 2,
+        "Accessibility": 2,
+        "Marketability": 3,
+        "LoreIntegration": 3,
+        "WeightedBreakdown": {
+            "Originality": 1.0,
+            "ThematicConsistency": 0.8,
+            "VisualDesign": 0.8,
+            "CompetitiveViability": 1.2,
+            "TypeBalance": 1.0,
+            "MovesetDesign": 1.0,
+            "EvolutionLogic": 0.27,
+            "Accessibility": 0.17,
+            "Marketability": 0.2,
+            "LoreIntegration": 0.13
+        },
+        "Questions": [
+            "Storm Surge 능력의 메커니즘이 게임 플레이에 어떤 영향을 미칠까요?",
+            "Voltorrent의 디자인이 기존 둥근 전기 타입 포켓몬과 어떻게 차별화될 수 있을까요?",
+            "Voltorrent의 로어가 기존 포켓몬 세계와 어떻게 연결되는지 설명해 주세요."
+        ],
+        "Limitations": [
+            "전기/물 타입의 4배 약점",
+            "Storm Surge 능력의 복잡성",
+            "시각적 디자인의 유사성",
+            "경쟁적 활용성 문제",
+            "로어 통합의 한계"
+        ],
+        "EthicalConcerns": false,
+        "Soundness": 3,
+        "Presentation": 4,
+        "Contribution": 3,
+        "Overall": 8,
+        "Confidence": 4,
+        "Decision": "Reject"
+    },
+    {
+        "Summary": "Voltorrent는 Voltorb와 물의 소용돌이를 결합한 전기/물 타입 포켓몬으로, 전기 폭풍 생성 능력을 가지고 있습니다. 'Storm Surge' 능력을 통해 비에서는 전기 기술을, 전기 지형에서는 물 기술을 강화할 수 있습니다.",
+        "Strengths": [
+            "유니크한 전기/물 하이브리드 타입",
+            "창의적인 'Storm Surge' 능력",
+            "전기/물 타입의 전략적 상호작용",
+            "매력적인 시각적 디자인",
+            "테마적 스토리텔링 및 로어 개발의 잠재력"
+        ],
+        "Weaknesses": [
+            "전기/물 타입의 4배 약점",
+            "Storm Surge 능력의 복잡성",
+            "기존 둥근 전기 타입 포켓몬과의 유사성",
+            "신규 플레이어에게의 접근성 문제",
+            "경쟁적 활용성 문제"
+        ],
+        "Originality": 3,
+        "ThematicConsistency": 3,
+        "VisualDesign": 3,
+        "CompetitiveViability": 3,
+        "TypeBalance": 3,
+        "MovesetDesign": 4,
+        "EvolutionLogic": 2,
+        "Accessibility": 2,
+        "Marketability": 3,
+        "LoreIntegration": 3,
+        "WeightedBreakdown": {
+            "Originality": 1.0,
+            "ThematicConsistency": 0.8,
+            "VisualDesign": 0.8,
+            "CompetitiveViability": 1.2,
+            "TypeBalance": 1.0,
+            "MovesetDesign": 1.0,
+            "EvolutionLogic": 0.27,
+            "Accessibility": 0.17,
+            "Marketability": 0.2,
+            "LoreIntegration": 0.13
+        },
+        "Questions": [
+            "Storm Surge 능력의 메커니즘이 게임 플레이에 어떤 영향을 미칠까요?",
+            "Voltorrent의 디자인이 기존 둥근 전기 타입 포켓몬과 어떻게 차별화될 수 있을까요?",
+            "Voltorrent의 로어가 기존 포켓몬 세계와 어떻게 연결되는지 설명해 주세요."
+        ],
+        "Limitations": [
+            "전기/물 타입의 4배 약점",
+            "Storm Surge 능력의 복잡성",
+            "시각적 디자인의 유사성",
+            "경쟁적 활용성 문제",
+            "로어 통합의 한계"
+        ],
+        "EthicalConcerns": false,
+        "Soundness": 3,
+        "Presentation": 4,
+        "Contribution": 3,
+        "Overall": 8,
+        "Confidence": 4,
+        "Decision": "Reject"
+    },
+    {
+        "Summary": "Voltorrent는 Voltorb와 물의 소용돌이를 결합한 전기/물 타입 포켓몬으로, 전기 폭풍 생성 능력을 가지고 있습니다. 'Storm Surge' 능력을 통해 비에서는 전기 기술을, 전기 지형에서는 물 기술을 강화할 수 있습니다.",
+        "Strengths": [
+            "유니크한 전기/물 하이브리드 타입",
+            "창의적인 'Storm Surge' 능력",
+            "전기/물 타입의 전략적 상호작용",
+            "매력적인 시각적 디자인",
+            "테마적 스토리텔링 및 로어 개발의 잠재력"
+        ],
+        "Weaknesses": [
+            "전기/물 타입의 4배 약점",
+            "Storm Surge 능력의 복잡성",
+            "기존 둥근 전기 타입 포켓몬과의 유사성",
+            "신규 플레이어에게의 접근성 문제",
+            "경쟁적 활용성 문제"
+        ],
+        "Originality": 3,
+        "ThematicConsistency": 3,
+        "VisualDesign": 3,
+        "CompetitiveViability": 3,
+        "TypeBalance": 3,
+        "MovesetDesign": 4,
+        "EvolutionLogic": 2,
+        "Accessibility": 2,
+        "Marketability": 3,
+        "LoreIntegration": 3,
+        "WeightedBreakdown": {
+            "Originality": 1.0,
+            "ThematicConsistency": 0.8,
+            "VisualDesign": 0.8,
+            "CompetitiveViability": 1.2,
+            "TypeBalance": 1.0,
+            "MovesetDesign": 1.0,
+            "EvolutionLogic": 0.27,
+            "Accessibility": 0.17,
+            "Marketability": 0.2,
+            "LoreIntegration": 0.13
+        },
+        "Questions": [
+            "Storm Surge 능력의 메커니즘이 게임 플레이에 어떤 영향을 미칠까요?",
+            "Voltorrent의 디자인이 기존 둥근 전기 타입 포켓몬과 어떻게 차별화될 수 있을까요?",
+            "Voltorrent의 로어가 기존 포켓몬 세계와 어떻게 연결되는지 설명해 주세요."
+        ],
+        "Limitations": [
+            "전기/물 타입의 4배 약점",
+            "Storm Surge 능력의 복잡성",
+            "시각적 디자인의 유사성",
+            "경쟁적 활용성 문제",
+            "로어 통합의 한계"
+        ],
+        "EthicalConcerns": false,
+        "Soundness": 3,
+        "Presentation": 4,
+        "Contribution": 3,
+        "Overall": 8,
+        "Confidence": 4,
+        "Decision": "Reject"
+    },
+    {
+        "Summary": "Voltorrent는 Voltorb와 물의 소용돌이를 결합한 전기/물 타입 포켓몬으로, 전기 폭풍 생성 능력을 가지고 있습니다. 'Storm Surge' 능력을 통해 비에서는 전기 기술을, 전기 지형에서는 물 기술을 강화할 수 있습니다.",
+        "Strengths": [
+            "유니크한 전기/물 하이브리드 타입",
+            "창의적인 'Storm Surge' 능력",
+            "전기/물 타입의 전략적 상호작용",
+            "매력적인 시각적 디자인",
+            "테마적 스토리텔링 및 로어 개발의 잠재력"
+        ],
+        "Weaknesses": [
+            "전기/물 타입의 4배 약점",
+            "Storm Surge 능력의 복잡성",
+            "기존 둥근 전기 타입 포켓몬과의 유사성",
+            "신규 플레이어에게의 접근성 문제",
+            "경쟁적 활용성 문제"
+        ],
+        "Originality": 3,
+        "ThematicConsistency": 3,
+        "VisualDesign": 3,
+        "CompetitiveViability": 3,
+        "TypeBalance": 3,
+        "MovesetDesign": 4,
+        "EvolutionLogic": 2,
+        "Accessibility": 2,
+        "Marketability": 3,
+        "LoreIntegration": 3,
+        "WeightedBreakdown": {
+            "Originality": 1.0,
+            "ThematicConsistency": 0.8,
+            "VisualDesign": 0.8,
+            "CompetitiveViability": 1.2,
+            "TypeBalance": 1.0,
+            "MovesetDesign": 1.0,
+            "EvolutionLogic": 0.27,
+            "Accessibility": 0.17,
+            "Marketability": 0.2,
+            "LoreIntegration": 0.13
+        },
+        "Questions": [
+            "Storm Surge 능력의 메커니즘이 게임 플레이에 어떤 영향을 미칠까요?",
+            "Voltorrent의 디자인이 기존 둥근 전기 타입 포켓몬과 어떻게 차별화될 수 있을까요?",
+            "Voltorrent의 로어가 기존 포켓몬 세계와 어떻게 연결되는지 설명해 주세요."
+        ],
+        "Limitations": [
+            "전기/물 타입의 4배 약점",
+            "Storm Surge 능력의 복잡성",
+            "시각적 디자인의 유사성",
+            "경쟁적 활용성 문제",
+            "로어 통합의 한계"
+        ],
+        "EthicalConcerns": false,
+        "Soundness": 3,
+        "Presentation": 4,
+        "Contribution": 3,
+        "Overall": 8,
+        "Confidence": 4,
+        "Decision": "Reject"
+    }
 ]

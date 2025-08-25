@@ -1,6 +1,94 @@
+# make_pokemoncard.py
 import json
-import pandas as pd
+import base64
+import io
+import unicodedata, re
+from typing import Dict, List, Any
+import pandas as pd  # optional: 요약 출력
+from PIL import Image
 
+# --------- 경로 ---------
+DETAILS_JSON_PATH = "ideas/i_cant_believe_its_not_better.json"          # 아이디어 디테일(원본)
+IMAGE_JSON_PATH   = "ideas/i_cant_believe_its_not_better_image.json"    # 이미지 전용(Name, Image)
+OUTPUT_JSON_PATH  = "ideas/pokemon_cards_output.json"                    # 카드 생성용 출력
+
+# --------- 유틸 ---------
+def normalize_key(s: str) -> str:
+    s = unicodedata.normalize("NFKC", str(s or "")).strip().lower()
+    return re.sub(r"\s+", "", s)
+
+def _json_load_safely(entry) -> Any:
+    if isinstance(entry, str):
+        try:
+            return json.loads(entry)
+        except Exception:
+            return {}
+    return entry
+
+def coerce_character(entry: Any) -> Dict[str, Any]:
+    """문자열/중첩 등 무엇이 와도 일관된 character dict로 변환 + 기본값 보정."""
+    entry = _json_load_safely(entry)
+    ch = entry.get("character", entry) if isinstance(entry, dict) else {}
+    if not isinstance(ch, dict):
+        ch = {}
+
+    # 필수 키 기본값
+    ch.setdefault("Name", "unknown")
+    ch.setdefault("Korean Name", "")
+    # Typing: 리스트 보정
+    typing = ch.get("Typing", [])
+    if isinstance(typing, str):
+        typing = [typing]
+    if not isinstance(typing, list):
+        typing = []
+    ch["Typing"] = typing
+
+    # Stats 보정 (누락/비정상 대비)
+    keys = ["HP", "Attack", "Defense", "Sp.Atk", "Sp.Def", "Speed"]
+    stats = ch.get("Stats")
+    if not isinstance(stats, dict):
+        stats = {}
+    fixed = {}
+    for k in keys:
+        v = stats.get(k, 0)
+        try:
+            fixed[k] = int(v)
+        except Exception:
+            fixed[k] = 0
+    fixed["Total"] = sum(fixed[k] for k in keys)
+    ch["Stats"] = fixed
+
+    # 나머지 필드 기본값
+    ch.setdefault("Abilities", [])
+    ch.setdefault("Signature Move", {})
+    ch.setdefault("Movepool Highlights", [])
+    ch.setdefault("Image", None)
+    return ch
+
+def load_image_index(path: str) -> Dict[str, str]:
+    """image.json → {정규화이름: base64(or data-url)}"""
+    idx: Dict[str, str] = {}
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+    except FileNotFoundError:
+        return idx
+    except Exception as e:
+        print(f"[warn] image.json read failed: {e}")
+        return idx
+
+    if isinstance(data, dict):
+        data = [data]
+    for rec in data or []:
+        key = normalize_key(rec.get("Name") or rec.get("Korean Name"))
+        if not key:
+            continue
+        b64 = rec.get("Image") or rec.get("image_base64")
+        if b64:
+            idx[key] = b64
+    return idx
+
+# --------- 도메인 클래스 ---------
 class Skill:
     def __init__(self, name, type_, power, accuracy, pp, effect=None):
         self.name = name
@@ -9,7 +97,6 @@ class Skill:
         self.accuracy = accuracy
         self.pp = pp
         self.effect = effect
-        # 에너지 소모량 결정: 파워가 -1이거나 None이면 0, 그 외 위력 구간에 따라 1~3
         if power is None or power == -1:
             self.energy_cost = 0
         elif power <= 60:
@@ -26,99 +113,70 @@ class Skill:
             "Power": self.power,
             "Accuracy": self.accuracy,
             "EnergyCost": self.energy_cost,
-            "Effect": self.effect
+            "Effect": self.effect,
         }
 
 class PokemonCard:
     def __init__(self, entry):
-        # JSON 구조가 두 가지가 있으므로, 'character' 키가 있으면 내부를 사용
-        ch = entry['character'] if 'character' in entry else entry
-        self.name = ch['Name']
-        # 타입은 리스트 또는 문자열
-        self.types = ch['Typing'] if isinstance(ch['Typing'], list) else [ch['Typing']]
-        self.image = ch.get('Image', None)
-        # 스탯 숫자 변환
-        self.stats = {}
-        for k, v in ch['Stats'].items():
-            if isinstance(v, (int, float)):
-                self.stats[k] = v
-            elif isinstance(v, str):
-                try:
-                    self.stats[k] = int(v)
-                except:
-                    self.stats[k] = 0
-            else:
-                self.stats[k] = 0
-        # 특성
-        self.abilities = ch.get('Abilities', [])
-        # 기술: 시그니처 기술
-        self.skills = []
-        sig = ch.get('Signature Move')
+        ch = entry.get("character", entry) if isinstance(entry, dict) else {}
+        ch = coerce_character(ch)  # 안전 보정
+
+        self.name = ch["Name"]
+        self.types = ch["Typing"] if ch["Typing"] else ["노말"]
+        self.image = ch.get("Image", None)
+
+        # Stats
+        self.stats = ch["Stats"]
+        # Abilities
+        self.abilities = ch.get("Abilities", [])
+
+        # Skills
+        self.skills: List[Skill] = []
+        sig = ch.get("Signature Move") or {}
         if sig:
-            # Power와 Accuracy를 숫자로 변환
-            power = sig.get('Power')
+            power = sig.get("Power")
             if isinstance(power, str):
                 try:
                     power = int(power)
-                except:
+                except Exception:
                     power = None
-            acc = sig.get('Accuracy')
+            acc = sig.get("Accuracy")
             acc_val = None
-            if isinstance(acc, str) and acc.endswith('%'):
+            if isinstance(acc, str) and acc.endswith("%"):
                 try:
-                    acc_val = float(acc.replace('%', ''))
-                except:
+                    acc_val = float(acc.replace("%", ""))
+                except Exception:
                     acc_val = None
             self.skills.append(
-                Skill(
-                    sig.get('Name'),
-                    sig.get('Type'),
-                    power,
-                    acc_val,
-                    sig.get('PP'),
-                    sig.get('Effect'),
-                )
+                Skill(sig.get("Name"), sig.get("Type") or (self.types[0] if self.types else "노말"),
+                      power, acc_val, sig.get("PP"), sig.get("Effect"))
             )
-        # Movepool Highlights → 카드 게임 기술로 변환(기본 파워 계산)
-        attack = self.stats.get('Attack', 0)
-        sp_atk = self.stats.get('Sp.Atk', 0)
-        base_power = max(attack, sp_atk) // 2
-        base_power = max(40, min(base_power, 120))  # 최소 40, 최대 120
+
+        # Movepool Highlights → 기본 스펙으로 카드 공격 생성
+        attack = self.stats.get("Attack", 0)
+        sp_atk = self.stats.get("Sp.Atk", 0)
+        base_power = max(40, min(max(attack, sp_atk) // 2, 120))
         base_accuracy = 100
         base_pp = 20
         base_type = self.types[0]
-        for mv in ch.get('Movepool Highlights', []):
-            self.skills.append(
-                Skill(
-                    mv,
-                    base_type,
-                    base_power,
-                    base_accuracy,
-                    base_pp,
-                    None,
-                )
-            )
-        # 총합 스탯/파워 스코어 계산
-        self.total_stats = ch['Stats'].get('Total') or sum(
-            [self.stats.get(stat, 0) for stat in ['HP','Attack','Defense','Sp.Atk','Sp.Def','Speed']]
+        for mv in ch.get("Movepool Highlights", []):
+            self.skills.append(Skill(mv, base_type, base_power, base_accuracy, base_pp, None))
+
+        # 합/파워/희귀도 계산용
+        self.total_stats = self.stats.get("Total") or sum(
+            self.stats.get(k, 0) for k in ["HP", "Attack", "Defense", "Sp.Atk", "Sp.Def", "Speed"]
         )
         self.power_score = (
-            1.2*self.stats.get('Attack',0) +
-            1.2*self.stats.get('Sp.Atk',0) +
-            1.0*self.stats.get('Defense',0) +
-            1.0*self.stats.get('Sp.Def',0) +
-            0.8*self.stats.get('HP',0) +
-            1.0*self.stats.get('Speed',0)
+            1.2 * self.stats.get("Attack", 0) +
+            1.2 * self.stats.get("Sp.Atk", 0) +
+            1.0 * self.stats.get("Defense", 0) +
+            1.0 * self.stats.get("Sp.Def", 0) +
+            0.8 * self.stats.get("HP", 0) +
+            1.0 * self.stats.get("Speed", 0)
         )
-        # 후퇴 비용 (HP 기준 간단한 휴리스틱)
-        hp = self.stats.get('HP', 50)
-        if hp < 60:
-            self.retreat = 1
-        elif hp < 100:
-            self.retreat = 2
-        else:
-            self.retreat = 3
-        self.rarity = None  # 나중에 부여
+        hp = self.stats.get("HP", 50)
+        self.retreat = 1 if hp < 60 else 2 if hp < 100 else 3
+        self.rarity = None
 
     def as_dict(self):
         return {
@@ -131,45 +189,60 @@ class PokemonCard:
             "Rarity": self.rarity,
             "Abilities": self.abilities,
             "Skills": [sk.as_dict() for sk in self.skills[:2]],
-            "Image": self.image  # 이미지도 함께 저장
+            "Image": self.image,  # (data-url or base64) – draw 단계가 소비
         }
 
-# JSON 로딩 및 카드 객체 생성
-with open('ideas/i_cant_believe_its_not_better_image.json') as f:
-    raw = json.load(f)
-cards = [PokemonCard(entry) for entry in raw]
+# --------- 파이프라인 ---------
+# 1) details 로드 + 정규화
+with open(DETAILS_JSON_PATH, "r", encoding="utf-8") as f:
+    details_raw = json.load(f)
 
-# 파워 스코어에 따라 희귀도 부여: 상위 10% Legendary, 10~40% Rare, 나머지 Common
+characters: List[Dict[str, Any]] = []
+for e in (details_raw if isinstance(details_raw, list) else [details_raw]):
+    ch = coerce_character(e)
+    characters.append({"character": ch})
+
+# 2) image.json을 이름으로 조인하여 Image 붙이기
+img_index = load_image_index(IMAGE_JSON_PATH)
+for rec in characters:
+    ch = rec["character"]
+    key = normalize_key(ch.get("Name") or ch.get("Korean Name"))
+    if key in img_index and not ch.get("Image"):
+        ch["Image"] = img_index[key]
+
+# 3) 카드 객체 생성
+cards = [PokemonCard(rec) for rec in characters]
+
+# 4) 파워 스코어로 희귀도 부여
 sorted_cards = sorted(cards, key=lambda c: c.power_score, reverse=True)
+n = len(sorted_cards)
 for i, c in enumerate(sorted_cards):
-    if i < len(cards)*0.1:
-        c.rarity = 'Legendary'
-    elif i < len(cards)*0.4:
-        c.rarity = 'Rare'
+    if i < max(1, int(n * 0.10)):
+        c.rarity = "Legendary"
+    elif i < max(1, int(n * 0.40)):
+        c.rarity = "Rare"
     else:
-        c.rarity = 'Common'
+        c.rarity = "Common"
 
-# 요약 출력
+# 5) 요약 출력(옵션)
 summary = [
     {
         "Name": c.name,
-        "Types": ', '.join(c.types),
+        "Types": ", ".join(c.types),
         "Power Score": round(c.power_score, 1),
         "Rarity": c.rarity,
         "Retreat Cost": c.retreat,
     }
-    for c in cards
+    for c in sorted_cards
 ]
-df = pd.DataFrame(summary)
-print(df)
+try:
+    print(pd.DataFrame(summary))
+except Exception:
+    print(summary)
 
-# 개별 카드 데이터 확인
-for c in cards:
-    print('\\n--- Card Data ---')
-    print(json.dumps(c.as_dict(), indent=2, ensure_ascii=False))
-    
-# cards 데이터를 JSON으로 저장
+# 6) 출력 저장
 output_data = [c.as_dict() for c in cards]
-
-with open('ideas/pokemon_cards_output.json', 'w', encoding='utf-8') as f:
+with open(OUTPUT_JSON_PATH, "w", encoding="utf-8") as f:
     json.dump(output_data, f, ensure_ascii=False, indent=2)
+
+print(f"\nSaved {len(output_data)} cards -> {OUTPUT_JSON_PATH}")

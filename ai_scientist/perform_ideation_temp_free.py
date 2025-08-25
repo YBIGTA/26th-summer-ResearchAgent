@@ -641,7 +641,7 @@ def generate_temp_free_idea(
                                     new_entry = {
                                         "Name": character.get("Name"),
                                         "Korean Name": character.get("Korean Name"),
-                                        "image_base64": base64_string
+                                        "Image": base64_string
                                     }
                                     image_data.append(new_entry)
                                     # 업데이트된 리스트를 JSON 파일에 저장

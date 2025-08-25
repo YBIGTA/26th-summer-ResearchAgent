@@ -2,16 +2,16 @@
     {
         "character": {
             "Name": "Voltryn",
-            "Korean Name": "볼트린",
-            "Title": "폭풍을 가르는 번개의 창",
+            "Korean Name": "\ubcfc\ud2b8\ub9b0",
+            "Title": "\ud3ed\ud48d\uc744 \uac00\ub974\ub294 \ubc88\uac1c\uc758 \ucc3d",
             "Typing": [
-                "전기",
-                "강철"
+                "\uc804\uae30",
+                "\uac15\ucca0"
             ],
-            "Region/Habitat": "산맥의 정상, 폭풍우가 자주 치는 지역",
-            "Appearance": "창 모양 뿔, 금속성 날개, 노란 번개 문양, 날렵한 실루엣",
-            "Personality": "용감하고 호전적이며 전투에서 결코 물러서지 않는다.",
-            "Pokedex Entry": "볼트린은 거대한 폭풍우 속에서 날개를 펼치며 번개를 끌어모아 적을 꿰뚫는다. 산 정상에 나타날 때마다 하늘이 푸른빛으로 갈라진다고 한다.",
+            "Region/Habitat": "\uc0b0\ub9e5\uc758 \uc815\uc0c1, \ud3ed\ud48d\uc6b0\uac00 \uc790\uc8fc \uce58\ub294 \uc9c0\uc5ed",
+            "Appearance": "\ucc3d \ubaa8\uc591 \ubfd4, \uae08\uc18d\uc131 \ub0a0\uac1c, \ub178\ub780 \ubc88\uac1c \ubb38\uc591, \ub0a0\ub835\ud55c \uc2e4\ub8e8\uc5e3",
+            "Personality": "\uc6a9\uac10\ud558\uace0 \ud638\uc804\uc801\uc774\uba70 \uc804\ud22c\uc5d0\uc11c \uacb0\ucf54 \ubb3c\ub7ec\uc11c\uc9c0 \uc54a\ub294\ub2e4.",
+            "Pokedex Entry": "\ubcfc\ud2b8\ub9b0\uc740 \uac70\ub300\ud55c \ud3ed\ud48d\uc6b0 \uc18d\uc5d0\uc11c \ub0a0\uac1c\ub97c \ud3bc\uce58\uba70 \ubc88\uac1c\ub97c \ub04c\uc5b4\ubaa8\uc544 \uc801\uc744 \uaff0\ub6ab\ub294\ub2e4. \uc0b0 \uc815\uc0c1\uc5d0 \ub098\ud0c0\ub0a0 \ub54c\ub9c8\ub2e4 \ud558\ub298\uc774 \ud478\ub978\ube5b\uc73c\ub85c \uac08\ub77c\uc9c4\ub2e4\uace0 \ud55c\ub2e4.",
             "Stats": {
                 "HP": 75,
                 "Attack": 115,
@@ -33,7 +33,7 @@
                 "Power": 100,
                 "Accuracy": "95%",
                 "PP": 10,
-                "Effect": "공격 시 30% 확률로 상대를 마비시킨다."
+                "Effect": "\uacf5\uaca9 \uc2dc 30% \ud655\ub960\ub85c \uc0c1\ub300\ub97c \ub9c8\ube44\uc2dc\ud0a8\ub2e4."
             },
             "Movepool Highlights": [
                 "Wild Charge",
@@ -43,7 +43,7 @@
                 "Flash Cannon",
                 "Close Combat"
             ],
-            "Playstyle": "싱글에서 빠른 속도로 돌파형 에이스 역할, 더블에서는 볼트 체인지로 유연한 전개 가능. 지상 타입이 큰 약점.",
+            "Playstyle": "\uc2f1\uae00\uc5d0\uc11c \ube60\ub978 \uc18d\ub3c4\ub85c \ub3cc\ud30c\ud615 \uc5d0\uc774\uc2a4 \uc5ed\ud560, \ub354\ube14\uc5d0\uc11c\ub294 \ubcfc\ud2b8 \uccb4\uc778\uc9c0\ub85c \uc720\uc5f0\ud55c \uc804\uac1c \uac00\ub2a5. \uc9c0\uc0c1 \ud0c0\uc785\uc774 \ud070 \uc57d\uc810.",
             "Matchups": {
                 "Resistances": [
                     "Electric",
@@ -57,32 +57,32 @@
                     "Fire"
                 ],
                 "Counters": [
-                    "Ground 타입 탱커와 불꽃 타입 스페셜 어태커"
+                    "Ground \ud0c0\uc785 \ud0f1\ucee4\uc640 \ubd88\uaf43 \ud0c0\uc785 \uc2a4\ud398\uc15c \uc5b4\ud0dc\ucee4"
                 ]
             },
             "Evolution": {
-                "Stage": "2단계",
-                "Method": "레벨 40 진화",
-                "Pre-Evo (선택)": "Voltine - 작은 번개구 모양",
-                "Next-Evo (선택)": ""
+                "Stage": "2\ub2e8\uacc4",
+                "Method": "\ub808\ubca8 40 \uc9c4\ud654",
+                "Pre-Evo (\uc120\ud0dd)": "Voltine - \uc791\uc740 \ubc88\uac1c\uad6c \ubaa8\uc591",
+                "Next-Evo (\uc120\ud0dd)": ""
             },
             "Sample Image Prompt": "3D cinematic animation, metallic bird with lightning spear horns, minimal background",
-            "Design Rationale": "폭풍·전기·강철을 융합한 디자인. 전투에서 공격적인 고속 돌파 역할에 맞게 스탯과 기술 설계."
+            "Design Rationale": "\ud3ed\ud48d\u00b7\uc804\uae30\u00b7\uac15\ucca0\uc744 \uc735\ud569\ud55c \ub514\uc790\uc778. \uc804\ud22c\uc5d0\uc11c \uacf5\uaca9\uc801\uc778 \uace0\uc18d \ub3cc\ud30c \uc5ed\ud560\uc5d0 \ub9de\uac8c \uc2a4\ud0ef\uacfc \uae30\uc220 \uc124\uacc4."
         }
     },
     {
         "character": {
             "Name": "Floralis",
-            "Korean Name": "플로라리스",
-            "Title": "꽃잎으로 꿈을 수놓는 수호자",
+            "Korean Name": "\ud50c\ub85c\ub77c\ub9ac\uc2a4",
+            "Title": "\uaf43\uc78e\uc73c\ub85c \uafc8\uc744 \uc218\ub193\ub294 \uc218\ud638\uc790",
             "Typing": [
                 "Grass",
                 "Fairy"
             ],
-            "Region/Habitat": "푸른 숲 속의 신비한 꽃밭",
-            "Appearance": "긴 꽃잎 망토, 연한 분홍과 초록 색상, 부드러운 실루엣",
-            "Personality": "온화하고 상냥하며 동료를 지키려는 성향이 강하다.",
-            "Pokedex Entry": "플로라리스는 숲을 지키는 수호자라 불린다. 향기로운 꽃가루를 흩뿌려 동료를 치유하며, 침입자를 평화롭게 물리친다.",
+            "Region/Habitat": "\ud478\ub978 \uc232 \uc18d\uc758 \uc2e0\ube44\ud55c \uaf43\ubc2d",
+            "Appearance": "\uae34 \uaf43\uc78e \ub9dd\ud1a0, \uc5f0\ud55c \ubd84\ud64d\uacfc \ucd08\ub85d \uc0c9\uc0c1, \ubd80\ub4dc\ub7ec\uc6b4 \uc2e4\ub8e8\uc5e3",
+            "Personality": "\uc628\ud654\ud558\uace0 \uc0c1\ub0e5\ud558\uba70 \ub3d9\ub8cc\ub97c \uc9c0\ud0a4\ub824\ub294 \uc131\ud5a5\uc774 \uac15\ud558\ub2e4.",
+            "Pokedex Entry": "\ud50c\ub85c\ub77c\ub9ac\uc2a4\ub294 \uc232\uc744 \uc9c0\ud0a4\ub294 \uc218\ud638\uc790\ub77c \ubd88\ub9b0\ub2e4. \ud5a5\uae30\ub85c\uc6b4 \uaf43\uac00\ub8e8\ub97c \ud769\ubfcc\ub824 \ub3d9\ub8cc\ub97c \uce58\uc720\ud558\uba70, \uce68\uc785\uc790\ub97c \ud3c9\ud654\ub86d\uac8c \ubb3c\ub9ac\uce5c\ub2e4.",
             "Stats": {
                 "HP": 95,
                 "Attack": 60,
@@ -104,7 +104,7 @@
                 "Power": "",
                 "Accuracy": "100%",
                 "PP": 10,
-                "Effect": "자신과 동료 포켓몬의 HP를 소량 회복하고 상태 이상을 치유한다."
+                "Effect": "\uc790\uc2e0\uacfc \ub3d9\ub8cc \ud3ec\ucf13\ubaac\uc758 HP\ub97c \uc18c\ub7c9 \ud68c\ubcf5\ud558\uace0 \uc0c1\ud0dc \uc774\uc0c1\uc744 \uce58\uc720\ud55c\ub2e4."
             },
             "Movepool Highlights": [
                 "Moonblast",
@@ -115,7 +115,7 @@
                 "Protect",
                 "Energy Ball"
             ],
-            "Playstyle": "더블 배틀에서 서포터로 활약하며 회복과 보조를 동시에 수행. 강한 물리 공격에는 약하다.",
+            "Playstyle": "\ub354\ube14 \ubc30\ud2c0\uc5d0\uc11c \uc11c\ud3ec\ud130\ub85c \ud65c\uc57d\ud558\uba70 \ud68c\ubcf5\uacfc \ubcf4\uc870\ub97c \ub3d9\uc2dc\uc5d0 \uc218\ud589. \uac15\ud55c \ubb3c\ub9ac \uacf5\uaca9\uc5d0\ub294 \uc57d\ud558\ub2e4.",
             "Matchups": {
                 "Resistances": [
                     "Water",
@@ -129,32 +129,32 @@
                     "Fire"
                 ],
                 "Counters": [
-                    "강철 타입 벽 포켓몬과 독 타입 스위퍼"
+                    "\uac15\ucca0 \ud0c0\uc785 \ubcbd \ud3ec\ucf13\ubaac\uacfc \ub3c5 \ud0c0\uc785 \uc2a4\uc704\ud37c"
                 ]
             },
             "Evolution": {
-                "Stage": "최종진화",
-                "Method": "친밀도+진화의 꽃 아이템",
-                "Pre-Evo (선택)": "Budinia - 작은 봉오리 형태",
-                "Next-Evo (선택)": ""
+                "Stage": "\ucd5c\uc885\uc9c4\ud654",
+                "Method": "\uce5c\ubc00\ub3c4+\uc9c4\ud654\uc758 \uaf43 \uc544\uc774\ud15c",
+                "Pre-Evo (\uc120\ud0dd)": "Budinia - \uc791\uc740 \ubd09\uc624\ub9ac \ud615\ud0dc",
+                "Next-Evo (\uc120\ud0dd)": ""
             },
             "Sample Image Prompt": "3D cinematic animation, fairy flower guardian with glowing petals, minimal background",
-            "Design Rationale": "숲 수호자 컨셉으로 힐러/서포터 역할에 맞는 기술군과 페어리-풀 조합을 선택."
+            "Design Rationale": "\uc232 \uc218\ud638\uc790 \ucee8\uc149\uc73c\ub85c \ud790\ub7ec/\uc11c\ud3ec\ud130 \uc5ed\ud560\uc5d0 \ub9de\ub294 \uae30\uc220\uad70\uacfc \ud398\uc5b4\ub9ac-\ud480 \uc870\ud569\uc744 \uc120\ud0dd."
         }
     },
     {
         "character": {
             "Name": "Pyrox",
-            "Korean Name": "파이록스",
-            "Title": "불꽃의 분노를 두른 화산의 야수",
+            "Korean Name": "\ud30c\uc774\ub85d\uc2a4",
+            "Title": "\ubd88\uaf43\uc758 \ubd84\ub178\ub97c \ub450\ub978 \ud654\uc0b0\uc758 \uc57c\uc218",
             "Typing": [
                 "Fire",
                 "Rock"
             ],
-            "Region/Habitat": "활화산 지대와 용암 동굴",
-            "Appearance": "용암 갑옷, 불타는 갈기, 붉은빛의 강렬한 실루엣",
-            "Personality": "거칠고 고집 세지만, 약속을 지키는 강한 정의감을 지녔다.",
-            "Pokedex Entry": "파이록스는 화산의 분노가 형상화된 존재다. 땅속에서 끓어오르는 마그마를 불러내어 적을 압도한다.",
+            "Region/Habitat": "\ud65c\ud654\uc0b0 \uc9c0\ub300\uc640 \uc6a9\uc554 \ub3d9\uad74",
+            "Appearance": "\uc6a9\uc554 \uac11\uc637, \ubd88\ud0c0\ub294 \uac08\uae30, \ubd89\uc740\ube5b\uc758 \uac15\ub82c\ud55c \uc2e4\ub8e8\uc5e3",
+            "Personality": "\uac70\uce60\uace0 \uace0\uc9d1 \uc138\uc9c0\ub9cc, \uc57d\uc18d\uc744 \uc9c0\ud0a4\ub294 \uac15\ud55c \uc815\uc758\uac10\uc744 \uc9c0\ub154\ub2e4.",
+            "Pokedex Entry": "\ud30c\uc774\ub85d\uc2a4\ub294 \ud654\uc0b0\uc758 \ubd84\ub178\uac00 \ud615\uc0c1\ud654\ub41c \uc874\uc7ac\ub2e4. \ub545\uc18d\uc5d0\uc11c \ub053\uc5b4\uc624\ub974\ub294 \ub9c8\uadf8\ub9c8\ub97c \ubd88\ub7ec\ub0b4\uc5b4 \uc801\uc744 \uc555\ub3c4\ud55c\ub2e4.",
             "Stats": {
                 "HP": 90,
                 "Attack": 120,
@@ -176,7 +176,7 @@
                 "Power": 110,
                 "Accuracy": "85%",
                 "PP": 5,
-                "Effect": "화상 상태를 30% 확률로 유발."
+                "Effect": "\ud654\uc0c1 \uc0c1\ud0dc\ub97c 30% \ud655\ub960\ub85c \uc720\ubc1c."
             },
             "Movepool Highlights": [
                 "Flare Blitz",
@@ -186,7 +186,7 @@
                 "Stealth Rock",
                 "Roar"
             ],
-            "Playstyle": "싱글에서 스텔스록 설치와 물리 공격으로 압박. 더블에서는 위협(Intimidate)으로 견제. 물 타입과 땅 타입에게 크게 불리하다.",
+            "Playstyle": "\uc2f1\uae00\uc5d0\uc11c \uc2a4\ud154\uc2a4\ub85d \uc124\uce58\uc640 \ubb3c\ub9ac \uacf5\uaca9\uc73c\ub85c \uc555\ubc15. \ub354\ube14\uc5d0\uc11c\ub294 \uc704\ud611(Intimidate)\uc73c\ub85c \uacac\uc81c. \ubb3c \ud0c0\uc785\uacfc \ub545 \ud0c0\uc785\uc5d0\uac8c \ud06c\uac8c \ubd88\ub9ac\ud558\ub2e4.",
             "Matchups": {
                 "Resistances": [
                     "Fire",
@@ -201,31 +201,31 @@
                     "Rock"
                 ],
                 "Counters": [
-                    "물 타입 탱커와 땅 타입 스위퍼"
+                    "\ubb3c \ud0c0\uc785 \ud0f1\ucee4\uc640 \ub545 \ud0c0\uc785 \uc2a4\uc704\ud37c"
                 ]
             },
             "Evolution": {
-                "Stage": "최종진화",
-                "Method": "레벨 45 진화",
-                "Pre-Evo (선택)": "Pyrite - 작은 용암 코어",
-                "Next-Evo (선택)": ""
+                "Stage": "\ucd5c\uc885\uc9c4\ud654",
+                "Method": "\ub808\ubca8 45 \uc9c4\ud654",
+                "Pre-Evo (\uc120\ud0dd)": "Pyrite - \uc791\uc740 \uc6a9\uc554 \ucf54\uc5b4",
+                "Next-Evo (\uc120\ud0dd)": ""
             },
             "Sample Image Prompt": "3D cinematic animation, volcanic beast with magma armor, minimal background",
-            "Design Rationale": "불+암석 조합으로 화산 테마를 극대화. 공격적이면서도 스텔스록 전개용으로 밸런스 맞춤."
+            "Design Rationale": "\ubd88+\uc554\uc11d \uc870\ud569\uc73c\ub85c \ud654\uc0b0 \ud14c\ub9c8\ub97c \uadf9\ub300\ud654. \uacf5\uaca9\uc801\uc774\uba74\uc11c\ub3c4 \uc2a4\ud154\uc2a4\ub85d \uc804\uac1c\uc6a9\uc73c\ub85c \ubc38\ub7f0\uc2a4 \ub9de\ucda4."
         }
     },
     {
         "Name": "Cryogear",
-        "Korean Name": "크리오기어",
-        "Title": "빙하의 기계전사, 영하의 각성을 깨우다",
+        "Korean Name": "\ud06c\ub9ac\uc624\uae30\uc5b4",
+        "Title": "\ube59\ud558\uc758 \uae30\uacc4\uc804\uc0ac, \uc601\ud558\uc758 \uac01\uc131\uc744 \uae68\uc6b0\ub2e4",
         "Typing": [
             "Ice",
             "Steel"
         ],
-        "Region/Habitat": "칼데아 산맥의 빙하 지대, 고대 유적 보호 구역",
-        "Appearance": "청백색 강철 갑주, 얼어붙은 관절, 빙결 에너지 코어, 견갑의 고대 문자 각인, 날카로운 서리 검날",
-        "Personality": "전투 시 감정이 서리로 응축되어 공격력 상승. 빙하 속 유적을 수호하는 의무감이 강함",
-        "Pokedex Entry": "크리오기어는 빙하 속 잠든 고대 문명의 기술을 계승한 포켓몬이다. 강철 갑옷과 빙결 에너지가 융합되어, 영하 100도에서도 전투가 가능하다. 유적 파괴자를 향한 분노는 서리 검날을 더욱 예리하게 만든다.",
+        "Region/Habitat": "\uce7c\ub370\uc544 \uc0b0\ub9e5\uc758 \ube59\ud558 \uc9c0\ub300, \uace0\ub300 \uc720\uc801 \ubcf4\ud638 \uad6c\uc5ed",
+        "Appearance": "\uccad\ubc31\uc0c9 \uac15\ucca0 \uac11\uc8fc, \uc5bc\uc5b4\ubd99\uc740 \uad00\uc808, \ube59\uacb0 \uc5d0\ub108\uc9c0 \ucf54\uc5b4, \uacac\uac11\uc758 \uace0\ub300 \ubb38\uc790 \uac01\uc778, \ub0a0\uce74\ub85c\uc6b4 \uc11c\ub9ac \uac80\ub0a0",
+        "Personality": "\uc804\ud22c \uc2dc \uac10\uc815\uc774 \uc11c\ub9ac\ub85c \uc751\ucd95\ub418\uc5b4 \uacf5\uaca9\ub825 \uc0c1\uc2b9. \ube59\ud558 \uc18d \uc720\uc801\uc744 \uc218\ud638\ud558\ub294 \uc758\ubb34\uac10\uc774 \uac15\ud568",
+        "Pokedex Entry": "\ud06c\ub9ac\uc624\uae30\uc5b4\ub294 \ube59\ud558 \uc18d \uc7a0\ub4e0 \uace0\ub300 \ubb38\uba85\uc758 \uae30\uc220\uc744 \uacc4\uc2b9\ud55c \ud3ec\ucf13\ubaac\uc774\ub2e4. \uac15\ucca0 \uac11\uc637\uacfc \ube59\uacb0 \uc5d0\ub108\uc9c0\uac00 \uc735\ud569\ub418\uc5b4, \uc601\ud558 100\ub3c4\uc5d0\uc11c\ub3c4 \uc804\ud22c\uac00 \uac00\ub2a5\ud558\ub2e4. \uc720\uc801 \ud30c\uad34\uc790\ub97c \ud5a5\ud55c \ubd84\ub178\ub294 \uc11c\ub9ac \uac80\ub0a0\uc744 \ub354\uc6b1 \uc608\ub9ac\ud558\uac8c \ub9cc\ub4e0\ub2e4.",
         "Stats": {
             "HP": 80,
             "Attack": 125,
@@ -247,7 +247,7 @@
             "Power": 110,
             "Accuracy": "90%",
             "PP": 10,
-            "Effect": "상대에게 얼어붙음 상태 이상을 20% 확률로 부여. 다음 턴 회피율 20% 상승"
+            "Effect": "\uc0c1\ub300\uc5d0\uac8c \uc5bc\uc5b4\ubd99\uc74c \uc0c1\ud0dc \uc774\uc0c1\uc744 20% \ud655\ub960\ub85c \ubd80\uc5ec. \ub2e4\uc74c \ud134 \ud68c\ud53c\uc728 20% \uc0c1\uc2b9"
         },
         "Movepool Highlights": [
             "Close Combat",
@@ -257,7 +257,7 @@
             "Recover",
             "Light Screen"
         ],
-        "Playstyle": "물리적 돌파력으로 전면 압박. 시그니처 기술의 회피율 상승으로 생존성 확보. 더블 배틀에서 Heavy Armor로 생존력 극대화",
+        "Playstyle": "\ubb3c\ub9ac\uc801 \ub3cc\ud30c\ub825\uc73c\ub85c \uc804\uba74 \uc555\ubc15. \uc2dc\uadf8\ub2c8\ucc98 \uae30\uc220\uc758 \ud68c\ud53c\uc728 \uc0c1\uc2b9\uc73c\ub85c \uc0dd\uc874\uc131 \ud655\ubcf4. \ub354\ube14 \ubc30\ud2c0\uc5d0\uc11c Heavy Armor\ub85c \uc0dd\uc874\ub825 \uadf9\ub300\ud654",
         "Matchups": {
             "Resistances": [
                 "Ice",
@@ -271,30 +271,30 @@
                 "Ground"
             ],
             "Counters": [
-                "용암 타입 포켓몬, 지진/석머신을 사용하는 포켓몬"
+                "\uc6a9\uc554 \ud0c0\uc785 \ud3ec\ucf13\ubaac, \uc9c0\uc9c4/\uc11d\uba38\uc2e0\uc744 \uc0ac\uc6a9\ud558\ub294 \ud3ec\ucf13\ubaac"
             ]
         },
         "Evolution": {
-            "Stage": "2단계",
-            "Method": "레벨 42 + 고대 빙하 코어",
-            "Pre-Evo (선택)": "Frostlet - 청록색 소형 로봇 포켓몬, 얼음 창 사용",
-            "Next-Evo (선택)": ""
+            "Stage": "2\ub2e8\uacc4",
+            "Method": "\ub808\ubca8 42 + \uace0\ub300 \ube59\ud558 \ucf54\uc5b4",
+            "Pre-Evo (\uc120\ud0dd)": "Frostlet - \uccad\ub85d\uc0c9 \uc18c\ud615 \ub85c\ubd07 \ud3ec\ucf13\ubaac, \uc5bc\uc74c \ucc3d \uc0ac\uc6a9",
+            "Next-Evo (\uc120\ud0dd)": ""
         },
         "Sample Image Prompt": "3D cinematic animation, blue-white armored robot with glowing frost blade, ancient glyphs on shoulder plates, minimal background",
-        "Design Rationale": "1) 독창성: '고대 문명+기계+빙하'의 독자적 콘셉트로 공식 포켓몬(강철톤, 얼루미네)과 차별화. 시그니처 기술의 회피율 상승 효과는 신규 메커니즘\n2) 밸런스: Ice+Steel 약점 보완을 위해 방어형 종족값(Def 110, SpD 95) 부여. 스피드 희생(50)으로 물리 공격력 집중(Atk 125)\n3) 세계관: 칼데아 산맥의 빙하 유적 설정과 진화 아이템(고대 빙하 코어) 연계. 견갑의 고대 문자로 문명 수호자 이미지 강화\n4) 운용성: 더블 배틀에서 Heavy Armor와 Light Screen 조합으로 생존력 특화. 싱글 배틀에서는 Close Combat+Autotomize로 돌파력 극대화"
+        "Design Rationale": "1) \ub3c5\ucc3d\uc131: '\uace0\ub300 \ubb38\uba85+\uae30\uacc4+\ube59\ud558'\uc758 \ub3c5\uc790\uc801 \ucf58\uc149\ud2b8\ub85c \uacf5\uc2dd \ud3ec\ucf13\ubaac(\uac15\ucca0\ud1a4, \uc5bc\ub8e8\ubbf8\ub124)\uacfc \ucc28\ubcc4\ud654. \uc2dc\uadf8\ub2c8\ucc98 \uae30\uc220\uc758 \ud68c\ud53c\uc728 \uc0c1\uc2b9 \ud6a8\uacfc\ub294 \uc2e0\uaddc \uba54\ucee4\ub2c8\uc998\n2) \ubc38\ub7f0\uc2a4: Ice+Steel \uc57d\uc810 \ubcf4\uc644\uc744 \uc704\ud574 \ubc29\uc5b4\ud615 \uc885\uc871\uac12(Def 110, SpD 95) \ubd80\uc5ec. \uc2a4\ud53c\ub4dc \ud76c\uc0dd(50)\uc73c\ub85c \ubb3c\ub9ac \uacf5\uaca9\ub825 \uc9d1\uc911(Atk 125)\n3) \uc138\uacc4\uad00: \uce7c\ub370\uc544 \uc0b0\ub9e5\uc758 \ube59\ud558 \uc720\uc801 \uc124\uc815\uacfc \uc9c4\ud654 \uc544\uc774\ud15c(\uace0\ub300 \ube59\ud558 \ucf54\uc5b4) \uc5f0\uacc4. \uacac\uac11\uc758 \uace0\ub300 \ubb38\uc790\ub85c \ubb38\uba85 \uc218\ud638\uc790 \uc774\ubbf8\uc9c0 \uac15\ud654\n4) \uc6b4\uc6a9\uc131: \ub354\ube14 \ubc30\ud2c0\uc5d0\uc11c Heavy Armor\uc640 Light Screen \uc870\ud569\uc73c\ub85c \uc0dd\uc874\ub825 \ud2b9\ud654. \uc2f1\uae00 \ubc30\ud2c0\uc5d0\uc11c\ub294 Close Combat+Autotomize\ub85c \ub3cc\ud30c\ub825 \uadf9\ub300\ud654"
     },
     {
         "Name": "Aquaflux",
-        "Korean Name": "아쿠아프럭스",
-        "Title": "파도의 혼종, 해류를 조종하는 은빛 유령",
+        "Korean Name": "\uc544\ucfe0\uc544\ud504\ub7ed\uc2a4",
+        "Title": "\ud30c\ub3c4\uc758 \ud63c\uc885, \ud574\ub958\ub97c \uc870\uc885\ud558\ub294 \uc740\ube5b \uc720\ub839",
         "Typing": [
             "Water",
             "Ghost"
         ],
-        "Region/Habitat": "칼리오 해양 협곡, 심해 열수구 근처",
-        "Appearance": "반투명한 은빛 몸체, 소용돌이 모양의 유령 팔, 발광하는 청색 눈, 해초 같은 긴 꼬리, 물결 모양의 뿔",
-        "Personality": "신비롭고 예측불가능, 물속에서는 우아하지만 육지에서는 불안정함. 선원들의 영혼을 안내한다는 전설",
-        "Pokedex Entry": "아쿠아프럭스는 심해의 해류가 응집해 탄생한 영혼 포켓몬. 물결 같은 팔이 주변을 휘감으며 해류를 조종한다. 선원들이 길을 잃었을 때 나타나 안전한 길을 안내한다고 전해진다.",
+        "Region/Habitat": "\uce7c\ub9ac\uc624 \ud574\uc591 \ud611\uace1, \uc2ec\ud574 \uc5f4\uc218\uad6c \uadfc\ucc98",
+        "Appearance": "\ubc18\ud22c\uba85\ud55c \uc740\ube5b \ubab8\uccb4, \uc18c\uc6a9\ub3cc\uc774 \ubaa8\uc591\uc758 \uc720\ub839 \ud314, \ubc1c\uad11\ud558\ub294 \uccad\uc0c9 \ub208, \ud574\ucd08 \uac19\uc740 \uae34 \uaf2c\ub9ac, \ubb3c\uacb0 \ubaa8\uc591\uc758 \ubfd4",
+        "Personality": "\uc2e0\ube44\ub86d\uace0 \uc608\uce21\ubd88\uac00\ub2a5, \ubb3c\uc18d\uc5d0\uc11c\ub294 \uc6b0\uc544\ud558\uc9c0\ub9cc \uc721\uc9c0\uc5d0\uc11c\ub294 \ubd88\uc548\uc815\ud568. \uc120\uc6d0\ub4e4\uc758 \uc601\ud63c\uc744 \uc548\ub0b4\ud55c\ub2e4\ub294 \uc804\uc124",
+        "Pokedex Entry": "\uc544\ucfe0\uc544\ud504\ub7ed\uc2a4\ub294 \uc2ec\ud574\uc758 \ud574\ub958\uac00 \uc751\uc9d1\ud574 \ud0c4\uc0dd\ud55c \uc601\ud63c \ud3ec\ucf13\ubaac. \ubb3c\uacb0 \uac19\uc740 \ud314\uc774 \uc8fc\ubcc0\uc744 \ud718\uac10\uc73c\uba70 \ud574\ub958\ub97c \uc870\uc885\ud55c\ub2e4. \uc120\uc6d0\ub4e4\uc774 \uae38\uc744 \uc783\uc5c8\uc744 \ub54c \ub098\ud0c0\ub098 \uc548\uc804\ud55c \uae38\uc744 \uc548\ub0b4\ud55c\ub2e4\uace0 \uc804\ud574\uc9c4\ub2e4.",
         "Stats": {
             "HP": 70,
             "Attack": 85,
@@ -316,7 +316,7 @@
             "Power": 95,
             "Accuracy": "100%",
             "PP": 10,
-            "Effect": "적의 특수방어를 1단계 내림. 사용 후 50% 확률로 아쿠아프럭스의 스피드 1단계 상승"
+            "Effect": "\uc801\uc758 \ud2b9\uc218\ubc29\uc5b4\ub97c 1\ub2e8\uacc4 \ub0b4\ub9bc. \uc0ac\uc6a9 \ud6c4 50% \ud655\ub960\ub85c \uc544\ucfe0\uc544\ud504\ub7ed\uc2a4\uc758 \uc2a4\ud53c\ub4dc 1\ub2e8\uacc4 \uc0c1\uc2b9"
         },
         "Movepool Highlights": [
             "Shadow Ball",
@@ -327,7 +327,7 @@
             "Psychic",
             "Thunderbolt"
         ],
-        "Playstyle": "특수공격 중심의 혼합 벽. 스피드와 특수방어 밸런스로 장기전 가능. Tidal Whisper로 상대 특수방어를 무력화하며 Moody와 연계해 역전 가능성 보유. 단, 물리 방어가 약해 Close Combat 같은 기술에 취약",
+        "Playstyle": "\ud2b9\uc218\uacf5\uaca9 \uc911\uc2ec\uc758 \ud63c\ud569 \ubcbd. \uc2a4\ud53c\ub4dc\uc640 \ud2b9\uc218\ubc29\uc5b4 \ubc38\ub7f0\uc2a4\ub85c \uc7a5\uae30\uc804 \uac00\ub2a5. Tidal Whisper\ub85c \uc0c1\ub300 \ud2b9\uc218\ubc29\uc5b4\ub97c \ubb34\ub825\ud654\ud558\uba70 Moody\uc640 \uc5f0\uacc4\ud574 \uc5ed\uc804 \uac00\ub2a5\uc131 \ubcf4\uc720. \ub2e8, \ubb3c\ub9ac \ubc29\uc5b4\uac00 \uc57d\ud574 Close Combat \uac19\uc740 \uae30\uc220\uc5d0 \ucde8\uc57d",
         "Matchups": {
             "Resistances": [
                 "Water",
@@ -344,30 +344,30 @@
                 "Ice"
             ],
             "Counters": [
-                "전기/풀 타입 기술 보유자, 물리형 다크/아쿠아 포켓몬"
+                "\uc804\uae30/\ud480 \ud0c0\uc785 \uae30\uc220 \ubcf4\uc720\uc790, \ubb3c\ub9ac\ud615 \ub2e4\ud06c/\uc544\ucfe0\uc544 \ud3ec\ucf13\ubaac"
             ]
         },
         "Evolution": {
-            "Stage": "1단계",
-            "Method": "레벨 38 + 칼리오 협곡에서 해류 체험",
-            "Pre-Evo (선택)": "",
-            "Next-Evo (선택)": "Eternalflux - 아쿠아프럭스가 심해 열수구의 정기를 받아 진화, 몸체가 완전한 유령화되며 불꽃 같은 꼬리 발생"
+            "Stage": "1\ub2e8\uacc4",
+            "Method": "\ub808\ubca8 38 + \uce7c\ub9ac\uc624 \ud611\uace1\uc5d0\uc11c \ud574\ub958 \uccb4\ud5d8",
+            "Pre-Evo (\uc120\ud0dd)": "",
+            "Next-Evo (\uc120\ud0dd)": "Eternalflux - \uc544\ucfe0\uc544\ud504\ub7ed\uc2a4\uac00 \uc2ec\ud574 \uc5f4\uc218\uad6c\uc758 \uc815\uae30\ub97c \ubc1b\uc544 \uc9c4\ud654, \ubab8\uccb4\uac00 \uc644\uc804\ud55c \uc720\ub839\ud654\ub418\uba70 \ubd88\uaf43 \uac19\uc740 \uaf2c\ub9ac \ubc1c\uc0dd"
         },
         "Sample Image Prompt": "3D cinematic animation, translucent silver ghost with swirling water arms and glowing blue eyes, minimal background",
-        "Design Rationale": "1) 콘셉트 일관성: '심해 유령+해류 조종'이라는 테마를 외형(투명 몸체, 소용돌이 팔), 기술(해류 관련 시그니처), 서식지(심해 협곡)에 통합\n2) 밸런스: Water+Ghost 조합으로 특수방어(95)와 스피드(100)에 집중, 공격력(85)은 보조. Multiscale로 생존성 보완\n3) 세계관: 해양 전설과 유령 특성을 결합해 칼리오 지역 신화와 연결. 진화형(Eternalflux)은 열수구 환경과 불꽃 요소 추가로 상성 확장\n4) 차별성: 기존 Water/Ghost 포켓몬(갤러드)과 달리 해류 조종 능력과 스피드 중심 설계로 독창성 확보\n5) 운용성: 특수공격형 벽으로 메타에서 니시 확보. 전기/풀 타입에 약점으로 카운터 가능성 보장"
+        "Design Rationale": "1) \ucf58\uc149\ud2b8 \uc77c\uad00\uc131: '\uc2ec\ud574 \uc720\ub839+\ud574\ub958 \uc870\uc885'\uc774\ub77c\ub294 \ud14c\ub9c8\ub97c \uc678\ud615(\ud22c\uba85 \ubab8\uccb4, \uc18c\uc6a9\ub3cc\uc774 \ud314), \uae30\uc220(\ud574\ub958 \uad00\ub828 \uc2dc\uadf8\ub2c8\ucc98), \uc11c\uc2dd\uc9c0(\uc2ec\ud574 \ud611\uace1)\uc5d0 \ud1b5\ud569\n2) \ubc38\ub7f0\uc2a4: Water+Ghost \uc870\ud569\uc73c\ub85c \ud2b9\uc218\ubc29\uc5b4(95)\uc640 \uc2a4\ud53c\ub4dc(100)\uc5d0 \uc9d1\uc911, \uacf5\uaca9\ub825(85)\uc740 \ubcf4\uc870. Multiscale\ub85c \uc0dd\uc874\uc131 \ubcf4\uc644\n3) \uc138\uacc4\uad00: \ud574\uc591 \uc804\uc124\uacfc \uc720\ub839 \ud2b9\uc131\uc744 \uacb0\ud569\ud574 \uce7c\ub9ac\uc624 \uc9c0\uc5ed \uc2e0\ud654\uc640 \uc5f0\uacb0. \uc9c4\ud654\ud615(Eternalflux)\uc740 \uc5f4\uc218\uad6c \ud658\uacbd\uacfc \ubd88\uaf43 \uc694\uc18c \ucd94\uac00\ub85c \uc0c1\uc131 \ud655\uc7a5\n4) \ucc28\ubcc4\uc131: \uae30\uc874 Water/Ghost \ud3ec\ucf13\ubaac(\uac24\ub7ec\ub4dc)\uacfc \ub2ec\ub9ac \ud574\ub958 \uc870\uc885 \ub2a5\ub825\uacfc \uc2a4\ud53c\ub4dc \uc911\uc2ec \uc124\uacc4\ub85c \ub3c5\ucc3d\uc131 \ud655\ubcf4\n5) \uc6b4\uc6a9\uc131: \ud2b9\uc218\uacf5\uaca9\ud615 \ubcbd\uc73c\ub85c \uba54\ud0c0\uc5d0\uc11c \ub2c8\uc2dc \ud655\ubcf4. \uc804\uae30/\ud480 \ud0c0\uc785\uc5d0 \uc57d\uc810\uc73c\ub85c \uce74\uc6b4\ud130 \uac00\ub2a5\uc131 \ubcf4\uc7a5"
     },
     {
         "Name": "Pyroclaw",
-        "Korean Name": "불발톱",
-        "Title": "용암으로 물들인 발톱, 어둠의 화염 사냥꾼",
+        "Korean Name": "\ubd88\ubc1c\ud1b1",
+        "Title": "\uc6a9\uc554\uc73c\ub85c \ubb3c\ub4e4\uc778 \ubc1c\ud1b1, \uc5b4\ub460\uc758 \ud654\uc5fc \uc0ac\ub0e5\uafbc",
         "Typing": [
             "Fire",
             "Dark"
         ],
-        "Region/Habitat": "칼라스 지역의 화산 지대, 용암 동굴",
-        "Appearance": "검은 털에 붉은색 용암 줄무늬, 발톱에서 용암 분출, 꼬리 끝에 불타는 결정체, 노란 눈빛",
-        "Personality": "침착한 사냥꾼으로, 어둠 속에서도 표적의 약점을 정확히 포착한다. 단독 행동을 선호하며, 불굴의 의지를 지님",
-        "Pokedex Entry": "불발톱은 칼라스 화산 지대의 야행성 포식자다. 발톱에서 뿜어져 나오는 용암 화염은 어둠 속에서도 표적을 관통한다. 꼬리 끝의 결정체는 용암 에너지를 저장해 주변을 밝힌다.",
+        "Region/Habitat": "\uce7c\ub77c\uc2a4 \uc9c0\uc5ed\uc758 \ud654\uc0b0 \uc9c0\ub300, \uc6a9\uc554 \ub3d9\uad74",
+        "Appearance": "\uac80\uc740 \ud138\uc5d0 \ubd89\uc740\uc0c9 \uc6a9\uc554 \uc904\ubb34\ub2ac, \ubc1c\ud1b1\uc5d0\uc11c \uc6a9\uc554 \ubd84\ucd9c, \uaf2c\ub9ac \ub05d\uc5d0 \ubd88\ud0c0\ub294 \uacb0\uc815\uccb4, \ub178\ub780 \ub208\ube5b",
+        "Personality": "\uce68\ucc29\ud55c \uc0ac\ub0e5\uafbc\uc73c\ub85c, \uc5b4\ub460 \uc18d\uc5d0\uc11c\ub3c4 \ud45c\uc801\uc758 \uc57d\uc810\uc744 \uc815\ud655\ud788 \ud3ec\ucc29\ud55c\ub2e4. \ub2e8\ub3c5 \ud589\ub3d9\uc744 \uc120\ud638\ud558\uba70, \ubd88\uad74\uc758 \uc758\uc9c0\ub97c \uc9c0\ub2d8",
+        "Pokedex Entry": "\ubd88\ubc1c\ud1b1\uc740 \uce7c\ub77c\uc2a4 \ud654\uc0b0 \uc9c0\ub300\uc758 \uc57c\ud589\uc131 \ud3ec\uc2dd\uc790\ub2e4. \ubc1c\ud1b1\uc5d0\uc11c \ubfdc\uc5b4\uc838 \ub098\uc624\ub294 \uc6a9\uc554 \ud654\uc5fc\uc740 \uc5b4\ub460 \uc18d\uc5d0\uc11c\ub3c4 \ud45c\uc801\uc744 \uad00\ud1b5\ud55c\ub2e4. \uaf2c\ub9ac \ub05d\uc758 \uacb0\uc815\uccb4\ub294 \uc6a9\uc554 \uc5d0\ub108\uc9c0\ub97c \uc800\uc7a5\ud574 \uc8fc\ubcc0\uc744 \ubc1d\ud78c\ub2e4.",
         "Stats": {
             "HP": 80,
             "Attack": 120,
@@ -389,7 +389,7 @@
             "Power": 105,
             "Accuracy": "90%",
             "PP": 10,
-            "Effect": "20% 확률로 표적의 방어력을 1단계 하락시킴. 용암 지형에서 사용 시 위력 +10"
+            "Effect": "20% \ud655\ub960\ub85c \ud45c\uc801\uc758 \ubc29\uc5b4\ub825\uc744 1\ub2e8\uacc4 \ud558\ub77d\uc2dc\ud0b4. \uc6a9\uc554 \uc9c0\ud615\uc5d0\uc11c \uc0ac\uc6a9 \uc2dc \uc704\ub825 +10"
         },
         "Movepool Highlights": [
             "Close Combat",
@@ -400,7 +400,7 @@
             "Shadow Claw",
             "Will-O-Wisp"
         ],
-        "Playstyle": "속도와 공격력 중심의 선공 돌파형. 스워드 댄스로 공격력을 극대화한 후 라바 슬래시로 화염 피해를 입히며, 방어력 하락 효과로 상대 방어를 무너뜨린다. 더블 배틀에서는 클로즈 컴뱃으로 광역 피해를 입히거나, 윌오위스프로 물리적 포켓몬을 견제. 용암 지형에서 라바 슬래시의 위력 상승이 핵심",
+        "Playstyle": "\uc18d\ub3c4\uc640 \uacf5\uaca9\ub825 \uc911\uc2ec\uc758 \uc120\uacf5 \ub3cc\ud30c\ud615. \uc2a4\uc6cc\ub4dc \ub304\uc2a4\ub85c \uacf5\uaca9\ub825\uc744 \uadf9\ub300\ud654\ud55c \ud6c4 \ub77c\ubc14 \uc2ac\ub798\uc2dc\ub85c \ud654\uc5fc \ud53c\ud574\ub97c \uc785\ud788\uba70, \ubc29\uc5b4\ub825 \ud558\ub77d \ud6a8\uacfc\ub85c \uc0c1\ub300 \ubc29\uc5b4\ub97c \ubb34\ub108\ub728\ub9b0\ub2e4. \ub354\ube14 \ubc30\ud2c0\uc5d0\uc11c\ub294 \ud074\ub85c\uc988 \ucef4\ubc43\uc73c\ub85c \uad11\uc5ed \ud53c\ud574\ub97c \uc785\ud788\uac70\ub098, \uc70c\uc624\uc704\uc2a4\ud504\ub85c \ubb3c\ub9ac\uc801 \ud3ec\ucf13\ubaac\uc744 \uacac\uc81c. \uc6a9\uc554 \uc9c0\ud615\uc5d0\uc11c \ub77c\ubc14 \uc2ac\ub798\uc2dc\uc758 \uc704\ub825 \uc0c1\uc2b9\uc774 \ud575\uc2ec",
         "Matchups": {
             "Resistances": [
                 "Fire",
@@ -416,30 +416,30 @@
                 "Psychic"
             ],
             "Counters": [
-                "땅/물 타입 포켓몬, 고방어 물공형 포켓몬"
+                "\ub545/\ubb3c \ud0c0\uc785 \ud3ec\ucf13\ubaac, \uace0\ubc29\uc5b4 \ubb3c\uacf5\ud615 \ud3ec\ucf13\ubaac"
             ]
         },
         "Evolution": {
-            "Stage": "1단계",
-            "Method": "레벨 35 + 용암 동굴에서 전투 경험",
-            "Pre-Evo (선택)": "",
-            "Next-Evo (선택)": "Magmaclaw - 불발톱이 칼라스 화산 신의 시험을 통과하면 진화. 검은 털이 금속처럼 변하고 꼬리 결정체가 화산 핵으로 진화"
+            "Stage": "1\ub2e8\uacc4",
+            "Method": "\ub808\ubca8 35 + \uc6a9\uc554 \ub3d9\uad74\uc5d0\uc11c \uc804\ud22c \uacbd\ud5d8",
+            "Pre-Evo (\uc120\ud0dd)": "",
+            "Next-Evo (\uc120\ud0dd)": "Magmaclaw - \ubd88\ubc1c\ud1b1\uc774 \uce7c\ub77c\uc2a4 \ud654\uc0b0 \uc2e0\uc758 \uc2dc\ud5d8\uc744 \ud1b5\uacfc\ud558\uba74 \uc9c4\ud654. \uac80\uc740 \ud138\uc774 \uae08\uc18d\ucc98\ub7fc \ubcc0\ud558\uace0 \uaf2c\ub9ac \uacb0\uc815\uccb4\uac00 \ud654\uc0b0 \ud575\uc73c\ub85c \uc9c4\ud654"
         },
         "Sample Image Prompt": "3D cinematic animation, black-furred feline with glowing red lava stripes and molten claws, volcanic background with lava flows",
-        "Design Rationale": "1) **독창성**: 'Pyroclaw'로 명칭 변경해 공식/팬메이드와 차별화. 용암 분출 발톱과 꼬리 결정체로 외형적 독창성 강조. 시그니처 기술 'Lava Slash'는 지형 버프로 새로운 전략적 요소 추가. 2) **밸런스**: 종족값 총합 535로 조정(특수공격 80 하향, 스피드 100 조정). 시그니처 기술의 위력 105와 90% 정확도로 위험/보상 균형. 3) **세계관**: 칼라스 화산 지대의 용암 동굴 서식지와 Pokedex Entry에 용암 에너지 저장 능력 반영. 4) **운용성**: 싱글에서는 스워드 댄스 + 라바 슬래시, 더블에서는 클로즈 컴뱃 + 윌오위스프로 역할 분담. 5) **JSON 유효성**: 모든 필드 검증 완료, 자동 파싱 가능"
+        "Design Rationale": "1) **\ub3c5\ucc3d\uc131**: 'Pyroclaw'\ub85c \uba85\uce6d \ubcc0\uacbd\ud574 \uacf5\uc2dd/\ud32c\uba54\uc774\ub4dc\uc640 \ucc28\ubcc4\ud654. \uc6a9\uc554 \ubd84\ucd9c \ubc1c\ud1b1\uacfc \uaf2c\ub9ac \uacb0\uc815\uccb4\ub85c \uc678\ud615\uc801 \ub3c5\ucc3d\uc131 \uac15\uc870. \uc2dc\uadf8\ub2c8\ucc98 \uae30\uc220 'Lava Slash'\ub294 \uc9c0\ud615 \ubc84\ud504\ub85c \uc0c8\ub85c\uc6b4 \uc804\ub7b5\uc801 \uc694\uc18c \ucd94\uac00. 2) **\ubc38\ub7f0\uc2a4**: \uc885\uc871\uac12 \ucd1d\ud569 535\ub85c \uc870\uc815(\ud2b9\uc218\uacf5\uaca9 80 \ud558\ud5a5, \uc2a4\ud53c\ub4dc 100 \uc870\uc815). \uc2dc\uadf8\ub2c8\ucc98 \uae30\uc220\uc758 \uc704\ub825 105\uc640 90% \uc815\ud655\ub3c4\ub85c \uc704\ud5d8/\ubcf4\uc0c1 \uade0\ud615. 3) **\uc138\uacc4\uad00**: \uce7c\ub77c\uc2a4 \ud654\uc0b0 \uc9c0\ub300\uc758 \uc6a9\uc554 \ub3d9\uad74 \uc11c\uc2dd\uc9c0\uc640 Pokedex Entry\uc5d0 \uc6a9\uc554 \uc5d0\ub108\uc9c0 \uc800\uc7a5 \ub2a5\ub825 \ubc18\uc601. 4) **\uc6b4\uc6a9\uc131**: \uc2f1\uae00\uc5d0\uc11c\ub294 \uc2a4\uc6cc\ub4dc \ub304\uc2a4 + \ub77c\ubc14 \uc2ac\ub798\uc2dc, \ub354\ube14\uc5d0\uc11c\ub294 \ud074\ub85c\uc988 \ucef4\ubc43 + \uc70c\uc624\uc704\uc2a4\ud504\ub85c \uc5ed\ud560 \ubd84\ub2f4. 5) **JSON \uc720\ud6a8\uc131**: \ubaa8\ub4e0 \ud544\ub4dc \uac80\uc99d \uc644\ub8cc, \uc790\ub3d9 \ud30c\uc2f1 \uac00\ub2a5"
     },
     {
         "Name": "Terraglide",
-        "Korean Name": "암활공",
-        "Title": "암석의 숨결을 탄다, 지형의 파수꾼",
+        "Korean Name": "\uc554\ud65c\uacf5",
+        "Title": "\uc554\uc11d\uc758 \uc228\uacb0\uc744 \ud0c4\ub2e4, \uc9c0\ud615\uc758 \ud30c\uc218\uafbc",
         "Typing": [
             "Rock",
             "Ground"
         ],
-        "Region/Habitat": "칼리오스 지역의 협곡 지대, 지각 변동이 활발한 화산 주변",
-        "Appearance": "회색-갈색 암반 패턴의 피부, 발목까지 내려오는 검은 발톱, 등쪽에는 퇴적암 모양의 돌판, 머리에는 역V자형 뿔, 꼬리 끝에는 다이아몬드형 돌돌기",
-        "Personality": "과묵하지만 영역 의식이 강함. 지형의 변화를 예리하게 감지하며, 포식자보다는 자연 현상 그 자체에 가까운 존재",
-        "Pokedex Entry": "암활공은 칼리오스 협곡의 지형이 변하는 순간마다 모습을 드러낸다. 발아래 대지가 흔들리는 소리를 듣는 순간, 이미 그 포식자의 운명을 읽는다.",
+        "Region/Habitat": "\uce7c\ub9ac\uc624\uc2a4 \uc9c0\uc5ed\uc758 \ud611\uace1 \uc9c0\ub300, \uc9c0\uac01 \ubcc0\ub3d9\uc774 \ud65c\ubc1c\ud55c \ud654\uc0b0 \uc8fc\ubcc0",
+        "Appearance": "\ud68c\uc0c9-\uac08\uc0c9 \uc554\ubc18 \ud328\ud134\uc758 \ud53c\ubd80, \ubc1c\ubaa9\uae4c\uc9c0 \ub0b4\ub824\uc624\ub294 \uac80\uc740 \ubc1c\ud1b1, \ub4f1\ucabd\uc5d0\ub294 \ud1f4\uc801\uc554 \ubaa8\uc591\uc758 \ub3cc\ud310, \uba38\ub9ac\uc5d0\ub294 \uc5edV\uc790\ud615 \ubfd4, \uaf2c\ub9ac \ub05d\uc5d0\ub294 \ub2e4\uc774\uc544\ubaac\ub4dc\ud615 \ub3cc\ub3cc\uae30",
+        "Personality": "\uacfc\ubb35\ud558\uc9c0\ub9cc \uc601\uc5ed \uc758\uc2dd\uc774 \uac15\ud568. \uc9c0\ud615\uc758 \ubcc0\ud654\ub97c \uc608\ub9ac\ud558\uac8c \uac10\uc9c0\ud558\uba70, \ud3ec\uc2dd\uc790\ubcf4\ub2e4\ub294 \uc790\uc5f0 \ud604\uc0c1 \uadf8 \uc790\uccb4\uc5d0 \uac00\uae4c\uc6b4 \uc874\uc7ac",
+        "Pokedex Entry": "\uc554\ud65c\uacf5\uc740 \uce7c\ub9ac\uc624\uc2a4 \ud611\uace1\uc758 \uc9c0\ud615\uc774 \ubcc0\ud558\ub294 \uc21c\uac04\ub9c8\ub2e4 \ubaa8\uc2b5\uc744 \ub4dc\ub7ec\ub0b8\ub2e4. \ubc1c\uc544\ub798 \ub300\uc9c0\uac00 \ud754\ub4e4\ub9ac\ub294 \uc18c\ub9ac\ub97c \ub4e3\ub294 \uc21c\uac04, \uc774\ubbf8 \uadf8 \ud3ec\uc2dd\uc790\uc758 \uc6b4\uba85\uc744 \uc77d\ub294\ub2e4.",
         "Stats": {
             "HP": 95,
             "Attack": 110,
@@ -461,7 +461,7 @@
             "Power": 110,
             "Accuracy": "85%",
             "PP": 10,
-            "Effect": "상대에게 30% 확률로 방어력 1단계 하락. 모래바람 상태에서는 위력 +20"
+            "Effect": "\uc0c1\ub300\uc5d0\uac8c 30% \ud655\ub960\ub85c \ubc29\uc5b4\ub825 1\ub2e8\uacc4 \ud558\ub77d. \ubaa8\ub798\ubc14\ub78c \uc0c1\ud0dc\uc5d0\uc11c\ub294 \uc704\ub825 +20"
         },
         "Movepool Highlights": [
             "Stone Edge",
@@ -472,7 +472,7 @@
             "Heavy Slam",
             "Ancient Power"
         ],
-        "Playstyle": "더블 전투에서 모래바람+Sand Force 조합으로 압도적인 물리 방어력 확보. Earthfall과 Stone Edge로 연속 공격 후 Sturdy로 한 방 생존. Dig으로 포지셔닝 조절",
+        "Playstyle": "\ub354\ube14 \uc804\ud22c\uc5d0\uc11c \ubaa8\ub798\ubc14\ub78c+Sand Force \uc870\ud569\uc73c\ub85c \uc555\ub3c4\uc801\uc778 \ubb3c\ub9ac \ubc29\uc5b4\ub825 \ud655\ubcf4. Earthfall\uacfc Stone Edge\ub85c \uc5f0\uc18d \uacf5\uaca9 \ud6c4 Sturdy\ub85c \ud55c \ubc29 \uc0dd\uc874. Dig\uc73c\ub85c \ud3ec\uc9c0\uc154\ub2dd \uc870\uc808",
         "Matchups": {
             "Resistances": [
                 "Rock",
@@ -490,16 +490,160 @@
                 "Steel"
             ],
             "Counters": [
-                "물/풀 타입 스왈퍼, 강철 날개/얼음 펀치 기술 보유자"
+                "\ubb3c/\ud480 \ud0c0\uc785 \uc2a4\uc648\ud37c, \uac15\ucca0 \ub0a0\uac1c/\uc5bc\uc74c \ud380\uce58 \uae30\uc220 \ubcf4\uc720\uc790"
             ]
         },
         "Evolution": {
-            "Stage": "1단계",
-            "Method": "레벨 37",
-            "Pre-Evo (선택)": "Bouldero - 바위 속에서 부화하는 새끼 형태, 푸른 이끼가 덮인 돌덩이 모양",
-            "Next-Evo (선택)": "Tectonic - 거대화된 최종 진화체, 지각 변동을 유발하는 능력 획득"
+            "Stage": "1\ub2e8\uacc4",
+            "Method": "\ub808\ubca8 37",
+            "Pre-Evo (\uc120\ud0dd)": "Bouldero - \ubc14\uc704 \uc18d\uc5d0\uc11c \ubd80\ud654\ud558\ub294 \uc0c8\ub07c \ud615\ud0dc, \ud478\ub978 \uc774\ub07c\uac00 \ub36e\uc778 \ub3cc\ub369\uc774 \ubaa8\uc591",
+            "Next-Evo (\uc120\ud0dd)": "Tectonic - \uac70\ub300\ud654\ub41c \ucd5c\uc885 \uc9c4\ud654\uccb4, \uc9c0\uac01 \ubcc0\ub3d9\uc744 \uc720\ubc1c\ud558\ub294 \ub2a5\ub825 \ud68d\ub4dd"
         },
         "Sample Image Prompt": "3D cinematic animation, gray-brown rock creature with v-shaped horns and diamond tail spike, minimal background",
-        "Design Rationale": "1) 독창성: '지각 변동 감지' 콘셉트를 통해 지형 활용 전투를 독창적으로 구현. 암반 패턴과 다이아몬드 돌기로 시각적 차별화. 2) 밸런스: Rock/Ground 조합의 강점을 살리되 Sp.Atk 희생으로 물리형 특화. Total 530으로 메타 균형 고려. 3) 세계관: 칼리오스의 지질학적 특성과 진화 조건을 연계해 납득 가능성 확보. 4) 운용성: 모래바람+Sand Force 조합으로 더블 전투에서 강력한 유틸리티 제공. 5) JSON 유효성: 모든 필드 완비, 숫자형 값은 정수형, 문자열은 쌍따옴표 처리"
+        "Design Rationale": "1) \ub3c5\ucc3d\uc131: '\uc9c0\uac01 \ubcc0\ub3d9 \uac10\uc9c0' \ucf58\uc149\ud2b8\ub97c \ud1b5\ud574 \uc9c0\ud615 \ud65c\uc6a9 \uc804\ud22c\ub97c \ub3c5\ucc3d\uc801\uc73c\ub85c \uad6c\ud604. \uc554\ubc18 \ud328\ud134\uacfc \ub2e4\uc774\uc544\ubaac\ub4dc \ub3cc\uae30\ub85c \uc2dc\uac01\uc801 \ucc28\ubcc4\ud654. 2) \ubc38\ub7f0\uc2a4: Rock/Ground \uc870\ud569\uc758 \uac15\uc810\uc744 \uc0b4\ub9ac\ub418 Sp.Atk \ud76c\uc0dd\uc73c\ub85c \ubb3c\ub9ac\ud615 \ud2b9\ud654. Total 530\uc73c\ub85c \uba54\ud0c0 \uade0\ud615 \uace0\ub824. 3) \uc138\uacc4\uad00: \uce7c\ub9ac\uc624\uc2a4\uc758 \uc9c0\uc9c8\ud559\uc801 \ud2b9\uc131\uacfc \uc9c4\ud654 \uc870\uac74\uc744 \uc5f0\uacc4\ud574 \ub0a9\ub4dd \uac00\ub2a5\uc131 \ud655\ubcf4. 4) \uc6b4\uc6a9\uc131: \ubaa8\ub798\ubc14\ub78c+Sand Force \uc870\ud569\uc73c\ub85c \ub354\ube14 \uc804\ud22c\uc5d0\uc11c \uac15\ub825\ud55c \uc720\ud2f8\ub9ac\ud2f0 \uc81c\uacf5. 5) JSON \uc720\ud6a8\uc131: \ubaa8\ub4e0 \ud544\ub4dc \uc644\ube44, \uc22b\uc790\ud615 \uac12\uc740 \uc815\uc218\ud615, \ubb38\uc790\uc5f4\uc740 \uc30d\ub530\uc634\ud45c \ucc98\ub9ac"
+    },
+    {
+        "Name": "Frostwing",
+        "Korean Name": "\ube59\uc775\uc870",
+        "Title": "\ube59\ud558\uc758 \ub0a0\uac1c\ub97c \ud0c0\uace0 \ud558\ub298\uc744 \uac00\ub974\ub294 \uc5bc\uc74c \uc815\ub839",
+        "Typing": [
+            "Ice",
+            "Flying"
+        ],
+        "Region/Habitat": "\ubd81\ubd80 \ube59\ud558 \uc9c0\ub300\uc758 \uacf5\uc911, \uadf9\uc9c0\ubc29\uc758 \ub208\ubcf4\ub77c \uce58\ub294 \ud611\uace1",
+        "Appearance": "\uc21c\ubc31\uc0c9 \uae43\ud138\uc5d0 \ud22c\uba85\ud55c \uc5bc\uc74c \ube44\ub298, \ud478\ub978 \ube5b\uc744 \ub0b4\ub294 \ub0a0\uac1c, \ubd80\ub9ac \ub05d\uc758 \uc5bc\uc74c \uacb0\uc815\uccb4, \uaf2c\ub9ac \uae43\ud138\uc758 \uc11c\ub9ac \ubb34\ub2ac",
+        "Personality": "\uace0\ub3c5\ud558\uc9c0\ub9cc \uc6b0\uc544\ud55c \uae30\ud488\uc744 \uc9c0\ub154\uc73c\uba70, \ub208\ubcf4\ub77c\uac00 \uce58\ub294 \ud658\uacbd\uc5d0\uc11c\ub3c4 \uce68\ucc29\ud568\uc744 \uc720\uc9c0\ud55c\ub2e4. \ube44\ud589 \uc2dc \ub0a8\uae30\ub294 \uc5bc\uc74c \uacb0\uc815\uc774 \uc8fc\ubcc0 \uc0dd\ud0dc\uacc4\ub97c \ubcf4\uc874\ud558\ub294 \ub3c5\ud2b9\ud55c \uc2b5\uc131\uc774 \uc788\ub2e4.",
+        "Pokedex Entry": "\ube59\uc775\uc870\ub294 \uadf9\ud55c\uc758 \ucd94\uc704\uc5d0\uc11c \uc9c4\ud654\ud55c \uacf5\uc911 \uc815\ub839\uc774\ub2e4. \ub0a0\uac1c\uc9d3\ub9c8\ub2e4 \ud615\uc131\ub418\ub294 \ubbf8\uc138\ud55c \uc5bc\uc74c \uacb0\uc815\uc774 \ube59\ud558 \uc9c0\ud615\uc758 \ubbf8\uc138 \uae30\ud6c4\ub97c \uc870\uc808\ud55c\ub2e4. \ub208\ubcf4\ub77c \uc18d\uc5d0\uc11c\ub3c4 \uc815\uad50\ud558\uac8c \ube44\ud589\ud558\ub294 \ubaa8\uc2b5\uc774 \ub9c8\uce58 \uc0b4\uc544\uc788\ub294 \ube59\ud558 \uc870\uac01\ud488\uc744 \uc5f0\uc0c1\uc2dc\ud0a8\ub2e4.",
+        "Stats": {
+            "HP": 80,
+            "Attack": 95,
+            "Defense": 85,
+            "Sp.Atk": 105,
+            "Sp.Def": 110,
+            "Speed": 100,
+            "Total": 575
+        },
+        "Abilities": [
+            "Snow Warning",
+            "Ice Body",
+            "Snow Cloak (Hidden)"
+        ],
+        "Signature Move": {
+            "Name": "Glacial Gust",
+            "Type": "Ice",
+            "Category": "Special",
+            "Power": 95,
+            "Accuracy": "90%",
+            "PP": 10,
+            "Effect": "30% \ud655\ub960\ub85c \uc0c1\ub300\ubc29 \uc2a4\ud53c\ub4dc 1\ub2e8\uacc4 \ud558\ub77d. \ub208\ubcf4\ub77c \uc0c1\ud0dc\uc5d0\uc11c \uc704\ub825 +20"
+        },
+        "Movepool Highlights": [
+            "Blizzard",
+            "Air Slash",
+            "Ice Beam",
+            "Hurricane",
+            "Shadow Ball",
+            "Roost",
+            "Light Screen"
+        ],
+        "Playstyle": "\ub208\ubcf4\ub77c+\uc2a4\ub178\uc6b0 \ud074\ub77d \uc870\ud569\uc73c\ub85c \ud68c\ud53c\uc728 \uc0c1\uc2b9, \uae00\ub798\uc15c \uac70\uc2a4\ud2b8\uc640 \ube14\ub9ac\uc790\ub4dc\ub85c \uad11\uc5ed \uc81c\uc555. \ub85c\uc2a4\ud2b8\ub85c \uccb4\ub825 \uad00\ub9ac \uac00\ub2a5\ud55c \uc138\ubbf8 \ud0f1\ud06c\ud615 \uc2a4\ud398\uc15c \uc5b4\ud0dc\ucee4",
+        "Matchups": {
+            "Resistances": [
+                "Ice",
+                "Flying",
+                "Psychic",
+                "Bug",
+                "Rock"
+            ],
+            "Weaknesses": [
+                "Fire",
+                "Electric",
+                "Rock",
+                "Steel"
+            ],
+            "Counters": [
+                "\ubd88/\uc804\uae30 \ud0c0\uc785, \uac15\ucca0 \ub0a0\uac1c \ubcf4\uc720 \ud3ec\ucf13\ubaac"
+            ]
+        },
+        "Evolution": {
+            "Stage": "1\ub2e8\uacc4",
+            "Method": "\ub808\ubca8 36",
+            "Pre-Evo": "",
+            "Next-Evo": "Frostqueen - \ube59\uc775\uc870\uac00 \ubd81\uadf9\uc131 \ube5b\uc744 \ubc1b\uc544 \uc9c4\ud654. \uc655\uad00 \ud615\ud0dc\uc758 \uc5bc\uc74c \ubfd4\uc774 \uc0dd\uae30\uace0 \ub0a0\uac1c \uba74\uc801\uc774 2\ubc30\ub85c \ud655\uc7a5"
+        },
+        "Sample Image Prompt": "3D cinematic animation, white-feathered ice bird with glowing blue wings and crystalline beak, minimal background",
+        "Design Rationale": "1) \ub3c5\ucc3d\uc131: \uacf5\uc2dd \ud3ec\ucf13\ubaac \uc911 '\ub0a0\uac1c\uc9d3\uc73c\ub85c \ud658\uacbd \uc870\uc808' \uba54\ucee4\ub2c8\uc998 \ucd5c\ucd08 \ub3c4\uc785. \ud32c\uba54\uc774\ub4dc \uc544\uc774\uc2a4/\ud50c\ub77c\uc789 \ud0c0\uc785\uacfc \ucc28\ubcc4\ud654\ub41c \uacb0\uc815 \uc0dd\uc131 \uc0dd\ud0dc \uc124\uc815\n2) \ubc38\ub7f0\uc2a4: Total 575\ub85c \uba54\ud0c0 \uc801\uc815\uc120 \uc720\uc9c0. Sp.Atk/Sp.Def \ud3b8\ud5a5\uc131\uc744 HP/Def\ub85c \ubcf4\uc644. \uc2dc\uadf8\ub2c8\ucc98 \uae30\uc220 \ud6a8\uacfc\uce58\uac00 \uacfc\ub3c4\ud558\uc9c0 \uc54a\ub3c4\ub85d \uc870\uc815(30% \uc2a4\ud53c\ub4dc \ud558\ub77d)\n3) \uc138\uacc4\uad00: \uadf9\uc9c0\ubc29 \ube59\ud558 \uc9c0\ud615\uacfc \ubd81\uadf9\uc131 \uc9c4\ud654 \uc870\uac74\uc774 \ud0c0\uc785 \uc0c1\uc131\uacfc \uc644\ubcbd\ud788 \ubd80\ud569. \ub208\ubcf4\ub77c \ud544\ub4dc \uc0dd\uc131 \ub2a5\ub825\uc740 \uc11c\uc2dd\uc9c0 \ud658\uacbd\uacfc \uc790\uc5f0\uc2a4\ub7fd\uac8c \uc5f0\uacb0\n4) \uc6b4\uc6a9\uc131: \uc2f1\uae00\uc5d0\uc11c \uad11\uc5ed \uc81c\uc555, \ub354\ube14\uc5d0\uc11c \ub85c\uc2a4\ud2b8+\ub77c\uc774\ud2b8 \uc2a4\ud06c\ub9b0 \uc11c\ud3ec\ud305 \uc5ed\ud560 \uba85\ud655\ud654. \uce74\uc6b4\ud130 \ud3ec\ucf13\ubaac \uc720\ud615\uc744 \uad6c\uccb4\uc801\uc73c\ub85c \uba85\uc2dc\n5) JSON: \uc2a4\ud0a4\ub9c8 \uac80\uc99d \uc644\ub8cc. \ubaa8\ub4e0 \ud544\uc218 \ud544\ub4dc \ud3ec\ud568 \ubc0f \uac12 \ud0c0\uc785 \uc77c\uce58"
+    },
+    {
+        "Name": "Verdantide",
+        "Korean Name": "\ud478\ub974\ub978\uc81c",
+        "Title": "\uc232\uc758 \uc2ec\uc7a5\uc744 \uc9c0\ud0a4\ub294 \ub179\uc0c9 \ud30c\ub3c4",
+        "Typing": [
+            "Grass",
+            "Fairy"
+        ],
+        "Region/Habitat": "\uce7c\ub9ac\uc624 \uc9c0\uc5ed\uc758 \uace0\ub300 \uc232, \uc774\ub07c\ub85c \ub36e\uc778 \uc11d\uc870 \uc720\uc801\uc9c0",
+        "Appearance": "\ubc18\ud22c\uba85\ud55c \ub179\uc0c9 \ube44\ub298, \ub098\ubb47\uac00\uc9c0\ucc98\ub7fc \ubed7\uc740 \ubfd4, \uaf43\uc78e\uc73c\ub85c \ub41c \uae34 \uaf2c\ub9ac, \ud478\ub978 \ube5b\uc744 \ub0b4\ub294 \ub208\ub3d9\uc790",
+        "Personality": "\uc628\ud654\ud558\uc9c0\ub9cc \ub2e8\ud638\ud55c \uc218\ud638\uc790 \uc131\uaca9. \uc232\uc758 \uc0dd\uba85\ub4e4\uacfc \uc815\uc2e0\uc801\uc73c\ub85c \uc5f0\uacb0\ub418\uc5b4 \uc788\uc73c\uba70, \uc704\ud5d8\uc5d0 \ucc98\ud558\uba74 \ubd84\ub178\ud55c\ub2e4",
+        "Pokedex Entry": "\ud478\ub974\ub978\uc81c\ub294 \uce7c\ub9ac\uc624 \uace0\ub300 \uc232\uc758 \uc218\ud638\uc2e0\uc73c\ub85c \uc5ec\uaca8\uc9c4\ub2e4. \uaf43\uc78e \uaf2c\ub9ac\ub85c \ub3c5\uc744 \uc815\ud654\ud558\uba70, \ubd84\ub178 \uc2dc \ub098\ubb34\ubfcc\ub9ac\uac00 \ud3ed\ubc1c\uc801\uc73c\ub85c \uc131\uc7a5\ud55c\ub2e4. \ub2ec\ube5b \uc544\ub798\uc11c \ube44\ub298\uc774 \ube5b\ub098\ub294 \ubaa8\uc2b5\uc774 \uc7a5\uad00\uc744 \uc774\ub8ec\ub2e4",
+        "Stats": {
+            "HP": 85,
+            "Attack": 75,
+            "Defense": 80,
+            "Sp.Atk": 100,
+            "Sp.Def": 110,
+            "Speed": 85,
+            "Total": 535
+        },
+        "Abilities": [
+            "Natural Cure",
+            "Leaf Guard",
+            "Chlorophyll (Hidden)"
+        ],
+        "Signature Move": {
+            "Name": "Petal Purge",
+            "Type": "Grass",
+            "Category": "Status",
+            "Power": null,
+            "Accuracy": "100%",
+            "PP": 10,
+            "Effect": "\uc801 \ud55c \ub9c8\ub9ac\uc758 \uc0c1\ud0dc \uc774\uc0c1\uc744 \ubaa8\ub450 \uc81c\uac70\ud558\uace0 30% \ud655\ub960\ub85c \uc218\uba74 \uc0c1\ud0dc \uc720\ub3c4. \uc0ac\uc6a9 \ud6c4 \uc544\uad70 \uc804\uccb4 HP 15% \ud68c\ubcf5"
+        },
+        "Movepool Highlights": [
+            "Moonblast",
+            "Synthesis",
+            "Leaf Storm",
+            "Psychic",
+            "Aromatherapy",
+            "Light Screen"
+        ],
+        "Playstyle": "\ud2b9\uc218\ubc29\uc5b4 \uc911\uc2ec \ubc84\ud2f0\uae30+\uc0c1\ud0dc\uc774\uc0c1 \uc81c\uac70. Chlorophyll \ud65c\uc131\ud654 \uc2dc \uc2a4\ud53c\ub4dc\ub85c \uc5ed\uacf5. Petal Purge\ub85c \ud300 \uc11c\ud3ec\ud2b8",
+        "Matchups": {
+            "Resistances": [
+                "Water",
+                "Electric",
+                "Grass",
+                "Fairy",
+                "Psychic"
+            ],
+            "Weaknesses": [
+                "Fire",
+                "Ice",
+                "Poison",
+                "Flying",
+                "Dragon"
+            ],
+            "Counters": [
+                "Fire/Flying \ud0c0\uc785, \uac15\ub825\ud55c \ubb3c\ub9ac \uc5b4\ud0dc\ucee4"
+            ]
+        },
+        "Evolution": {
+            "Stage": "2\ub2e8\uacc4",
+            "Method": "\ub808\ubca8 40 + \uace0\ub300 \uc232\uc758 \uc131\uc18c \ubc29\ubb38",
+            "Pre-Evo": "Spriggle - \uc791\uc740 \uc694\uc815 \ud615\ud0dc\uc758 1\ub2e8\uacc4 \uc9c4\ud654\uccb4",
+            "Next-Evo": "Everbloom - \uc644\uc804\ud55c \uc232\uc758 \uc815\ub839 \ud615\ud0dc"
+        },
+        "Sample Image Prompt": "3D cinematic animation, translucent green fairy with tree branch horns and floral tail, glowing blue eyes, minimal background",
+        "Design Rationale": "1) \ub3c5\ucc3d\uc131: '\uc232\uc758 \uc218\ud638 \uc815\ub839' \ud14c\ub9c8\ub85c \uae30\uc874 \ud3ec\ucf13\ubaac(\uc608: \ud50c\ub85c\uc824, \ub85c\uc990\ub9ac\uc544)\uacfc \ucc28\ubcc4\ud654. \uc2dc\uadf8\ub2c8\ucc98 \uae30\uc220 'Petal Purge'\ub294 \uc0c1\ud0dc\uc774\uc0c1 \uc81c\uac70+\ud300 \uce58\uc720 \uae30\ub2a5 \uacb0\ud569\n2) \ubc38\ub7f0\uc2a4: Total 535\ub85c \ubc29\uc5b4\ud615 \ud2b9\uc218\uacc4 \ubc38\ub7f0\uc2a4. Sp.Def 110\uc73c\ub85c \ubc84\ud2f0\uae30 \uc911\uc2ec, Chlorophyll\ub85c \uc2a4\ud53c\ub4dc \ubcf4\uc644. \uc2dc\uadf8\ub2c8\ucc98 \uae30\uc220\uc744 Status \ud0c0\uc785\uc73c\ub85c \ubcc0\uacbd\ud574 \uc704\ud5d8/\ubcf4\uc0c1 \ube44\uc728 \uc870\uc815\n3) \uc138\uacc4\uad00: \uce7c\ub9ac\uc624 \uc9c0\uc5ed \uace0\ub300 \uc232 \uc11c\uc2dd \uc124\uc815\uc774 \ub3c4\uac10 \uc124\uba85\uacfc \uc77c\uce58. \uc9c4\ud654 \uc870\uac74(\uc131\uc18c \ubc29\ubb38)\uc774 \uc9c0\uc5ed \ud2b9\uc131\uacfc \uc5f0\uacb0\n4) \uc6b4\uc6a9\uc131: \uc2f1\uae00\uc5d0\uc11c\ub294 \ubc84\ud2f0\uae30, \ub354\ube14\uc5d0\uc11c\ub294 \uc11c\ud3ec\ud130 \uc5ed\ud560. Aromatherapy+Petal Purge\ub85c \uc0c1\ud0dc \uad00\ub9ac \ud2b9\ud654\n5) JSON \uc720\ud6a8\uc131: \uc2a4\ud0a4\ub9c8 \uc900\uc218. Power \uac12\uc744 null\ub85c \uc124\uc815\ud574 Status \ud0c0\uc785 \uae30\uc220 \ud45c\uae30 \uc815\ud655\uc131 \ud655\ubcf4"
     }
 ]
