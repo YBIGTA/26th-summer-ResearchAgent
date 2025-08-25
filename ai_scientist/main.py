@@ -464,7 +464,7 @@ def build_app() -> None:
             "Number of Pokémon ideas to generate", min_value=1, max_value=50, value=5,
             help="How many new Pokémon should the ideation script produce?"
         )
-        default_idea_out = os.path.join(os.path.dirname(__file__), 'ideas', 'generated_pokemon.json')
+        default_idea_out = os.path.join(os.path.dirname(__file__), 'ideas', 'i_cant_believe_its_not_better.json')
         idea_output = st.text_input(
             "Path to save generated ideas", value=default_idea_out,
             help="Relative or absolute path where the ideation script will write JSON."
@@ -479,8 +479,6 @@ def build_app() -> None:
                     cmd = [
                         'python',
                         script_path,
-                        '--num_pokemon', str(int(num_ideas)),
-                        '--output', idea_output,
                     ]
                     result = subprocess.run(cmd, capture_output=True, text=True)
                     if result.returncode != 0:
