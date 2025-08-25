@@ -482,9 +482,15 @@ def build_app() -> None:
                     ]
                     result = subprocess.run(cmd, capture_output=True, text=True)
                     if result.returncode != 0:
-                        st.error(f"Ideation script failed: {result.stderr.strip()}")
+                        st.error("Ideation script failed:")
+                        if result.stderr:
+                            st.code(result.stderr.strip(), language="bash")
+                        if result.stdout:
+                            st.code(result.stdout.strip(), language="bash")
                     else:
                         st.success(f"Successfully generated {num_ideas} ideas to {idea_output}.")
+                        if result.stdout:
+                            st.code(result.stdout.strip(), language="bash")
                 else:
                     dummy_char = {
                         "Name": "Testmon",
