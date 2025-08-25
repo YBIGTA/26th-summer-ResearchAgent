@@ -9,7 +9,16 @@ from typing import List, Dict, Any, Optional
 from PIL import Image, ImageDraw, ImageFont
 import pandas as pd
 import streamlit as st
+import subprocess
 
+# -----------------------------------------------------------------------------
+# Colour definitions and helpers
+#
+# The card generator uses a simple mapping of Pokémon types to colours.  This
+# dictionary maps both English and Korean type names to a hex colour.  When
+# drawing cards the primary type is looked up to determine border and badge
+# colours.  If an unknown type is encountered a neutral grey is used instead.
+# -----------------------------------------------------------------------------
 
 TYPE_COLORS: Dict[str, str] = {
     '전기': '#F7D02C', 'Electric': '#F7D02C',
@@ -30,7 +39,7 @@ TYPE_COLORS: Dict[str, str] = {
     '강철': '#B7B7CE', 'Steel':    '#B7B7CE',
     '페어리': '#D685AD','Fairy':    '#D685AD',
     '노말': '#A8A77A', 'Normal':   '#A8A77A',
-    '공통': '#A8A77A', 
+    '공통': '#A8A77A',
 }
 
 
@@ -56,13 +65,17 @@ def lighten_color(hex_color: str, factor: float) -> tuple:
 
 
 def load_image_from_data_url(data_url: str) -> Image.Image:
-   
+    """Load an image from a data URI.
+
+    If the string cannot be decoded for any reason a 1×1 transparent image is
+    returned instead.  This helps avoid crashes when optional artwork is
+    malformed or missing.
+    """
     try:
         header, b64data = data_url.split(',', 1)
         raw = base64.b64decode(b64data)
         return Image.open(io.BytesIO(raw)).convert('RGBA')
     except Exception:
-        # if anything goes wrong just return a blank image
         return Image.new('RGBA', (1, 1), (0, 0, 0, 0))
 
 
@@ -72,7 +85,12 @@ def load_image_from_data_url(data_url: str) -> Image.Image:
 
 @dataclass
 class Skill:
- 
+    """Representation of a move that can appear on a Pokémon card.
+
+    The energy_cost is derived automatically from the power value unless it is
+    explicitly provided.  A power of None or -1 denotes a non‑damaging move.
+    """
+
     name: str
     type: str
     power: Optional[int]
@@ -82,7 +100,6 @@ class Skill:
     energy_cost: int = 0
 
     def __post_init__(self) -> None:
-        # Determine energy cost based on power
         p = self.power
         if p is None or p == -1:
             self.energy_cost = 0
@@ -105,13 +122,16 @@ class Skill:
 
 
 class PokemonCard:
-    
+    """Internal class representing a Pokémon card's data.
+
+    It converts raw JSON entries into strongly typed attributes, computes
+    derived values such as retreat cost and power score, and assigns a rarity
+    externally after sorting by power.
+    """
+
     def __init__(self, entry: Dict[str, Any]):
-        # If the JSON contains a ``character`` key then nest into that
         ch = entry.get('character', entry)
-        # Name
         self.name: str = ch.get('Name', 'Unknown')
-        # Typing as a list
         typing = ch.get('Typing', [])
         if isinstance(typing, list):
             self.types: List[str] = typing
@@ -119,10 +139,7 @@ class PokemonCard:
             self.types = [typing]
         else:
             self.types = []
-        # Optional Base64 artwork
         self.image: Optional[str] = ch.get('Image')
-        # Parse stats; convert numeric strings to integers and ignore
-        # non‑numeric entries
         raw_stats = ch.get('Stats', {}) or {}
         self.stats: Dict[str, int] = {}
         for key, value in raw_stats.items():
@@ -135,21 +152,16 @@ class PokemonCard:
                     self.stats[key] = 0
             else:
                 self.stats[key] = 0
-        # Abilities (pass through directly)
         self.abilities: List[str] = ch.get('Abilities', []) or []
-        # Build skill list
         self.skills: List[Skill] = []
-        # Signature move (if provided) – convert to numeric values where needed
         sig = ch.get('Signature Move')
         if sig:
-            # Convert power
             power = sig.get('Power')
             if isinstance(power, str):
                 try:
                     power = int(power)
                 except Exception:
                     power = None
-            # Convert accuracy expressed as a percentage string
             acc = sig.get('Accuracy')
             acc_val: Optional[float] = None
             if isinstance(acc, str) and acc.endswith('%'):
@@ -157,7 +169,6 @@ class PokemonCard:
                     acc_val = float(acc.replace('%', ''))
                 except Exception:
                     acc_val = None
-            # Add signature skill
             self.skills.append(
                 Skill(
                     name=sig.get('Name', 'Unknown Move'),
@@ -168,7 +179,6 @@ class PokemonCard:
                     effect=sig.get('Effect'),
                 )
             )
-        # Movepool highlights; derive a base move power from attack/sp.atk
         attack = self.stats.get('Attack', 0)
         sp_atk = self.stats.get('Sp.Atk', 0)
         base_power = max(attack, sp_atk) // 2
@@ -187,11 +197,9 @@ class PokemonCard:
                     effect=None,
                 )
             )
-        # Compute total stats; if explicit total provided use that, otherwise sum
         self.total_stats: int = raw_stats.get('Total') or sum(
             self.stats.get(stat, 0) for stat in ['HP','Attack','Defense','Sp.Atk','Sp.Def','Speed']
         )
-        # Compute weighted power score for rarity ranking
         self.power_score: float = (
             1.2 * self.stats.get('Attack', 0) +
             1.2 * self.stats.get('Sp.Atk', 0) +
@@ -200,7 +208,6 @@ class PokemonCard:
             0.8 * self.stats.get('HP', 0) +
             1.0 * self.stats.get('Speed', 0)
         )
-        # Retreat cost heuristic based on HP
         hp = self.stats.get('HP', 50)
         if hp < 60:
             self.retreat: int = 1
@@ -208,11 +215,9 @@ class PokemonCard:
             self.retreat = 2
         else:
             self.retreat = 3
-        # Rarity is assigned externally after sorting all cards
         self.rarity: Optional[str] = None
 
     def as_dict(self) -> Dict[str, Any]:
-        """Convert card into a serialisable dictionary for JSON output."""
         return {
             "Name": self.name,
             "Types": self.types,
@@ -227,21 +232,23 @@ class PokemonCard:
             "Image": self.image,
         }
 
+
 def draw_card(card: Dict[str, Any], width: int = 400, height: int = 560) -> Image.Image:
-  
-    # Create a transparent canvas
+    """Render a single Pokémon card to a Pillow image.
+
+    The layout follows a standard card format with a coloured header, artwork
+    panel, type badges, skill descriptions and retreat cost icons.  The
+    colours are derived from the primary type of the card.
+    """
     card_img = Image.new('RGBA', (width, height), (0, 0, 0, 0))
     draw = ImageDraw.Draw(card_img)
 
-    # Helper function to measure text dimensions
     def text_wh(text: str, font: ImageFont.ImageFont) -> tuple:
         l, t, r, b = draw.textbbox((0, 0), text, font=font)
         return (r - l, b - t)
 
-    # Determine primary type and base colour
     primary_type = card.get('Types')[0] if card.get('Types') else '노말'
     base_colour = TYPE_COLORS.get(primary_type, '#A8A77A')
-    # Determine rarity level mapping to border thickness and glitter
     rarity = str(card.get('Rarity', 'Common'))
     rarity_levels = {'Common': 1, 'Uncommon': 2, 'Rare': 3, 'Epic': 4, 'Legendary': 5}
     level = rarity_levels.get(rarity, 1)
@@ -393,12 +400,14 @@ def draw_card(card: Dict[str, Any], width: int = 400, height: int = 560) -> Imag
     return card_img
 
 
-# -----------------------------------------------------------------------------
-# Card generation logic
-# -----------------------------------------------------------------------------
-
 def generate_pokemon_cards(input_json_path: str) -> List[Dict[str, Any]]:
-    
+    """Load raw Pokémon specifications and assign rarity and derived stats.
+
+    The returned list preserves the original ordering of the input JSON but
+    populates the `rarity` field based on power ranking.  Legendary cards are
+    the top 10 %, rare cards up to 40 %, and the remainder common.  The
+    function will raise if the input file cannot be found or parsed.
+    """
     if not os.path.isfile(input_json_path):
         raise FileNotFoundError(f"Input file '{input_json_path}' does not exist.")
     with open(input_json_path, 'r', encoding='utf-8') as f:
@@ -424,11 +433,11 @@ def generate_pokemon_cards(input_json_path: str) -> List[Dict[str, Any]]:
 # -----------------------------------------------------------------------------
 
 def build_app() -> None:
-    """Construct the Streamlit UI for generating and visualising cards."""
+    """Construct the Streamlit UI for generating ideas and visualising cards."""
     st.title("Pokémon Card Generator & Visualiser")
     st.markdown(
         "Generate custom Pokémon card specifications from a dataset and render\n"
-        "them as stylised trading cards.  Begin by loading your source JSON,\n"
+        "them as stylised trading cards.  Begin by optionally creating new ideas,\n"
         "then assign rarities and create artwork.  Finally select the cards\n"
         "you wish to see and click *Draw Selected Cards* to view them."
     )
@@ -437,61 +446,136 @@ def build_app() -> None:
     if 'cards_data' not in st.session_state:
         st.session_state.cards_data: Optional[List[Dict[str, Any]]] = None
 
-    st.header("Step 1 – Generate Card Specifications")
-    default_path = os.path.join(os.path.dirname(__file__), 'ai_scientist', 'ideas', 'i_cant_believe_its_not_better_image.json')
-    input_path = st.text_input(
-        "Path to raw Pokémon specification JSON", value=default_path,
-        help="Relative or absolute path to the JSON file containing base Pokémon data."
-    )
-    if st.button("Generate Specifications"):
-        try:
-            cards = generate_pokemon_cards(input_path)
-            st.session_state.cards_data = cards
-            st.success(f"Generated {len(cards)} card specifications.")
-            # Show a summary dataframe
-            summary_records = [
-                {
-                    'Name': c['Name'],
-                    'Types': ', '.join(c.get('Types', [])),
-                    'Power Score': c.get('Power Score'),
-                    'Rarity': c.get('Rarity'),
-                    'Retreat Cost': c.get('Retreat Cost'),
-                }
-                for c in cards
-            ]
-            summary_df = pd.DataFrame(summary_records)
-            st.dataframe(summary_df, use_container_width=True)
-            # Allow user to download the generated JSON
-            json_str = json.dumps(cards, ensure_ascii=False, indent=2)
-            st.download_button(
-                label="Download Cards JSON",
-                data=json_str,
-                file_name="pokemon_cards_output.json",
-                mime="application/json",
-            )
-        except Exception as e:
-            st.error(f"Failed to generate cards: {e}")
+    # Create tabs for each major step of the workflow.  Using tabs helps
+    # organise the user interface so that ideation, card specification and
+    # visualisation are clearly separated.
+    tabs = st.tabs(["Ideation", "Generate Cards", "Visualise Cards"])
 
-    st.header("Step 2 – Select & Visualise Cards")
-    cards_data: Optional[List[Dict[str, Any]]] = st.session_state.get('cards_data')
-    if not cards_data:
-        st.info("Please generate card specifications in Step 1 before proceeding.")
-        return
-    # Provide selection of cards by name
-    card_names = [card['Name'] for card in cards_data]
-    selected_names = st.multiselect(
-        "Select Pokémon to draw", card_names,
-        help="Choose one or more cards from the generated list to render."
-    )
-    if selected_names and st.button("Draw Selected Cards"):
-        # Render selected cards
-        for card in cards_data:
-            if card['Name'] in selected_names:
-                img = draw_card(card)
-                # Convert to bytes for Streamlit
-                buf = io.BytesIO()
-                img.save(buf, format='PNG')
-                st.image(buf.getvalue(), caption=f"{card['Name']} ({card.get('Rarity', 'Unknown')})", use_column_width=False)
+    # -------------------------------------------------------------------------
+    # Tab 0 – Ideation 
+    # -------------------------------------------------------------------------
+    with tabs[0]:
+        st.header("Generate Pokémon Ideas")
+        st.markdown(
+            "Use the ideation script to produce brand new Pokémon concepts. "
+            "This step is optional – you can also provide your own JSON file."
+        )
+        num_ideas = st.number_input(
+            "Number of Pokémon ideas to generate", min_value=1, max_value=50, value=5,
+            help="How many new Pokémon should the ideation script produce?"
+        )
+        default_idea_out = os.path.join(os.path.dirname(__file__), 'ideas', 'generated_pokemon.json')
+        idea_output = st.text_input(
+            "Path to save generated ideas", value=default_idea_out,
+            help="Relative or absolute path where the ideation script will write JSON."
+        )
+        if st.button("Run Ideation"):
+            out_dir = os.path.dirname(idea_output)
+            if out_dir and not os.path.exists(out_dir):
+                os.makedirs(out_dir, exist_ok=True)
+            try:
+                script_path = os.path.join(os.path.dirname(__file__), 'perform_ideation_temp_free.py')
+                if os.path.isfile(script_path):
+                    cmd = [
+                        'python',
+                        script_path,
+                        '--num_pokemon', str(int(num_ideas)),
+                        '--output', idea_output,
+                    ]
+                    result = subprocess.run(cmd, capture_output=True, text=True)
+                    if result.returncode != 0:
+                        st.error(f"Ideation script failed: {result.stderr.strip()}")
+                    else:
+                        st.success(f"Successfully generated {num_ideas} ideas to {idea_output}.")
+                else:
+                    dummy_char = {
+                        "Name": "Testmon",
+                        "Typing": ["노말"],
+                        "Stats": {"HP": 50, "Attack": 50, "Defense": 50, "Sp.Atk": 50, "Sp.Def": 50, "Speed": 50},
+                        "Abilities": ["Overgrow"],
+                        "Signature Move": {"Name": "Test Move", "Type": "노말", "Power": 60, "Accuracy": 100, "PP": 20, "Effect": "None"},
+                        "Movepool Highlights": ["Tackle", "Growl"],
+                    }
+                    with open(idea_output, 'w', encoding='utf-8') as f:
+                        json.dump([dummy_char], f, ensure_ascii=False, indent=2)
+                    st.info(
+                        "Ideation script not found; wrote a dummy idea instead. "
+                        "You can replace this file with your own ideas."
+                    )
+            except Exception as e:
+                st.error(f"Failed to run ideation: {e}")
+            # Display the newly generated ideas in the UI
+            if os.path.isfile(idea_output):
+                try:
+                    with open(idea_output, 'r', encoding='utf-8') as f:
+                        idea_data = json.load(f)
+                    st.success(f"Loaded {len(idea_data)} ideas from {idea_output}.")
+                    st.json(idea_data)
+                except Exception:
+                    pass
+
+    # -------------------------------------------------------------------------
+    # Tab 1 – Generate Card Specifications
+    # -------------------------------------------------------------------------
+    with tabs[1]:
+        st.header("Generate Card Specifications")
+        default_path = os.path.join(os.path.dirname(__file__), 'ideas', 'i_cant_believe_its_not_better_image.json')
+        input_path = st.text_input(
+            "Path to raw Pokémon specification JSON", value=default_path,
+            help="Relative or absolute path to the JSON file containing base Pokémon data."
+        )
+        if st.button("Generate Specifications"):
+            try:
+                cards = generate_pokemon_cards(input_path)
+                st.session_state.cards_data = cards
+                st.success(f"Generated {len(cards)} card specifications.")
+                summary_records = [
+                    {
+                        'Name': c['Name'],
+                        'Types': ', '.join(c.get('Types', [])),
+                        'Power Score': c.get('Power Score'),
+                        'Rarity': c.get('Rarity'),
+                        'Retreat Cost': c.get('Retreat Cost'),
+                    }
+                    for c in cards
+                ]
+                summary_df = pd.DataFrame(summary_records)
+                st.dataframe(summary_df, use_container_width=True)
+                # Allow user to download the generated JSON
+                json_str = json.dumps(cards, ensure_ascii=False, indent=2)
+                st.download_button(
+                    label="Download Cards JSON",
+                    data=json_str,
+                    file_name="pokemon_cards_output.json",
+                    mime="application/json",
+                )
+            except Exception as e:
+                st.error(f"Failed to generate cards: {e}")
+
+    # -------------------------------------------------------------------------
+    # Tab 2 – Select & Visualise Cards
+    # -------------------------------------------------------------------------
+    with tabs[2]:
+        st.header("Select & Visualise Cards")
+        cards_data: Optional[List[Dict[str, Any]]] = st.session_state.get('cards_data')
+        if not cards_data:
+            st.info("Please generate card specifications in the previous tab before proceeding.")
+        else:
+            # Provide selection of cards by name
+            card_names = [card['Name'] for card in cards_data]
+            selected_names = st.multiselect(
+                "Select Pokémon to draw", card_names,
+                help="Choose one or more cards from the generated list to render."
+            )
+            if selected_names and st.button("Draw Selected Cards"):
+                # Render selected cards
+                for card in cards_data:
+                    if card['Name'] in selected_names:
+                        img = draw_card(card)
+                        # Convert to bytes for Streamlit
+                        buf = io.BytesIO()
+                        img.save(buf, format='PNG')
+                        st.image(buf.getvalue(), caption=f"{card['Name']} ({card.get('Rarity', 'Unknown')})", use_column_width=False)
 
 
 def main() -> None:
