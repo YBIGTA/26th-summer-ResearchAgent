@@ -9,7 +9,7 @@ from ai_scientist.vlm import (
     extract_json_between_markers,
 )
 
-from ai_scientist.perform_llm_review import load_paper
+from ai_scientist.perform.perform_llm_review import load_paper
 
 
 def encode_image_to_base64(image_data):

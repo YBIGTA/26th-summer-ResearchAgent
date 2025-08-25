@@ -17,14 +17,14 @@ from ai_scientist.treesearch.bfts_utils import (
     idea_to_markdown,
     edit_bfts_config_file,
 )
-from ai_scientist.perform_plotting import aggregate_plots
-from ai_scientist.perform_writeup import perform_writeup
-from ai_scientist.perform_icbinb_writeup import (
+from ai_scientist.perform.perform_plotting import aggregate_plots
+from ai_scientist.perform.perform_writeup import perform_writeup
+from ai_scientist.perform.perform_icbinb_writeup import (
     perform_writeup as perform_icbinb_writeup,
     gather_citations,
 )
-from ai_scientist.perform_llm_review import perform_review, load_paper
-from ai_scientist.perform_vlm_review import perform_imgs_cap_ref_review
+from ai_scientist.perform.perform_llm_review import perform_review, load_paper
+from ai_scientist.perform.perform_vlm_review import perform_imgs_cap_ref_review
 from ai_scientist.utils.token_tracker import token_tracker
 
 

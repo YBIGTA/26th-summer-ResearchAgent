@@ -18,7 +18,7 @@ from ai_scientist.llm import (
 
 from ai_scientist.tools.semantic_scholar import search_for_papers
 
-from ai_scientist.perform_vlm_review import generate_vlm_img_review
+from ai_scientist.perform.perform_vlm_review import generate_vlm_img_review
 from ai_scientist.vlm import create_client as create_vlm_client
 
 

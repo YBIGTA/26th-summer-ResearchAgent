@@ -22,7 +22,7 @@ from ai_scientist.llm import (
     get_response_from_llm,
     extract_json_object,
 )
-from ai_scientist.perform_poke_review import perform_review,save_review_result
+from ai_scientist.perform.perform_poke_review import perform_review,save_review_result
 from ai_scientist.vlm import encode_image_to_base64, generate_image_from_prompt
 from ai_scientist.tools.feedback import ReviewbyLLM_tool
 from ai_scientist.tools.base_tool import BaseTool
