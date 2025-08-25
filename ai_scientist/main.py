@@ -437,155 +437,122 @@ def build_app() -> None:
     st.title("Pokémon Card Generator & Visualiser")
     st.markdown(
         "Generate custom Pokémon card specifications from a dataset and render\n"
-        "them as stylised trading cards.  Begin by optionally creating new ideas,\n"
-        "then assign rarities and create artwork.  Finally select the cards\n"
+        "them as stylised trading cards.  Begin by optionally creating new ideas,\n"
+        "then assign rarities and create artwork.  Finally select the cards\n"
         "you wish to see and click *Draw Selected Cards* to view them."
     )
 
-    # Maintain generated card data in session state
     if 'cards_data' not in st.session_state:
         st.session_state.cards_data: Optional[List[Dict[str, Any]]] = None
 
-    # Create tabs for each major step of the workflow.  Using tabs helps
-    # organise the user interface so that ideation, card specification and
-    # visualisation are clearly separated.
-    tabs = st.tabs(["Ideation", "Generate Cards", "Visualise Cards"])
-
+    tabs = st.tabs(["1. Generate Pokémon Data", "2. Generate Pokémon Card"])
+    
     # -------------------------------------------------------------------------
-    # Tab 0 – Ideation 
+    # Tab 1 – Generate Pokémon (Formerly Ideation)
     # -------------------------------------------------------------------------
     with tabs[0]:
-        st.header("Generate Pokémon Ideas")
-        st.markdown(
-            "Use the ideation script to produce brand new Pokémon concepts. "
-            "This step is optional – you can also provide your own JSON file."
-        )
-        num_ideas = st.number_input(
-            "Number of Pokémon ideas to generate", min_value=1, max_value=50, value=5,
-            help="How many new Pokémon should the ideation script produce?"
-        )
-        default_idea_out = os.path.join(os.path.dirname(__file__), 'ideas', 'i_cant_believe_its_not_better.json')
-        idea_output = st.text_input(
-            "Path to save generated ideas", value=default_idea_out,
-            help="Relative or absolute path where the ideation script will write JSON."
-        )
-        if st.button("Run Ideation"):
-            out_dir = os.path.dirname(idea_output)
-            if out_dir and not os.path.exists(out_dir):
-                os.makedirs(out_dir, exist_ok=True)
-            try:
-                script_path = os.path.join(os.path.dirname(__file__), 'perform_ideation_temp_free.py')
-                if os.path.isfile(script_path):
-                    cmd = [
-                        'python',
-                        script_path,
-                    ]
-                    result = subprocess.run(cmd, capture_output=True, text=True)
-                    if result.returncode != 0:
-                        st.error("Ideation script failed:")
-                        if result.stderr:
-                            st.code(result.stderr.strip(), language="bash")
-                        if result.stdout:
-                            st.code(result.stdout.strip(), language="bash")
-                    else:
-                        st.success(f"Successfully generated {num_ideas} ideas to {idea_output}.")
-                        if result.stdout:
-                            st.code(result.stdout.strip(), language="bash")
-                else:
-                    dummy_char = {
-                        "Name": "Testmon",
-                        "Typing": ["노말"],
-                        "Stats": {"HP": 50, "Attack": 50, "Defense": 50, "Sp.Atk": 50, "Sp.Def": 50, "Speed": 50},
-                        "Abilities": ["Overgrow"],
-                        "Signature Move": {"Name": "Test Move", "Type": "노말", "Power": 60, "Accuracy": 100, "PP": 20, "Effect": "None"},
-                        "Movepool Highlights": ["Tackle", "Growl"],
-                    }
-                    with open(idea_output, 'w', encoding='utf-8') as f:
-                        json.dump([dummy_char], f, ensure_ascii=False, indent=2)
-                    st.info(
-                        "Ideation script not found; wrote a dummy idea instead. "
-                        "You can replace this file with your own ideas."
-                    )
-            except Exception as e:
-                st.error(f"Failed to run ideation: {e}")
-            # Display the newly generated ideas in the UI
-            if os.path.isfile(idea_output):
+        with st.container(border=True):
+            st.subheader(" 1. Generate New Pokémon Concepts")
+            st.markdown(
+                "Use the refactoring script to produce brand new Pokémon concepts based on your existing data."
+            )
+            num_ideas = st.number_input(
+                "Number of Pokémon to generate", min_value=1, max_value=20, value=3
+            )
+            default_idea_out = os.path.join(os.path.dirname(__file__), 'generated_pokemon', 'new_creations.json')
+            idea_output = st.text_input(
+                "Path to save generated JSON", value=default_idea_out
+            )
+
+            if st.button("✨ Run Generation Script", type="primary"):
+                out_dir = os.path.dirname(idea_output)
+                if out_dir: os.makedirs(out_dir, exist_ok=True)
+                
                 try:
-                    with open(idea_output, 'r', encoding='utf-8') as f:
-                        idea_data = json.load(f)
-                    st.success(f"Loaded {len(idea_data)} ideas from {idea_output}.")
-                    st.json(idea_data)
-                except Exception:
-                    pass
+                    # --- MODIFIED PART ---
+                    # This now calls our separate refactoring script with arguments
+                    script_path = os.path.join(os.path.dirname(__file__), 'refactor_pokemon.py')
+                    
+                    with st.spinner(f"Running external script: refactor_pokemon.py..."):
+                        cmd = [
+                            'python',
+                            script_path,
+                            '--count', str(num_ideas),
+                            '--output', idea_output
+                        ]
+                        result = subprocess.run(
+                            cmd, 
+                            capture_output=True, 
+                            check=True, 
+                            encoding='utf-8', 
+                            env={**os.environ, "PYTHONUTF8": "1"}
+                        )
+                        
+                        st.success(f"Successfully generated {num_ideas} Pokémon to `{idea_output}`.")
+                        if result.stdout:
+                            st.code(result.stdout.strip(), language="bash")
+
+                except FileNotFoundError:
+                    st.error(f"Script not found at '{script_path}'. Make sure 'refactor_pokemon.py' is in the same directory.")
+                except subprocess.CalledProcessError as e:
+                    st.error("The generation script failed:")
+                    st.code(e.stderr.strip(), language="bash")
+                except Exception as e:
+                    st.error(f"An unexpected error occurred: {e}")
 
     # -------------------------------------------------------------------------
-    # Tab 1 – Generate Card Specifications
+    # Tab 2 – Generate Card Specifications, Select & Visualise Cards
     # -------------------------------------------------------------------------
     with tabs[1]:
-        st.header("Generate Card Specifications")
-        default_path = os.path.join(os.path.dirname(__file__), 'ideas', 'i_cant_believe_its_not_better_image.json')
-        input_path = st.text_input(
-            "Path to raw Pokémon specification JSON", value=default_path,
-            help="Relative or absolute path to the JSON file containing base Pokémon data."
-        )
-        if st.button("Generate Specifications"):
-            try:
-                cards = generate_pokemon_cards(input_path)
-                st.session_state.cards_data = cards
-                st.success(f"Generated {len(cards)} card specifications.")
-                summary_records = [
-                    {
-                        'Name': c['Name'],
-                        'Types': ', '.join(c.get('Types', [])),
-                        'Power Score': c.get('Power Score'),
-                        'Rarity': c.get('Rarity'),
-                        'Retreat Cost': c.get('Retreat Cost'),
-                    }
-                    for c in cards
-                ]
-                summary_df = pd.DataFrame(summary_records)
-                st.dataframe(summary_df, use_container_width=True)
-                # Allow user to download the generated JSON
-                json_str = json.dumps(cards, ensure_ascii=False, indent=2)
-                st.download_button(
-                    label="Download Cards JSON",
-                    data=json_str,
-                    file_name="pokemon_cards_output.json",
-                    mime="application/json",
-                )
-            except Exception as e:
-                st.error(f"Failed to generate cards: {e}")
+        # --- Container 2: Finalize & Assign Rarity ---
+        with st.container(border=True):
+            st.subheader("2. Finalize Specs & Assign Rarity")
+            st.markdown("This step loads a JSON file (like the one from the previous step), calculates power scores, and assigns a rarity to each Pokémon.")
+            default_path = os.path.join(os.path.dirname(__file__), 'generated_pokemon', 'new_creations.json')
+            input_path = st.text_input("Path to generated Pokémon JSON", value=default_path, key="finalize_input")
+            
+            if st.button("Generate Specifications", type="primary"):
+                try:
+                    cards = generate_pokemon_cards(input_path)
+                    st.session_state.cards_data = cards
+                    st.success(f"Processed {len(cards)} Pokémon and assigned rarities.")
+                    summary_records = [{'Name': c['Name'], 'Types': ', '.join(c.get('Types', [])), 'Power Score': c.get('Power Score'), 'Rarity': c.get('Rarity')} for c in cards]
+                    summary_df = pd.DataFrame(summary_records)
+                    st.dataframe(summary_df, use_container_width=True)
+                    json_str = json.dumps(cards, ensure_ascii=False, indent=2)
+                    st.download_button(label="Download Finalized Card Data (JSON)", data=json_str, file_name="final_pokemon_cards.json", mime="application/json")
+                except Exception as e:
+                    st.error(f"Failed to process cards: {e}")
 
-    # -------------------------------------------------------------------------
-    # Tab 2 – Select & Visualise Cards
-    # -------------------------------------------------------------------------
-    with tabs[2]:
-        st.header("Select & Visualise Cards")
-        cards_data: Optional[List[Dict[str, Any]]] = st.session_state.get('cards_data')
-        if not cards_data:
-            st.info("Please generate card specifications in the previous tab before proceeding.")
-        else:
-            # Provide selection of cards by name
-            card_names = [card['Name'] for card in cards_data]
-            selected_names = st.multiselect(
-                "Select Pokémon to draw", card_names,
-                help="Choose one or more cards from the generated list to render."
-            )
-            if selected_names and st.button("Draw Selected Cards"):
-                # Render selected cards
-                for card in cards_data:
-                    if card['Name'] in selected_names:
-                        img = draw_card(card)
-                        # Convert to bytes for Streamlit
-                        buf = io.BytesIO()
-                        img.save(buf, format='PNG')
-                        st.image(buf.getvalue(), caption=f"{card['Name']} ({card.get('Rarity', 'Unknown')})", use_column_width=False)
+        st.divider()
 
+        # --- Container 3: Draw Cards ---
+        with st.container(border=True):
+            st.subheader("3. Draw Pokémon Cards")
+            if not st.session_state.cards_data:
+                st.info("Please generate and finalize card specs in the steps above first.")
+            else:
+                card_names = [card['Name'] for card in st.session_state.cards_data]
+                selected_names = st.multiselect("Select Pokémon to draw", card_names)
+                
+                if selected_names:
+                    st.subheader("Generated Cards")
+                    # Adjust columns based on the number of selected cards for better layout
+                    num_selected = len(selected_names)
+                    cols = st.columns(min(num_selected, 3)) 
+                    for i, name in enumerate(selected_names):
+                        card_to_draw = next((c for c in st.session_state.cards_data if c['Name'] == name), None)
+                        if card_to_draw:
+                            with cols[i % min(num_selected, 3)]:
+                                with st.spinner(f"Drawing {name}..."):
+                                    img = draw_card(card_to_draw)
+                                    st.image(img, caption=f"{card_to_draw['Name']} ({card_to_draw.get('Rarity', 'N/A')})")
 
 def main() -> None:
-    """Entrypoint used by Streamlit when running ``streamlit run main.py``."""
     build_app()
 
-
 if __name__ == '__main__':
+    # You will need to paste your full functions and classes here
+    # I have omitted them for brevity, but they are required for the app to run.
+    st.warning("Please paste the full code for helper functions and classes into main.py")
     main()
