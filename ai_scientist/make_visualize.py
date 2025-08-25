@@ -3,15 +3,29 @@ import json
 import base64
 import io
 import random
+import re
+import unicodedata
+from typing import Dict, List
 from PIL import Image, ImageDraw, ImageFont
 
-# Path to the input JSON containing card definitions.
-INPUT_JSON_PATH = "ideas/pokemon_cards_output.json"
+# ------------------------------------------------------------
+# 경로 설정
+# ------------------------------------------------------------
+# 카드 디테일(JSON). 여기엔 Name/Types/Stats/Skills 등 정보만 있다고 가정
+INPUT_JSON_PATH = "ideas/pokemon_cards_output.json"     # better.json에 해당
 
-# Output directory for improved card images.
+# image.json (이름-이미지 Base64만 저장되어 있는 파일)
+IMAGE_JSON_PATH = "ideas/i_cant_believe_its_not_better_image.json"
+
+# 로컬 원본 이미지 디렉토리(있으면 파일이 최우선)
+IMAGE_SRC_DIR = "ideas/img"
+
+# 출력 디렉토리
 OUTPUT_DIR = "ideas/improved_card_images"
 
-# catch-all for colorless energy (`공통`).
+# ------------------------------------------------------------
+# 타입 컬러(에너지 색)
+# ------------------------------------------------------------
 TYPE_COLORS = {
     '전기': '#F7D02C', 'Electric': '#F7D02C',
     '물': '#6390F0', 'Water': '#6390F0',
@@ -34,25 +48,55 @@ TYPE_COLORS = {
     '공통': '#A8A77A',  # colorless energy
 }
 
+# ------------------------------------------------------------
+# 유틸: 이름 매칭 키 정규화
+# ------------------------------------------------------------
+def normalize_key(s: str) -> str:
+    """이름 매칭용 키 표준화: 전각/소문자/공백 제거."""
+    s = unicodedata.normalize("NFKC", str(s or "")).strip().lower()
+    s = re.sub(r"\s+", "", s)
+    return s
 
+# ------------------------------------------------------------
+# 유틸: image.json 로드 → {정규화된이름: base64(or data-url)} 딕셔너리
+# ------------------------------------------------------------
+def load_image_index(path: str) -> Dict[str, str]:
+    idx = {}
+    if not os.path.exists(path):
+        return idx
+    with open(path, "r", encoding="utf-8") as f:
+        arr = json.load(f)
+    if isinstance(arr, dict):
+        arr = [arr]
+    for rec in arr or []:
+        key = normalize_key(rec.get("Name") or rec.get("Korean Name"))
+        if not key:
+            continue
+        b64 = rec.get("Image") or rec.get("image_base64")  # 호환
+        if not b64:
+            continue
+        idx[key] = b64
+    return idx
+
+# ------------------------------------------------------------
+# 유틸: base64 혹은 data-url 모두 허용해서 PIL Image로 변환
+# ------------------------------------------------------------
+def load_image_from_b64_any(s: str) -> Image.Image:
+    if s.startswith("data:"):
+        _, b64 = s.split(",", 1)
+    else:
+        b64 = s
+    raw = base64.b64decode(b64)
+    return Image.open(io.BytesIO(raw)).convert("RGBA")
+
+# (호환) 기존 인터페이스 유지
 def load_image_from_data_url(data_url: str) -> Image.Image:
-    """Decode a base64 data URL into a PIL Image."""
-    header, b64data = data_url.split(',', 1)
-    raw = base64.b64decode(b64data)
-    return Image.open(io.BytesIO(raw)).convert('RGBA')
+    return load_image_from_b64_any(data_url)
 
-
+# ------------------------------------------------------------
+# 색상 라이트닝
+# ------------------------------------------------------------
 def lighten_color(hex_color: str, factor: float) -> tuple:
-    """Lighten a hex RGB color by blending it with white.
-
-    Args:
-        hex_color: Color in '#RRGGBB' form.
-        factor: Amount to lighten (0–1). 0 returns the original color,
-                and 1 returns white.
-
-    Returns:
-        A 3-tuple with the lightened RGB values.
-    """
     hex_color = hex_color.lstrip('#')
     r = int(hex_color[0:2], 16)
     g = int(hex_color[2:4], 16)
@@ -62,53 +106,33 @@ def lighten_color(hex_color: str, factor: float) -> tuple:
     b = int(b + (255 - b) * factor)
     return (r, g, b)
 
-
+# ------------------------------------------------------------
+# 카드 렌더링
+# ------------------------------------------------------------
 def draw_card(card: dict, width: int = 400, height: int = 560) -> Image.Image:
-    """Draw a single Pokémon card according to the given specification.
-
-    The card design adapts to the primary type and rarity, applies a sparkly
-    border for higher rarities, separates the artwork and details areas, and
-    shows energy costs as colored circles next to each skill.
-
-    Args:
-        card: A dictionary containing card information (Name, Types, Rarity,
-              Skills, Image, etc.).
-        width: Width of the resulting card image.
-        height: Height of the resulting card image.
-
-    Returns:
-        A PIL Image representing the rendered card.
-    """
-    # Create a transparent canvas
     card_img = Image.new('RGBA', (width, height), (0, 0, 0, 0))
     draw = ImageDraw.Draw(card_img)
 
-    # Helper for text size
     def text_wh(text: str, font: ImageFont.ImageFont):
         l, t, r, b = draw.textbbox((0, 0), text, font=font)
         return (r - l, b - t)
 
-    # Determine primary type and base color
-    primary_type = card.get('Types')[0] if card.get('Types') else '노말'
+    primary_type = (card.get('Types') or ['노말'])[0]
     base_color   = TYPE_COLORS.get(primary_type, '#A8A77A')
-    # Determine rarity level
     rarity       = str(card.get('Rarity', 'Common'))
     rarity_levels = {'Common': 1, 'Uncommon': 2, 'Rare': 3, 'Epic': 4, 'Legendary': 5}
     level        = rarity_levels.get(rarity, 1)
 
-    # Border and glitter settings
     border_w     = 8 + (level - 1) * 2
     inner_margin = border_w + 4
     glitter_density = (level - 1) * 20
-
-    # Lighten the border color based on rarity
     border_color = lighten_color(base_color, min(0.1 * (level - 1), 0.5))
 
-    # Draw border and base
+    # 배경/보더
     draw.rectangle([0, 0, width, height], fill=border_color)
     draw.rectangle([inner_margin, inner_margin, width - inner_margin, height - inner_margin], fill='#FDFDFD')
 
-    # Draw glitter behind the artwork and details areas
+    # 글리터 효과
     for _ in range(glitter_density):
         x = random.randint(inner_margin, width - inner_margin)
         y = random.randint(inner_margin, height - inner_margin)
@@ -119,12 +143,12 @@ def draw_card(card: dict, width: int = 400, height: int = 560) -> Image.Image:
             color = (255, 255, random.randint(200, 255), random.randint(100, 200))
         draw.ellipse([x, y, x + size, y + size], fill=color)
 
-    # Draw the top bar
+    # 상단 바
     bar_h = 60
     bar_rect = [inner_margin + 2, inner_margin + 2, width - inner_margin - 2, inner_margin + bar_h]
     draw.rectangle(bar_rect, fill=base_color)
 
-    # Load fonts (prefer NotoSansCJK for multi-language support)
+    # 폰트
     try:
         font_title    = ImageFont.truetype('/usr/share/fonts/opentype/noto/NotoSansCJK-Bold.ttc', 24)
         font_subtitle = ImageFont.truetype('/usr/share/fonts/opentype/noto/NotoSansCJK-Bold.ttc', 16)
@@ -137,43 +161,51 @@ def draw_card(card: dict, width: int = 400, height: int = 560) -> Image.Image:
         except Exception:
             font_title = font_subtitle = font_text = ImageFont.load_default()
 
-    # Draw the name and HP
+    # 이름/HP
     draw.text((inner_margin + 10, inner_margin + 15), card.get('Name', 'Unknown'), font=font_title, fill='black')
     hp_value = (card.get('Stats') or {}).get('HP', 0)
     hp_text  = f"HP {hp_value}"
     hp_w, _  = text_wh(hp_text, font_subtitle)
     draw.text((width - inner_margin - 10 - hp_w, inner_margin + 20), hp_text, font=font_subtitle, fill='black')
 
-    # Determine artwork area and paste the artwork image if available
+    # 아트 영역
     art_top = inner_margin + bar_h + 6
     art_h   = 240
     art_area = [inner_margin + 6, art_top, width - inner_margin - 6, art_top + art_h]
-    if card.get('Image'):
+
+    art_img = None
+    if card.get('artwork_image'):
+        art_img = card['artwork_image']
+    elif card.get('Image'):
         try:
-            art_img = load_image_from_data_url(card['Image'])
+            art_img = load_image_from_b64_any(card['Image'])
+        except Exception:
+            print(f"Warning: Could not decode embedded image for {card.get('Name')}")
+
+    if art_img:
+        try:
+            art_img = art_img.convert("RGBA")
             art_ratio = art_img.width / art_img.height
-            target_w = art_area[2] - art_area[0]
-            target_h = art_area[3] - art_area[1]
+            target_w  = art_area[2] - art_area[0]
+            target_h  = art_area[3] - art_area[1]
             target_ratio = target_w / target_h
             if art_ratio > target_ratio:
-                # Fit to width
                 new_w, new_h = target_w, int(target_w / art_ratio)
             else:
-                # Fit to height
                 new_h, new_w = target_h, int(target_h * art_ratio)
             art_resized = art_img.resize((new_w, new_h), Image.Resampling.LANCZOS)
             x_off = art_area[0] + (target_w - new_w) // 2
             y_off = art_area[1] + (target_h - new_h) // 2
             card_img.paste(art_resized, (x_off, y_off), art_resized)
-        except Exception:
-            pass
+        except Exception as e:
+            print(f"Error pasting artwork for {card.get('Name')}: {e}")
 
-    # Fill details area with a pale tint of the base color
-    details_top = art_area[3] + 8  # start below the artwork
+    # 디테일 영역
+    details_top = art_area[3] + 8
     tinted_color = lighten_color(base_color, 0.7)
     draw.rectangle([inner_margin, details_top, width - inner_margin, height - inner_margin], fill=tinted_color)
 
-    # Draw type badges
+    # 타입 배지
     type_x = inner_margin + 10
     type_y = details_top + 4
     for t in (card.get('Types') or []):
@@ -185,7 +217,7 @@ def draw_card(card: dict, width: int = 400, height: int = 560) -> Image.Image:
         draw.text((type_x + (badge_w - tw) / 2, type_y + (badge_h - th) / 2), t, font=font_text, fill='white')
         type_x += badge_w + 6
 
-    # Draw the Skills section (limit to two skills)
+    # 스킬(최대 2개)
     skills = card.get('Skills') or []
     if skills:
         y_pos = type_y + 22 + 10
@@ -200,7 +232,7 @@ def draw_card(card: dict, width: int = 400, height: int = 560) -> Image.Image:
             dmg_text = f"Damage: {power}" if power not in (None, -1) else "Damage: -"
             draw.text((inner_margin + 40, y_pos), dmg_text, font=font_text, fill='dimgray')
             y_pos += 18
-            # Extract energy cost (integer) and draw colored circles
+
             energy_cost = skill.get('EnergyCost') or skill.get('Energy') or skill.get('Energy Cost') or skill.get('Cost')
             try:
                 energy_count = int(energy_cost)
@@ -219,10 +251,9 @@ def draw_card(card: dict, width: int = 400, height: int = 560) -> Image.Image:
                 y_pos += icon_size + 6
             else:
                 y_pos += 6
-            # Space before the next skill
             y_pos += 8
 
-    # Draw retreat cost at the bottom of the card
+    # 리트리트
     bottom_y = height - inner_margin - 40
     retreat = card.get('Retreat Cost', 0) or 0
     label   = 'Retreat:'
@@ -236,27 +267,66 @@ def draw_card(card: dict, width: int = 400, height: int = 560) -> Image.Image:
 
     return card_img
 
-
+# ------------------------------------------------------------
+# 메인
+# ------------------------------------------------------------
 def main() -> None:
-    """Main entry point for generating improved cards."""
-    # Load card data from JSON
+    # 입력 카드 데이터
+    if not os.path.exists(INPUT_JSON_PATH):
+        print(f"Error: Input file not found at {INPUT_JSON_PATH}")
+        return
     with open(INPUT_JSON_PATH, 'r', encoding='utf-8') as f:
-        cards = json.load(f)
+        cards: List[Dict] = json.load(f)
 
-    # Ensure output directory exists
+    # image.json 로드 → 이름→이미지 맵
+    image_index = load_image_index(IMAGE_JSON_PATH)
+
     os.makedirs(OUTPUT_DIR, exist_ok=True)
 
-    # Generate and save each card
     generated = []
     for card in cards:
-        img = draw_card(card)
-        safe_name = card.get('Name', 'Unknown').replace(' ', '_')
-        filename = f"{safe_name}_improved.png"
-        path = os.path.join(OUTPUT_DIR, filename)
-        img.save(path)
-        generated.append(path)
-    print("Generated card files:", generated)
+        # 매칭 키
+        card_name = card.get('Name') or card.get('Korean Name') or 'Unknown'
+        key = normalize_key(card_name)
 
+        # 1) 로컬 파일 우선
+        sanitized_name = "".join(c for c in (card.get('Name') or '') if c.isalnum())
+        local_img_path = os.path.join(IMAGE_SRC_DIR, f"{sanitized_name}_temp.png")
+
+        art_img = None
+        if os.path.exists(local_img_path):
+            try:
+                art_img = Image.open(local_img_path).convert("RGBA")
+                card['artwork_image'] = art_img
+                print(f"[art] local file => {card_name} ({local_img_path})")
+            except Exception as e:
+                print(f"[art] fail local {local_img_path}: {e}")
+
+        # 2) image.json (Base64) 사용
+        if art_img is None and key in image_index:
+            try:
+                art_img = load_image_from_b64_any(image_index[key])
+                card['artwork_image'] = art_img
+                print(f"[art] image.json => {card_name}")
+            except Exception as e:
+                print(f"[art] fail image.json for {card_name}: {e}")
+
+        # 3) better.json 내부의 Image 필드 (마지막 폴백)
+        if art_img is None and card.get('Image'):
+            try:
+                card['artwork_image'] = load_image_from_b64_any(card['Image'])
+                print(f"[art] embedded base64 => {card_name}")
+            except Exception as e:
+                print(f"[art] fail embedded for {card_name}: {e}")
+
+        # 카드 출력
+        img = draw_card(card)
+        safe_name = (card.get('Name') or 'Unknown').replace(' ', '_')
+        out_path = os.path.join(OUTPUT_DIR, f"{safe_name}_improved.png")
+        img.save(out_path)
+        generated.append(out_path)
+
+    print("\nGenerated card files:", generated)
 
 if __name__ == '__main__':
     main()
