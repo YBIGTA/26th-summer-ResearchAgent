@@ -3,6 +3,7 @@ import io
 import re
 import json
 import base64
+import sys
 from typing import Any, List, Dict, Tuple, Optional
 from dataclasses import dataclass
 
@@ -19,6 +20,8 @@ from transformers import (
     AutoModelForCausalLM,
     GenerationConfig,
 )
+
+_SDXL_PIPE = None
 
 # 기존 데코레이터가 없으면 no-op
 try:
@@ -122,43 +125,28 @@ def _open_images(image_paths: List[str], max_images: int) -> List[Image.Image]:
 def generate_image_from_prompt(prompt: str, output_path: str) -> str:
     """
     Animagine XL 3.0을 사용하여 포켓몬 스타일의 이미지를 생성하고 저장합니다.
+    (Caches the model after the first run for efficiency)
     """
+    global _SDXL_PIPE # eeference the global variable
+
     try:
-        # 1. 애니메이션/포켓몬 스타일에 특화된 고품질 모델로 변경
-        # 기존: "runwayml/stable-diffusion-v1-5"
-        model_id = "cagliostrolab/animagine-xl-3.0"
-        # pipe = StableDiffusionPipeline.from_pretrained(
-        #     model_id,
-        #     torch_dtype=torch.float16,
-        #     use_safetensors=True,
-        # ).to("cuda")
+        if _SDXL_PIPE is None: # load the model ONLY if it's not already in memory
+            print("Loading Image Generation Model for the first time (this may take a moment)...", file=sys.stderr)
+            model_id = "cagliostrolab/animagine-xl-3.0"
+            pipe = StableDiffusionXLPipeline.from_pretrained(
+                model_id,
+                torch_dtype=torch.float16,
+                use_safetensors=True,
+            ).to("cuda")
+            # Store the loaded model in our global cache variable
+            _SDXL_PIPE = pipe
 
-        # <<< StableDiffusionPipeline -> StableDiffusionXLPipeline으로 클래스 이름 변경
-        pipe = StableDiffusionXLPipeline.from_pretrained(
-            model_id,
-            torch_dtype=torch.float16,
-            use_safetensors=True,
-        ).to("cuda")
+        # Use the cached model
+        pipe = _SDXL_PIPE
 
-        # GPU VRAM이 부족할 경우 아래 주석을 해제하여 메모리 사용량을 줄일 수 있습니다.
-        # pipe.enable_model_cpu_offload()
-
-        # 2. 포켓몬 공식 아트워크 스타일을 위한 프롬프트 엔지니어링
-        # 사용자의 기본 프롬프트(캐릭터 외형 묘사)에 스타일 키워드를 추가합니다.
-        # style_prompt = (
-        #     "masterpiece, best quality, official artwork, game character, "
-        #     "pokemon style, style of Ken Sugimori, vibrant colors, clean lineart, "
-        #     "white background"
-        # )
         style_prompt = (
             "(official Pokémon artwork:1.4), (Ken Sugimori style:1.3), (Ohmura style:1.1), "
             "(single creature:1.4), (full body:1.3), (3/4 view:1.2), (centered:1.2), "
-            # "(white background:1.5), (no background:1.5), "
-            # "(clean thin black lineart:1.3), (flat cel shading, two-tone shadows:1.3), "
-            # "(simple geometric shapes:1.2), (limited color palette 2-3 colors + accent:1.2), "
-            # "(cute proportions, big expressive eyes, small mouth:1.2), "
-            # "(no clothes, no armor, creature design not human:1.4)"
-
             "(white background:1.5), (light gray drop shadow:1.1), "
             "(clean thick-thin black lineart:1.3), (flat cel shading:1.3), (two-tone shadows:1.2), "
             "(simple geometric shapes:1.2), (limited 2-3 color palette + accent:1.2), "
@@ -167,12 +155,9 @@ def generate_image_from_prompt(prompt: str, output_path: str) -> str:
         )
         full_prompt = f"{style_prompt}, {prompt}, redesign as a creature, readable silhouette, minimal details"
 
-        # full_prompt = f"{style_prompt}, {prompt}"
-
-        # 3. 원치 않는 결과(실사, 3D 등)를 방지하기 위한 네거티브 프롬프트
         negative_prompt = (
             "nsfw, photorealistic, photograph, 3d, rendering, text, watermark, "
-            "signature, ugly, blurry, low quality, worst quality, monochrome"
+            "signature, ugly, blurry, low quality, worst quality, monochrome, "
             "human, humanoid, girl, woman, man, realistic anatomy, fingers, hands,"
             "armor, clothing, dress, stockings, heels, cleavage,"
             "angel, angelic, goddess, halo,"
@@ -184,25 +169,22 @@ def generate_image_from_prompt(prompt: str, output_path: str) -> str:
             "ugly, lowres, blurry, noisy, worst quality, monochrome"
         )
 
-        print(f"Generating Pokemon-style image for prompt: '{prompt}'")
+        print(f"Generating Pokemon-style image for prompt: '{prompt}'", file=sys.stderr)
         
-        # 4. 강화된 프롬프트로 이미지 생성
         image = pipe(
             prompt=full_prompt,
             negative_prompt=negative_prompt,
-            num_inference_steps=28,  # 추론 스텝 수 (품질과 속도 조절)
-            guidance_scale=7.5,     # 프롬프트 충실도
+            num_inference_steps=28,
+            guidance_scale=7.5,
         ).images[0]
         
-        # 이미지 저장
         os.makedirs(os.path.dirname(output_path), exist_ok=True)
         image.save(output_path)
-        print(f"Image saved to {output_path}")
+        print(f"Image saved to {output_path}", file=sys.stderr)
         return output_path
 
     except Exception as e:
-        print(f"Image generation failed: {e}")
-        # traceback.print_exc() # 더 자세한 에러를 보고 싶을 때 주석 해제
+        print(f"Image generation failed: {e}", file=sys.stderr)
         return ""
 
 def _has_chat_template(processor: Any) -> bool:
