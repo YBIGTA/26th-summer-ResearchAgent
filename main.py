@@ -232,174 +232,65 @@ class PokemonCard:
             "Image": self.image,
         }
 
-
-def draw_card(card: Dict[str, Any], width: int = 400, height: int = 560) -> Image.Image:
-    """Render a single Pokémon card to a Pillow image.
-
-    The layout follows a standard card format with a coloured header, artwork
-    panel, type badges, skill descriptions and retreat cost icons.  The
-    colours are derived from the primary type of the card.
-    """
-    card_img = Image.new('RGBA', (width, height), (0, 0, 0, 0))
-    draw = ImageDraw.Draw(card_img)
-
-    def text_wh(text: str, font: ImageFont.ImageFont) -> tuple:
-        l, t, r, b = draw.textbbox((0, 0), text, font=font)
-        return (r - l, b - t)
-
-    primary_type = card.get('Types')[0] if card.get('Types') else '노말'
-    base_colour = TYPE_COLORS.get(primary_type, '#A8A77A')
-    rarity = str(card.get('Rarity', 'Common'))
-    rarity_levels = {'Common': 1, 'Uncommon': 2, 'Rare': 3, 'Epic': 4, 'Legendary': 5}
-    level = rarity_levels.get(rarity, 1)
-
-    # Border width and inner margin scale with rarity
-    border_w = 8 + (level - 1) * 2
-    inner_margin = border_w + 4
-    glitter_density = (level - 1) * 20
-
-    # Lighten the border colour relative to the base colour and rarity
-    border_colour = lighten_color(base_colour, min(0.1 * (level - 1), 0.5))
-
-    # Draw border and base rectangle
-    draw.rectangle([0, 0, width, height], fill=border_colour)
-    draw.rectangle([inner_margin, inner_margin, width - inner_margin, height - inner_margin], fill='#FDFDFD')
-
-    # Sprinkle glitter in the background
-    for _ in range(glitter_density):
-        x = random.randint(inner_margin, width - inner_margin)
-        y = random.randint(inner_margin, height - inner_margin)
-        size = random.randint(1, 3)
-        if random.random() < 0.5:
-            colour = (255, 255, 255, random.randint(100, 200))
-        else:
-            colour = (255, 255, random.randint(200, 255), random.randint(100, 200))
-        draw.ellipse([x, y, x + size, y + size], fill=colour)
-
-    # Top bar for name and HP
-    bar_h = 60
-    bar_rect = [inner_margin + 2, inner_margin + 2, width - inner_margin - 2, inner_margin + bar_h]
-    draw.rectangle(bar_rect, fill=base_colour)
-
-    # Load fonts; fall back gracefully if not available
+def draw_card(card: Dict[str, Any]) -> str:
+    """Populates the HTML template with card data and returns the HTML string."""
+    
+    # Read the template file
     try:
-        font_title = ImageFont.truetype('/usr/share/fonts/opentype/noto/NotoSansCJK-Bold.ttc', 24)
-        font_subtitle = ImageFont.truetype('/usr/share/fonts/opentype/noto/NotoSansCJK-Bold.ttc', 16)
-        font_text = ImageFont.truetype('/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc', 14)
-    except Exception:
-        try:
-            font_title = ImageFont.truetype('/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf', 24)
-            font_subtitle = ImageFont.truetype('/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf', 16)
-            font_text = ImageFont.truetype('/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf', 14)
-        except Exception:
-            font_title = font_subtitle = font_text = ImageFont.load_default()
+        with open('card_template.html', 'r', encoding='utf-8') as f:
+            html_template = f.read()
+    except FileNotFoundError:
+        return "<h3>Error: card_template.html not found.</h3><p>Please ensure the template file is in the same directory as the script.</p>"
 
-    # Draw name and HP on top bar
-    draw.text((inner_margin + 10, inner_margin + 15), card.get('Name', 'Unknown'), font=font_title, fill='black')
-    hp_value = (card.get('Stats') or {}).get('HP', 0)
-    hp_text = f"HP {hp_value}"
-    hp_w, _ = text_wh(hp_text, font_subtitle)
-    draw.text((width - inner_margin - 10 - hp_w, inner_margin + 20), hp_text, font=font_subtitle, fill='black')
+    # --- Prepare data snippets for injection ---
+    
+    # Types
+    types_html = ""
+    for t in card.get('Types', []):
+        color = TYPE_COLORS.get(t, '#666')
+        types_html += f'<div class="type-badge" style="background-color: {color};">{t}</div>'
 
-    # Artwork area
-    art_top = inner_margin + bar_h + 6
-    art_h = 240
-    art_area = [inner_margin + 6, art_top, width - inner_margin - 6, art_top + art_h]
-    if card.get('Image'):
-        try:
-            art_img = load_image_from_data_url(card['Image'])
-            # Fit image into the artwork area while maintaining aspect ratio
-            art_ratio = art_img.width / art_img.height
-            target_w = art_area[2] - art_area[0]
-            target_h = art_area[3] - art_area[1]
-            target_ratio = target_w / target_h
-            if art_ratio > target_ratio:
-                new_w, new_h = target_w, int(target_w / art_ratio)
-            else:
-                new_h, new_w = target_h, int(target_h * art_ratio)
-            art_resized = art_img.resize((new_w, new_h), Image.Resampling.LANCZOS)
-            x_off = art_area[0] + (target_w - new_w) // 2
-            y_off = art_area[1] + (target_h - new_h) // 2
-            card_img.paste(art_resized, (x_off, y_off), art_resized)
-        except Exception:
-            pass
+    # Skills - CORRECTED KEY ACCESS
+    skills_html = ""
+    for skill in card.get('Skills', []):
+        # CORRECTED: Use 'Power', 'Name', and 'Effect' (capitalized)
+        power = skill.get('Power')
+        power_text = f" (Power: {power})" if power is not None else ""
+        skill_name = skill.get('Name', 'Unknown')
+        skill_effect = skill.get('Effect', 'No effect description.')
+        
+        skills_html += f"""
+        <div class="skill">
+            <span class="skill-name">• {skill_name}{power_text}:</span>
+            <span>{skill_effect}</span>
+        </div>
+        """
+        
+    # Retreat Cost
+    retreat_html = ""
+    for _ in range(card.get('Retreat Cost', 0)):
+        retreat_html += '<div class="retreat-icon"></div>'
 
-    # Details area background tinted version of base colour
-    details_top = art_area[3] + 8
-    tinted_colour = lighten_color(base_colour, 0.7)
-    draw.rectangle([inner_margin, details_top, width - inner_margin, height - inner_margin], fill=tinted_colour)
+    # Colors
+    primary_type = card.get('Types')[0] if card.get('Types') else 'Normal'
+    base_color = TYPE_COLORS.get(primary_type, '#A8A77A')
+    # Create a tinted background color with transparency (alpha)
+    tinted_color = f"{base_color}40" # Adding '40' creates ~25% opacity
 
-    # Draw type badges
-    type_x = inner_margin + 10
-    type_y = details_top + 4
-    for t in (card.get('Types') or []):
-        c = TYPE_COLORS.get(t, '#A8A77A')
-        badge_w, badge_h = 70, 22
-        badge_rect = [type_x, type_y, type_x + badge_w, type_y + badge_h]
-        draw.rounded_rectangle(badge_rect, radius=8, fill=c, outline='black')
-        tw, th = text_wh(t, font_text)
-        draw.text((type_x + (badge_w - tw) / 2, type_y + (badge_h - th) / 2), t, font=font_text, fill='white')
-        type_x += badge_w + 6
+    # --- Inject all data into the template ---
+    html_content = html_template.replace('{{ NAME }}', card.get('Name', 'Unknown'))
+    html_content = html_content.replace('{{ HP }}', str(card.get('Stats', {}).get('HP', 0)))
+    html_content = html_content.replace('{{ RARITY }}', card.get('Rarity', 'Common'))
+    html_content = html_content.replace('{{ IMAGE_DATA_URL }}', card.get('Image') or '')
+    html_content = html_content.replace('{{ TYPES_HTML }}', types_html)
+    html_content = html_content.replace('{{ SKILLS_HTML }}', skills_html)
+    html_content = html_content.replace('{{ RETREAT_HTML }}', retreat_html)
+    html_content = html_content.replace('{{ BASE_COLOR }}', base_color)
+    html_content = html_content.replace('{{ BORDER_COLOR }}', base_color)
+    html_content = html_content.replace('{{ TINTED_COLOR }}', tinted_color)
+    
 
-    # Skills section (limit to two skills)
-    skills = card.get('Skills') or []
-    if skills:
-        y_pos = type_y + 22 + 10
-        draw.text((inner_margin + 10, y_pos), 'Skills:', font=font_subtitle, fill='black')
-        y_pos += 22
-        for skill in skills[:2]:
-            name = skill.get('Name', '?')
-            stype = skill.get('Type', '?')
-            draw.text((inner_margin + 20, y_pos), f"• {name} ({stype})", font=font_text, fill='black')
-            y_pos += 16
-            power = skill.get('Power')
-            dmg_text = f"Damage: {power}" if power not in (None, -1) else "Damage: -"
-            draw.text((inner_margin + 40, y_pos), dmg_text, font=font_text, fill='dimgray')
-            y_pos += 18
-            # Draw energy cost as coloured circles
-            energy_cost = (
-                skill.get('EnergyCost') or
-                skill.get('Energy') or
-                skill.get('Energy Cost') or
-                skill.get('Cost')
-            )
-            try:
-                energy_count = int(energy_cost)
-            except Exception:
-                energy_count = 0
-            if energy_count > 0:
-                icon_size = 12
-                icon_x = inner_margin + 40
-                icon_y = y_pos
-                colour_key = stype if stype in TYPE_COLORS else '공통'
-                for idx in range(energy_count):
-                    et_colour = TYPE_COLORS.get(colour_key, '#A8A77A')
-                    draw.ellipse([
-                        icon_x + idx * (icon_size + 4), icon_y,
-                        icon_x + idx * (icon_size + 4) + icon_size,
-                        icon_y + icon_size
-                    ], fill=et_colour, outline='black')
-                y_pos += icon_size + 6
-            else:
-                y_pos += 6
-            # Space before next skill
-            y_pos += 8
-
-    # Draw retreat cost at bottom of card
-    bottom_y = height - inner_margin - 40
-    retreat = card.get('Retreat Cost', 0) or 0
-    label = 'Retreat:'
-    lbl_w, _ = text_wh(label, font_text)
-    rc_start = width - inner_margin - 10 - (retreat * 18)
-    draw.text((rc_start - lbl_w - 4, bottom_y), label, font=font_text, fill='black')
-    for i in range(retreat):
-        cx = rc_start + i * 18
-        cy = bottom_y + 5
-        draw.ellipse([cx, cy, cx + 12, cy + 12], fill='gray', outline='black')
-
-    return card_img
-
-
+    return html_content
 def generate_pokemon_cards(input_json_path: str) -> List[Dict[str, Any]]:
     """Load raw Pokémon specifications and assign rarity and derived stats.
 
@@ -452,51 +343,60 @@ def build_app() -> None:
     # -------------------------------------------------------------------------
     with tabs[0]:
         with st.container(border=True):
-            st.subheader(" 1. Generate New Pokémon Concepts")
-            st.markdown(
-                "Use the refactoring script to produce brand new Pokémon concepts based on your existing data."
-            )
-            num_ideas = st.number_input(
-                "Number of Pokémon to generate", min_value=1, max_value=20, value=3
-            )
+            st.header("1. Generate New Pokémon Concepts")
+            st.markdown(f"Select how many new Pokémon to generate from your `{os.path.abspath('./crawler/json')}` folder.")
+            
+            num_ideas = st.number_input("Number of Pokémon to generate", min_value=1, max_value=20, value=3)
             default_idea_out = os.path.join(os.path.dirname(__file__), 'generated_pokemon', 'new_creations.json')
-            idea_output = st.text_input(
-                "Path to save generated JSON", value=default_idea_out
-            )
+            idea_output = st.text_input("Path to save final JSON file", value=default_idea_out)
 
             if st.button("✨ Run Generation Script", type="primary"):
-                out_dir = os.path.dirname(idea_output)
-                if out_dir: os.makedirs(out_dir, exist_ok=True)
+                st.session_state.generated_ideas = [] # Clear previous results
                 
-                try:
-                    # --- MODIFIED PART ---
-                    # This now calls our separate refactoring script with arguments
-                    script_path = os.path.join(os.path.dirname(__file__), 'refactor_pokemon.py')
-                    
-                    with st.spinner(f"Running external script: refactor_pokemon.py..."):
-                        cmd = [
-                            'python',
-                            script_path,
-                            '--count', str(num_ideas),
-                            '--output', idea_output
-                        ]
-                        result = subprocess.run(
-                            cmd, 
-                            capture_output=True, 
-                            check=True, 
-                            encoding='utf-8', 
-                            env={**os.environ, "PYTHONUTF8": "1"}
-                        )
-                        
-                        st.success(f"Successfully generated {num_ideas} Pokémon to `{idea_output}`.")
-                        if result.stdout:
-                            st.code(result.stdout.strip(), language="bash")
+                script_path = os.path.join(os.path.dirname(__file__), 'refactor_pokemon.py')
+                cmd = ['python', script_path, '--count', str(num_ideas), '--output', idea_output]
+                
+                st.subheader("Generation Progress")
+                progress_placeholder = st.empty()
+                log_placeholder = st.expander("Show Live Logs", expanded=True)
+                log_container = log_placeholder.empty()
 
-                except FileNotFoundError:
-                    st.error(f"Script not found at '{script_path}'. Make sure 'refactor_pokemon.py' is in the same directory.")
-                except subprocess.CalledProcessError as e:
-                    st.error("The generation script failed:")
-                    st.code(e.stderr.strip(), language="bash")
+                log_lines = []
+
+                try:
+                    process = subprocess.Popen(
+                        cmd,
+                        stdout=subprocess.PIPE,
+                        stderr=subprocess.STDOUT, # This is the key change
+                        text=True,
+                        encoding='utf-8',
+                        env={**os.environ, "PYTHONUTF8": "1"}
+                    )
+
+                    for line in iter(process.stdout.readline, ''):
+                        line = line.strip()
+                        if not line:
+                            continue
+
+                        try:
+                            # Try to parse the line as JSON. If it works, it's a result.
+                            new_pokemon = json.loads(line)
+                            st.session_state.generated_ideas.append(new_pokemon)
+                            
+                            with progress_placeholder.container():
+                                st.success(f"Generated {len(st.session_state.generated_ideas)} / {num_ideas} Pokémon...")
+                                st.json(new_pokemon) # Display the latest one
+                        except json.JSONDecodeError:
+                            # If it's not JSON, it must be a log message.
+                            log_lines.append(line)
+                            log_container.code("\n".join(log_lines), language="log")
+
+                    process.wait() # Wait for the process to finish
+                    if process.returncode != 0:
+                        st.error("The generation script encountered an error. Check logs above.")
+                    else:
+                        progress_placeholder.success(f"Generation complete! {len(st.session_state.generated_ideas)} Pokémon were created.")
+                
                 except Exception as e:
                     st.error(f"An unexpected error occurred: {e}")
 
@@ -529,30 +429,24 @@ def build_app() -> None:
         # --- Container 3: Draw Cards ---
         with st.container(border=True):
             st.subheader("3. Draw Pokémon Cards")
-            if not st.session_state.cards_data:
-                st.info("Please generate and finalize card specs in the steps above first.")
+            cards_data: Optional[List[Dict[str, Any]]] = st.session_state.get('cards_data')
+            if not cards_data:
+                st.info("Please generate card specifications in Step 2 before proceeding.")
             else:
-                card_names = [card['Name'] for card in st.session_state.cards_data]
-                selected_names = st.multiselect("Select Pokémon to draw", card_names)
+                # Define number of columns for the grid
+                num_columns = 2
                 
-                if selected_names:
-                    st.subheader("Generated Cards")
-                    # Adjust columns based on the number of selected cards for better layout
-                    num_selected = len(selected_names)
-                    cols = st.columns(min(num_selected, 3)) 
-                    for i, name in enumerate(selected_names):
-                        card_to_draw = next((c for c in st.session_state.cards_data if c['Name'] == name), None)
-                        if card_to_draw:
-                            with cols[i % min(num_selected, 3)]:
-                                with st.spinner(f"Drawing {name}..."):
-                                    img = draw_card(card_to_draw)
-                                    st.image(img, caption=f"{card_to_draw['Name']} ({card_to_draw.get('Rarity', 'N/A')})")
+                # Create a list of columns
+                cols = st.columns(num_columns)
+                
+                # Distribute cards into the columns
+                for i, card in enumerate(cards_data):
+                    with cols[i % num_columns]:
+                        card_html = draw_card(card)
+                        st.html(card_html)
 
 def main() -> None:
     build_app()
 
 if __name__ == '__main__':
-    # You will need to paste your full functions and classes here
-    # I have omitted them for brevity, but they are required for the app to run.
-    st.warning("Please paste the full code for helper functions and classes into main.py")
     main()
