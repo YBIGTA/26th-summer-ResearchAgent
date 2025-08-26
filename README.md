@@ -42,45 +42,28 @@ pip install -r requirements.txt
 
 ---
 
-### 2. Generate Pokémon Specifications
-아이디어 JSON 파일을 생성합니다.  
-아래 예시는 `ideas/generated_pokemon.json` 파일로 10개의 포켓몬 데이터를 생성합니다:
+### 2. Run Streamlit
+스트림릿 실행합니다:
 
 ```bash
-python perform_ideation_temp_free.py --num_pokemon 10 --output ideas/generated_pokemon.json
+streamlit run main.py
 ```
-
----
-
-### 3. Convert to Card Format
-아이디어 데이터를 카드 형식으로 변환합니다:
-
-```bash
-python make_pokemoncard.py --input ideas/generated_pokemon.json --output ideas/pokemon_cards_output.json
-```
-
----
-
-### 4. Draw Card Images
-최종 포켓몬 카드를 이미지로 생성합니다:
-
-```bash
-python make_visualize.py --input ideas/pokemon_cards_output.json --output_dir ideas/improved_card_images
-```
-
-`output_dir`에 지정한 경로로 카드 이미지가 저장됩니다.
 
 ---
 
 ## 📂 Project Layout
 
 ```
-ideas/                    # 아이디어 및 결과물 저장
-├── generated_pokemon.json  # LLM 아이디어 결과
-├── pokemon_cards_output.json  # 카드 포맷 변환 결과
-perform_ideation_temp_free.py # 아이디어 생성 스크립트
-make_pokemoncard.py           # 카드 포맷 변환 스크립트
-make_visualize.py            # 카드 시각화 스크립트
+├── ai_scientist/               # 아이디어 생성 프로젝트
+│ └── perform/                  # 아이디어 생성 실행 코드
+├── crawler/
+├── main.py                     # Streamlit 애플리케이션 실행 파일
+├── card_template.html          # 카드 렌더링을 위한 HTML 템플릿
+├── requirements.txt            # 의존성 패키지 목록
+├── README.md                   # 프로젝트 설명 파일
+└── generated_pokemon/          # 생성된 데이터 및 결과물 저장 디렉토리
+    ├── ideas/                  # 생성된 포켓몬 아이디어 (JSON)
+    └── img/                    # 생성된 포켓몬 이미지 (PNG)
 ```
 
 ---
