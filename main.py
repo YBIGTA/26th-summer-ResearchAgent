@@ -42,6 +42,22 @@ TYPE_COLORS: Dict[str, str] = {
     '공통': '#A8A77A',
 }
 
+RARITY_COLORS: Dict[str, str] = {
+    "Common": "#B0BEC5",    # Blue Grey
+    "Rare": "#42A5F5",      # Blue
+    "Legendary": "#FFD700", # Gold
+}
+
+def hex_to_rgba(hex_color: str, alpha: float) -> str:
+    """Converts a hex color string to a CSS rgba() string."""
+    hex_color = hex_color.lstrip('#')
+    if len(hex_color) != 6:
+        hex_color = 'A8A77A'  # Fallback to a neutral grey for safety
+    r = int(hex_color[0:2], 16)
+    g = int(hex_color[2:4], 16)
+    b = int(hex_color[4:6], 16)
+    return f"rgba({r}, {g}, {b}, {alpha})"
+
 
 def lighten_color(hex_color: str, factor: float) -> tuple:
     """Lighten a hex colour by blending it with white.
@@ -232,6 +248,47 @@ class PokemonCard:
             "Image": self.image,
         }
 
+def _get_image_data_url(card: Dict[str, Any]) -> str:
+    """
+    Gets a data URL for the Pokémon image.
+
+    Tries the 'Image' field in the card data first. If that is missing,
+    empty, or invalid, it falls back to loading a local file from
+    'generated_pokemon/img/{pokemon_name}.png'.
+    """
+    # 1. Try the data URL from the JSON
+    data_url = card.get("Image")
+    if data_url and data_url.startswith("data:image"):
+        # A basic check to see if it's not just the header and some minimal content
+        if len(data_url.split(',')) > 1 and len(data_url.split(',')[1]) > 24:
+            return data_url
+
+    # 2. Fallback to local file in 'generated_pokemon/img/'
+    try:
+        pokemon_name = card.get("Name", "unknown")
+        img_dir = os.path.join("generated_pokemon", "img")
+        
+        # Check for filename with spaces and with underscores
+        possible_filenames = [f"{pokemon_name}.png", f"{pokemon_name.replace(' ', '_')}.png"]
+        
+        img_path = None
+        for filename in possible_filenames:
+            path_to_check = os.path.join(img_dir, filename)
+            if os.path.exists(path_to_check):
+                img_path = path_to_check
+                break
+
+        if img_path:
+            with open(img_path, "rb") as image_file:
+                encoded_string = base64.b64encode(image_file.read()).decode()
+                return f"data:image/png;base64,{encoded_string}"
+    except Exception:
+        # If file reading fails, fall through to default
+        pass
+
+    # 3. Return empty string if all fails, so the template shows no image
+    return ""
+
 def draw_card(card: Dict[str, Any]) -> str:
     """Populates the HTML template with card data and returns the HTML string."""
     
@@ -241,6 +298,12 @@ def draw_card(card: Dict[str, Any]) -> str:
             html_template = f.read()
     except FileNotFoundError:
         return "<h3>Error: card_template.html not found.</h3><p>Please ensure the template file is in the same directory as the script.</p>"
+
+    # --- Determine Rarity and Type Colors ---
+    raw_rarity = card.get('Rarity')
+    rarity = str(raw_rarity).strip() if raw_rarity is not None else "Common"
+    default_color = RARITY_COLORS.get("Common", "#B0BEC5") # Safe default
+    rarity_color = RARITY_COLORS.get(rarity, default_color)
 
     # --- Prepare data snippets for injection ---
     
@@ -253,44 +316,102 @@ def draw_card(card: Dict[str, Any]) -> str:
     # Skills - CORRECTED KEY ACCESS
     skills_html = ""
     for skill in card.get('Skills', []):
-        # CORRECTED: Use 'Power', 'Name', and 'Effect' (capitalized)
-        power = skill.get('Power')
-        power_text = f" (Power: {power})" if power is not None else ""
+        # --- Power Icon Generation ---
+        power_display_html = ""
+        try:
+            # Convert power to a number to determine icon count
+            power = int(skill.get('Power'))
+            if 0 < power <= 50:
+                num_icons = 1
+            elif 50 < power <= 100:
+                num_icons = 2
+            elif power > 100:
+                num_icons = 3
+            else:
+                num_icons = 0
+            
+            # Assuming a .power-icon class exists in the CSS, similar to .retreat-icon
+            # We wrap in a span to keep it inline with the skill name
+            if num_icons > 0:
+                # Generate an inline style for each icon to prevent CSS conflicts
+                power_icon_html = f'<div class="power-icon" style="background-color: {rarity_color};"></div>'
+                power_display_html = (
+                    '<span class="power-icon-group">'
+                    + power_icon_html * num_icons
+                    + '</span>'
+                )
+        except (ValueError, TypeError):
+            # If power is not a number (e.g., "VMAX"), display it as text
+            power_val = skill.get('Power')
+            if power_val:
+                power_display_html = f'&nbsp;<span class="power-text">({power_val})</span>'
+
         skill_name = skill.get('Name', 'Unknown')
         skill_effect = skill.get('Effect', 'No effect description.')
         
         skills_html += f"""
         <div class="skill">
-            <span class="skill-name">• {skill_name}{power_text}:</span>
+            <span class="skill-name">• {skill_name}{power_display_html}:</span>
             <span>{skill_effect}</span>
         </div>
         """
-        
+
     # Retreat Cost
     retreat_html = ""
     for _ in range(card.get('Retreat Cost', 0)):
-        retreat_html += '<div class="retreat-icon"></div>'
+        # Inject the rarity color directly as an inline style
+        retreat_html += f'<div class="retreat-icon" style="background-color: {rarity_color};"></div>'
 
     # Colors
     primary_type = card.get('Types')[0] if card.get('Types') else 'Normal'
-    base_color = TYPE_COLORS.get(primary_type, '#A8A77A')
-    # Create a tinted background color with transparency (alpha)
-    tinted_color = f"{base_color}40" # Adding '40' creates ~25% opacity
+    base_type_color = TYPE_COLORS.get(primary_type, '#A8A77A')
+
+    # Create a more dynamic, "holographic" gradient using both type and rarity
+    # colors, using the robust rgba() format to ensure browser compatibility.
+    tint_type_color = hex_to_rgba(base_type_color, 0.1)  # 10% opacity for the base
+    tint_rarity_color = hex_to_rgba(rarity_color, 0.3)   # 30% opacity for the highlight
+
+    # Define a multi-layered background. The solid color (#fdfdfd) acts as a
+    # base layer, and the semi-transparent gradient is rendered on top.
+    gradient = (
+        f"linear-gradient(135deg, "
+        f"{tint_type_color} 0%, "
+        f"{tint_rarity_color} 50%, "
+        f"{tint_type_color} 100%), "
+        f"#fdfdfd"  # Solid base color
+    )
+    # Construct the entire inline style attribute for the card container.
+    # This is the most robust way to apply dynamic styles in Streamlit,
+    # as it has high specificity and is scoped to the individual element.
+    card_style_attr = (
+        f'border: 10px solid {rarity_color}; '
+        f'background: {gradient} !important;'
+    )
+
+    # --- Get image data URL using the new robust function ---
+    image_data_url = _get_image_data_url(card)
 
     # --- Inject all data into the template ---
-    html_content = html_template.replace('{{ NAME }}', card.get('Name', 'Unknown'))
+    # Replace longer placeholders first to avoid substring issues.
+
+    # Add a check to ensure the main placeholder exists. This prevents silent failures.
+    if '{{ CARD_STYLE_ATTR }}' not in html_template:
+        st.error("Critical Error: The placeholder '{{ CARD_STYLE_ATTR }}' was not found in your `card_template.html` file. Please ensure the file is correct and saved.")
+        return "<h3>Template Error</h3>" # Stop rendering this card
+
+    html_content = html_template.replace('{{ CARD_STYLE_ATTR }}', card_style_attr)
+    html_content = html_content.replace('{{ RARITY_COLOR }}', rarity_color)
+    html_content = html_content.replace('{{ IMAGE_DATA_URL }}', image_data_url)
+    html_content = html_content.replace('{{ NAME }}', card.get('Name', 'Unknown'))
     html_content = html_content.replace('{{ HP }}', str(card.get('Stats', {}).get('HP', 0)))
-    html_content = html_content.replace('{{ RARITY }}', card.get('Rarity', 'Common'))
-    html_content = html_content.replace('{{ IMAGE_DATA_URL }}', card.get('Image') or '')
     html_content = html_content.replace('{{ TYPES_HTML }}', types_html)
     html_content = html_content.replace('{{ SKILLS_HTML }}', skills_html)
     html_content = html_content.replace('{{ RETREAT_HTML }}', retreat_html)
-    html_content = html_content.replace('{{ BASE_COLOR }}', base_color)
-    html_content = html_content.replace('{{ BORDER_COLOR }}', base_color)
-    html_content = html_content.replace('{{ TINTED_COLOR }}', tinted_color)
+    html_content = html_content.replace('{{ RARITY }}', rarity)
     
 
     return html_content
+
 def generate_pokemon_cards(input_json_path: str) -> List[Dict[str, Any]]:
     """Load raw Pokémon specifications and assign rarity and derived stats.
 

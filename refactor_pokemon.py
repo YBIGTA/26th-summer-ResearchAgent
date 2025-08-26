@@ -8,12 +8,12 @@ from typing import Any, Dict, List, Optional
 
 import sys
 
-from ai_scientist.perform.perform_ideation_temp_free import parse_tool_call
+from ai_scientist.perform.perform_ideation_temp_free import parse_tool_call, generate_temp_free_idea
 from ai_scientist.perform.perform_poke_review import perform_review
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 # --- Import from your actual modules ---
-from ai_scientist.llm import create_client, extract_json_object, get_response_from_llm
+from ai_scientist.llm import create_client, create_embed_client, extract_json_object, get_response_from_llm
 from ai_scientist.vlm import generate_image_from_prompt, encode_image_to_base64
 
 # --- Configuration & Prompts ---
@@ -175,32 +175,63 @@ def main():
     parser = argparse.ArgumentParser(description="Generate new Pokémon data based on existing files.")
     parser.add_argument("-c", "--count", type=int, required=True, help="Number of Pokémon to generate.")
     parser.add_argument("-o", "--output", type=str, required=True, help="Output file path for the generated JSON.")
-    parser.add_argument("--model", type=str, default="upstage:solar-pro", help="Model to use.")
+    parser.add_argument("--model", type=str, default="upstage:solar-pro2", help="Model to use.")
+    parser.add_argument("--model2", type=str, default="upstage:solar-1-mini-chat", help="Secondary model for tools.")
+    parser.add_argument("--emb_model", type=str, default="all-MiniLM-L6-v2", help="Embedding model for similarity checks.")
+    parser.add_argument("--num_reflections", type=int, default=3, help="Number of reflection rounds.")
+    parser.add_argument(
+    "--workshop_file",
+        type=str,
+        default="ai_scientist/ideas/i_cant_believe_its_not_better.md",
+        help="Path to the workshop description file.",
+    )
     args = parser.parse_args()
 
+    # --- Initialize all necessary clients ---
     client, client_model = create_client(args.model)
+    client2, client_model2 = create_client(args.model2)
+    client_emd = create_embed_client(args.emb_model)
     
     generated_characters = []
     try:
         files = [f for f in os.listdir(POKEMON_DATA_DIR) if f.endswith('.json')]
-        if not files: raise FileNotFoundError(f"'{POKEMON_DATA_DIR}' has no JSON files.")
+        if not files:
+            raise FileNotFoundError(f"'{POKEMON_DATA_DIR}' has no JSON files.")
     except FileNotFoundError as e:
-        print(f"Error: {e}", file=sys.stderr) # Print errors to stderr
+        print(f"Error: {e}", file=sys.stderr)
         return
+    
+    # The output of the advanced generator is a list of characters
+    os.makedirs(os.path.dirname(args.output), exist_ok=True)
+
 
     for i in range(args.count):
-        print(f"--- Generating Pokémon {i+1} of {args.count} ---", file=sys.stderr) # Print progress to stderr
+        print(f"--- Generating Pokémon {i+1} of {args.count} ---", file=sys.stderr)
         random_file = os.path.join(POKEMON_DATA_DIR, random.choice(files))
         with open(random_file, 'r', encoding='utf-8') as f:
             source_data = json.load(f)
 
         core_data = extract_core_data(source_data)
-        inspiration_prompt = (f"타입: {core_data['typing']}\n특성: {core_data['abilities']}\n종족값: {core_data['stats']}\n"
-                              f"기존 도감 설명: {core_data['pokedex_entries']}")
         
-        final_character = run_generation_workflow(client, client_model, inspiration_prompt)
-        
-        if final_character:
+        # --- KEY CHANGE: Call the advanced generator ---
+        generated_idea_list = generate_temp_free_idea(
+            idea_fname=args.output, # Use the output file to check for previous ideas
+            client=client,
+            model=client_model,
+            client_embed=client_emd,
+            idea_fname2=args.output,
+            client2=client2,
+            model2=client_model2,
+            workshop_description=args.workshop_file, # Use the dynamic prompt
+            max_num_generations=1, # Generate one at a time
+            num_reflections=args.num_reflections,
+            reload_ideas= i != 0 # Reload ideas after the first generation
+        )
+        if generated_idea_list:
+            # The function appends to its own file, so we get the last one
+            final_character = generated_idea_list[-1]
+            
+            # This part of your logic remains the same
             final_character["Typing"] = core_data["typing"]
             final_character["Stats"] = core_data["stats"]
             final_character["Abilities"] = core_data["abilities"]
@@ -208,20 +239,23 @@ def main():
             if prompt := final_character.get("Sample Image Prompt"):
                 name_sanitized = "".join(c for c in final_character.get("Name", "unknown") if c.isalnum())
                 img_path = f"generated_pokemon/img/{name_sanitized}.png"
+                os.makedirs(os.path.dirname(img_path), exist_ok=True)
                 if generate_image_from_prompt(prompt, img_path):
                     final_character["Image"] = encode_image_to_base64(img_path)
 
+            # The advanced function already saves the file, but we keep track in memory too
+            # to save the complete list with images at the end.
             final_character_data = {"character": final_character}
             generated_characters.append(final_character_data)
             
-            print(json.dumps(final_character_data, ensure_ascii=False))
-            sys.stdout.flush() # Ensure the output is sent immediately
+            print("--- Generated Character ---")
+            print(json.dumps(final_character_data, ensure_ascii=False, indent=2))
+            sys.stdout.flush()
 
         else:
             print(f"  -> Failed to generate Pokémon {i+1}", file=sys.stderr)
 
-    # Still save the complete file at the end
-    os.makedirs(os.path.dirname(args.output), exist_ok=True)
+    # Final save with all generated characters, including image data
     with open(args.output, 'w', encoding='utf-8') as f:
         json.dump(generated_characters, f, ensure_ascii=False, indent=2)
 
