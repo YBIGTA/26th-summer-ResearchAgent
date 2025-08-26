@@ -200,4 +200,5 @@ crawler/chromedriver.exe
 crawler/json
 crawler/save
 crawler/crawler.log
-ai_scientist/generated_pokemon/new_creations.json
+generated_pokemon/new_creations.json
+generated_pokemon/img/
