@@ -584,7 +584,7 @@ def generate_temp_free_idea(
                         # Use the tool
                         try:
                             # Assuming the arguments match the parameters of the tool
-                            result = tool.use_tool(client2,model2,client_embed,arguments_text,logcallback=print)
+                            result = tool.use_tool(client2,model2,client_embed,arguments_text,log_callback=print)
                             last_tool_results = str(result)
                         except Exception as e:
                             review+=1
@@ -653,7 +653,7 @@ def generate_temp_free_idea(
                             ## 기존에 저장하던 방식대로        
                             review, _ = perform_review(
                                         text=character,
-                                        model=client_model,
+                                        model=model,
                                         client=client,
                                         num_reflections=1,
                                         use_persona_ensemble=True, # 페르소나 앙상블 on
