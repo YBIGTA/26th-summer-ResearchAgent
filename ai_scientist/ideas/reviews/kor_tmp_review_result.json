@@ -270,62 +270,483 @@
         "Decision": "Accept"
     },
     {
-        "Summary": "Voltorrent는 Voltorb와 물의 소용돌이를 결합한 전기/물 타입 포켓몬으로, 전기 폭풍 생성 능력을 가지고 있습니다. 'Storm Surge' 능력을 통해 비에서는 전기 기술을, 전기 지형에서는 물 기술을 강화할 수 있습니다.",
+        "Summary": "칼리오스 화산 지대의 재생을 상징하는 Grass/Ground 타입 서포터 포켓몬. 포자로 상태 이상 유발과 HP 회복을 동시에 수행하며, 물리적 내구성과 필드 컨트롤에 특화됨.",
         "Strengths": [
-            "유니크한 전기/물 하이브리드 타입",
-            "창의적인 'Storm Surge' 능력",
-            "전기/물 타입의 전략적 상호작용",
-            "매력적인 시각적 디자인",
-            "테마적 스토리텔링 및 로어 개발의 잠재력"
+            "Chlorophyll + Earth Armor 조합으로 선공 필드 컨트롤과 물리적 탱킹 가능",
+            "Spore Bloom의 치유+상태이상 복합 효과가 전략적 다양성 제공",
+            "칼리오스 화산 지대의 생태적 설정과 높은 부합성",
+            "Stealth Rock, Synthesis 등 유틸리티 기술 보유",
+            "독창적인 Grass/Ground 타입 조합으로 메타 다양성 증가"
         ],
         "Weaknesses": [
-            "전기/물 타입의 4배 약점",
-            "Storm Surge 능력의 복잡성",
-            "기존 둥근 전기 타입 포켓몬과의 유사성",
-            "신규 플레이어에게의 접근성 문제",
-            "경쟁적 활용성 문제"
+            "Fire/Ice/Flying/Bug 4중 약점으로 메타 카운터에 취약",
+            "비-Chlorophyll 조건에서의 낮은 스피드(60)가 단점",
+            "특수 방어(80)가 상대적으로 낮아 특수 공격자에 약함",
+            "진화 조건인 '화산 재 5개 수집'의 게임 내 구현 복잡성",
+            "진화형(Terraflora) 디자인의 독창성 부족 가능성"
         ],
-        "Originality": 3,
-        "ThematicConsistency": 3,
+        "Originality": 4,
+        "ThematicConsistency": 4,
         "VisualDesign": 3,
         "CompetitiveViability": 3,
         "TypeBalance": 3,
         "MovesetDesign": 4,
-        "EvolutionLogic": 2,
+        "EvolutionLogic": 3,
         "Accessibility": 2,
         "Marketability": 3,
-        "LoreIntegration": 3,
+        "LoreIntegration": 4,
         "WeightedBreakdown": {
-            "Originality": 1.0,
-            "ThematicConsistency": 0.8,
+            "Originality": 1.5,
+            "ThematicConsistency": 1.2,
             "VisualDesign": 0.8,
             "CompetitiveViability": 1.2,
             "TypeBalance": 1.0,
             "MovesetDesign": 1.0,
-            "EvolutionLogic": 0.27,
+            "EvolutionLogic": 0.53,
             "Accessibility": 0.17,
             "Marketability": 0.2,
-            "LoreIntegration": 0.13
+            "LoreIntegration": 0.2
         },
         "Questions": [
-            "Storm Surge 능력의 메커니즘이 게임 플레이에 어떤 영향을 미칠까요?",
-            "Voltorrent의 디자인이 기존 둥근 전기 타입 포켓몬과 어떻게 차별화될 수 있을까요?",
-            "Voltorrent의 로어가 기존 포켓몬 세계와 어떻게 연결되는지 설명해 주세요."
+            "Spore Bloom의 HP 회복량이 OU 티어에서 충분히 유의미한가?",
+            "Terraflora 진화 시 화산 재 수집 조건이 게임플레이에 자연스럽게 통합되는가?",
+            "비-Chlorophyll 조건에서의 대체 전략(예: Trick Room)은 충분한가?",
+            "진화 후 형태(Terraflora)의 디자인이 어떻게 완성될 예정인가요?"
         ],
         "Limitations": [
-            "전기/물 타입의 4배 약점",
-            "Storm Surge 능력의 복잡성",
-            "시각적 디자인의 유사성",
-            "경쟁적 활용성 문제",
-            "로어 통합의 한계"
+            "4중 약점이 팀 빌딩에 제약을 줄 수 있음",
+            "낮은 스피드가 Chlorophyll 의존성을 과도하게 높임",
+            "특수 방어 스탯이 상대적으로 취약",
+            "상위 티어 메타에서의 활용도 제한"
         ],
         "EthicalConcerns": false,
         "Soundness": 3,
         "Presentation": 4,
         "Contribution": 3,
-        "Overall": 8,
+        "Overall": 9,
         "Confidence": 4,
-        "Decision": "Reject"
+        "Decision": "Accept"
+    },
+    {
+        "Summary": "Grass/Ghost 타입의 실바라는 망각된 숲의 영혼을 형상화한 2단계 진화 포켓몬. Shadow Tag와 Ethereal Tendrils로 장기전 전략을 구사하며, 높은 특수방어와 상태이상 조합으로 전략적 가치를 지님. 다중 약점과 특성 간 비일관성이 주요 도전 과제.",
+        "Strengths": [
+            "Grass/Ghost 타입 조합의 독창성",
+            "Ethereal Tendrils의 상태이상+회복 시너지",
+            "높은 Sp.Atk/Sp.Def로 특수계 전략 가능",
+            "신비로운 디자인과 세계관 통합성",
+            "Shadow Tag를 통한 대전 통제력",
+            "상품성 및 애니메이션 잠재력"
+        ],
+        "Weaknesses": [
+            "Fire/Dark/Flying 타입에 대한 4중 약점",
+            "Natural Cure와 Ghost 타입의 비논리적 조합",
+            "Shadow Tag의 압박감으로 인한 플레이어 피로도",
+            "시그니처 기술의 회복 효과 과도 가능성",
+            "2단계 진화로 인한 접근성 저하"
+        ],
+        "Originality": 4,
+        "ThematicConsistency": 4,
+        "VisualDesign": 4,
+        "CompetitiveViability": 3,
+        "TypeBalance": 3,
+        "MovesetDesign": 3,
+        "EvolutionLogic": 3,
+        "Accessibility": 2,
+        "Marketability": 4,
+        "LoreIntegration": 4,
+        "WeightedBreakdown": {
+            "Originality": 1.5,
+            "ThematicConsistency": 1.2,
+            "VisualDesign": 1.2,
+            "CompetitiveViability": 1.2,
+            "TypeBalance": 1.0,
+            "MovesetDesign": 0.67,
+            "EvolutionLogic": 0.53,
+            "Accessibility": 0.17,
+            "Marketability": 0.3,
+            "LoreIntegration": 0.2
+        },
+        "Questions": [
+            "Natural Cure 대신 Forest's Curse 등의 지역 특화 특성 적용 가능성?",
+            "Ethereal Tendrils의 회복 확률 조정 필요성?",
+            "진화 전 단계(Sprig)의 대전 활용도 검토 여부?"
+        ],
+        "Limitations": [
+            "4중 약점으로 인한 메타 불안정성",
+            "Shadow Tag와 Natural Cure의 시너지 부재",
+            "시그니처 기술의 물리적/특수 타입 불일치 가능성"
+        ],
+        "EthicalConcerns": false,
+        "Soundness": 3,
+        "Presentation": 4,
+        "Contribution": 3,
+        "Overall": 9,
+        "Confidence": 4,
+        "Decision": "Accept"
+    },
+    {
+        "Summary": "화산 지대에서 진화한 Fire/Flying 타입 포켓몬. 용암 결정체 날개와 시그니처 기술 'Flame Cyclone'으로 화상과 회피율 상승을 동시에 노리는 공격/스피드 중심 포켓몬. 더블 배틀에서 Roost와 조합된 지속전 가능성 보유.",
+        "Strengths": [
+            "독창적인 용암 결정체 날개 디자인과 시그니처 기술 효과",
+            "공격력(105)과 스피드(95)의 우수한 밸런스",
+            "Roost/Will-O-Wisp와 Speed Boost의 전략적 시너지",
+            "화산 서식지와 불+비행 타입의 강한 세계관 일관성",
+            "3D 애니메이션 친화적 시각 디자인과 높은 상품성"
+        ],
+        "Weaknesses": [
+            "Rock/Water/Electric 타입에 대한 4중 약점 취약성",
+            "Big Pecks의 비효율성과 낮은 방어력(75)",
+            "리자몽과의 유사성 및 타입 조합의 진부함",
+            "Flame Cyclone의 회피율 상승 효과와 PP/명중률 제한",
+            "진화체(Pyroclaw)의 미공개 디자인으로 인한 세계관 통합성 저하"
+        ],
+        "Originality": 4,
+        "ThematicConsistency": 4,
+        "VisualDesign": 4,
+        "CompetitiveViability": 3,
+        "TypeBalance": 2,
+        "MovesetDesign": 3,
+        "EvolutionLogic": 3,
+        "Accessibility": 3,
+        "Marketability": 3,
+        "LoreIntegration": 4,
+        "WeightedBreakdown": {
+            "Originality": 1.5,
+            "ThematicConsistency": 1.2,
+            "VisualDesign": 1.2,
+            "CompetitiveViability": 1.2,
+            "TypeBalance": 0.5,
+            "MovesetDesign": 0.67,
+            "EvolutionLogic": 0.53,
+            "Accessibility": 0.33,
+            "Marketability": 0.2,
+            "LoreIntegration": 0.2
+        },
+        "Questions": [
+            "Pyroclaw의 진화 후 디자인 및 종족값 배분 계획은?",
+            "Flame Cyclone의 회피율 상승 메커니즘과 더블 배틀 메타 영향은?",
+            "Big Pecks 대신 화산 특화 특성(예: Magma Armor) 적용 가능성 검토 여부",
+            "리자몽과의 차별화를 위한 고유 메커니즘 추가 필요성"
+        ],
+        "Limitations": [
+            "Rock 타입 카운터 메타 의존성 과도",
+            "시그니처 기술의 밸런스 붕괴 가능성",
+            "진화 라인의 미완성성으로 인한 장기적 기여도 불확실",
+            "타입 조합의 진부함으로 인한 메타 영향력 제한"
+        ],
+        "EthicalConcerns": false,
+        "Soundness": 3,
+        "Presentation": 4,
+        "Contribution": 3,
+        "Overall": 9,
+        "Confidence": 4,
+        "Decision": "Accept"
+    },
+    {
+        "Summary": "Aurelian은 Fire/Psychic 타입의 2단계 진화 포켓몬으로, 고대 유적지와 화산 지대에서 서식하는 '불꽃의 현자' 콘셉트. 높은 특수 공격/방어 스탯과 Magic Guard, Solar Purge를 활용한 전략적 플레이가 특징.",
+        "Strengths": [
+            "독창적인 '불꽃 현자' 콘셉트와 Fire/Psychic 타입의 이색적 조합",
+            "Solar Purge의 상태 이상 제거 + 특수 방어 하락 효과로 전략적 다양성 제공",
+            "Magic Guard로 간접 피해 무시 가능",
+            "금빛 깃털과 태양 문양의 시각적 차별화",
+            "고대 유적지 서식지로 인한 세계관 일관성"
+        ],
+        "Weaknesses": [
+            "Ground/Water/Dark 3중 약점으로 카운터 포인트 명확",
+            "Psychic Surge와 Magic Guard의 중복 효과 가능성",
+            "느린 Speed(80)로 선공 기술 대응에 불리",
+            "2단계 진화체 부재로 진화 라인 미완성",
+            "명상 진화 조건이 신규 플레이어에게 비직관적"
+        ],
+        "Originality": 4,
+        "ThematicConsistency": 4,
+        "VisualDesign": 4,
+        "CompetitiveViability": 3,
+        "TypeBalance": 3,
+        "MovesetDesign": 4,
+        "EvolutionLogic": 3,
+        "Accessibility": 3,
+        "Marketability": 4,
+        "LoreIntegration": 4,
+        "WeightedBreakdown": {
+            "Originality": 1.5,
+            "ThematicConsistency": 1.2,
+            "VisualDesign": 1.2,
+            "CompetitiveViability": 1.2,
+            "TypeBalance": 1.0,
+            "MovesetDesign": 1.0,
+            "EvolutionLogic": 0.53,
+            "Accessibility": 0.33,
+            "Marketability": 0.3,
+            "LoreIntegration": 0.2
+        },
+        "Questions": [
+            "Psychic Surge와 Magic Guard의 중복 효과를 방지하기 위한 메커니즘은 있는가?",
+            "Solar Purge의 특수 방어 하락 확률이 메타에 미치는 영향은 어떻게 예상하는가?",
+            "2단계 진화체가 없는 이유는 무엇인가? (예: 최종 진화체로서의 완성도 부족)",
+            "명상 진화 조건을 게임 내에서 어떻게 시각화할 계획인가?"
+        ],
+        "Limitations": [
+            "3중 약점으로 인해 특정 타입에 과도하게 취약",
+            "느린 Speed로 선공 기술 대응에 불리",
+            "간접 피해 무시 능력이 특정 메타에서 과도히 강력해질 수 있음",
+            "Fire/Psychic 조합의 메타 영향력 제한 가능성"
+        ],
+        "EthicalConcerns": false,
+        "Soundness": 4,
+        "Presentation": 4,
+        "Contribution": 4,
+        "Overall": 9,
+        "Confidence": 4,
+        "Decision": "Accept"
+    },
+    {
+        "Summary": "Rock/Flying 타입의 폭풍 에너지 흡수 포켓몬. 결정체 몸체와 기류 시각화를 통해 필드 컨트롤과 하이브리드 공격/서포팅 역할을 수행하며, Weather Eye와 다기능 기술 조합으로 전략적 가치를 제공.",
+        "Strengths": [
+            "독창적인 '폭풍 결정체' 콘셉트와 시각적 차별화",
+            "Weather Eye + Stealth Rock/Defog/Roost로 필드 컨트롤 최적화",
+            "Aerial Grind의 공격+방어 상승+스피드 감소 다기능성",
+            "Sp.Def 110 + Roost로 높은 생존성",
+            "진화형과의 자연스러운 콘셉트 연계"
+        ],
+        "Weaknesses": [
+            "Ground/Fighting/Steel 타입에 대한 다중 약점",
+            "Hurricane의 낮은 명중률(70%)로 특수 공격 신뢰성 저하",
+            "Tempestite의 Hurricane 120이 메타 과열 가능성",
+            "신규 플레이어의 다중 약점 이해 난이도",
+            "칼리오스트 산맥 설정 미확정으로 인한 세계관 통합성 우려"
+        ],
+        "Originality": 4,
+        "ThematicConsistency": 4,
+        "VisualDesign": 4,
+        "CompetitiveViability": 3,
+        "TypeBalance": 3,
+        "MovesetDesign": 3,
+        "EvolutionLogic": 3,
+        "Accessibility": 2,
+        "Marketability": 3,
+        "LoreIntegration": 4,
+        "WeightedBreakdown": {
+            "Originality": 1.5,
+            "ThematicConsistency": 1.2,
+            "VisualDesign": 1.2,
+            "CompetitiveViability": 1.2,
+            "TypeBalance": 1.0,
+            "MovesetDesign": 0.67,
+            "EvolutionLogic": 0.53,
+            "Accessibility": 0.17,
+            "Marketability": 0.2,
+            "LoreIntegration": 0.2
+        },
+        "Questions": [
+            "칼리오스트 산맥의 공식 설정 존재 여부 및 포켓몬 도감 설명 방식",
+            "Tempestite의 Hurricane 120 밸런스 조정 메커니즘(예: 추가 조건)",
+            "Ground 타입 약점 상쇄를 위한 보조 특성(예: Core Guard) 적용 가능성"
+        ],
+        "Limitations": [
+            "Ground 타입 카운터에 대한 취약성",
+            "Hurricane의 낮은 명중률 의존성",
+            "진화형 디자인의 신선도 감소 가능성"
+        ],
+        "EthicalConcerns": false,
+        "Soundness": 3,
+        "Presentation": 4,
+        "Contribution": 4,
+        "Overall": 9,
+        "Confidence": 4,
+        "Decision": "Accept"
+    },
+    {
+        "Originality": 3,
+        "ThematicConsistency": 4,
+        "VisualDesign": 4,
+        "CompetitiveViability": 3,
+        "TypeBalance": 3,
+        "MovesetDesign": 3,
+        "EvolutionLogic": 3,
+        "Accessibility": 3,
+        "Marketability": 4,
+        "LoreIntegration": 4,
+        "Soundness": 3,
+        "Presentation": 4,
+        "Contribution": 3,
+        "Overall": 9,
+        "Confidence": 4,
+        "Summary": "Consensus review aggregated from multiple expert perspectives.",
+        "Strengths": [],
+        "Weaknesses": [],
+        "Questions": [],
+        "Limitations": [],
+        "EthicalConcerns": true,
+        "Decision": "Accept",
+        "WeightedBreakdown": {
+            "Originality": 1.0,
+            "ThematicConsistency": 1.2,
+            "VisualDesign": 1.2,
+            "CompetitiveViability": 1.2,
+            "TypeBalance": 1.0,
+            "MovesetDesign": 0.67,
+            "EvolutionLogic": 0.53,
+            "Accessibility": 0.33,
+            "Marketability": 0.3,
+            "LoreIntegration": 0.2
+        }
+    },
+    {
+        "Summary": "칼라스 사막 협곡의 척박한 환경에 적응한 전기/독 타입 뱀형 포켓몬. 고속 스윕과 독/전기 복합 전략을 통해 Ground 타입에 대한 취약성을 상쇄하려는 디자인. 지그재그 비늘과 Toxic Surge(시그니처 무브)가 특징.",
+        "Strengths": [
+            "칼라스 지역 테마와의 높은 일관성(전기 폭풍+유독 가스 환경)",
+            "전기/독 타입의 희귀성과 전략적 다양성 제공",
+            "Speed 110 + Sp.Atk 100으로 선두 스윕 가능성",
+            "Volt Switch + Toxic Surge를 활용한 교체전 및 장기전 전술",
+            "독창적인 지그재그 비늘 디자인과 시그니처 무브 효과",
+            "Volt Absorb로 전기 타입 기술 흡수 가능",
+            "높은 상품성과 캐주얼 플레이어 접근성"
+        ],
+        "Weaknesses": [
+            "Ground 타입에 4배 약점으로 카운터 과잉 리스크",
+            "Toxic Surge의 마비 부가 효과가 지나치게 강력할 우려",
+            "뱀형 포켓몬 과잉으로 인한 신선도 하락",
+            "2단계 진화 라인의 현대적 비적합성",
+            "Psychic/Ice 타입에 대한 추가 약점으로 전략적 제약",
+            "독 타입의 부정적 인식으로 인한 캐주얼 거부감 가능성",
+            "진화 라인의 디자인 연계성 부족"
+        ],
+        "Originality": 4,
+        "ThematicConsistency": 4,
+        "VisualDesign": 4,
+        "CompetitiveViability": 3,
+        "TypeBalance": 2,
+        "MovesetDesign": 3,
+        "EvolutionLogic": 3,
+        "Accessibility": 3,
+        "Marketability": 4,
+        "LoreIntegration": 4,
+        "WeightedBreakdown": {
+            "Originality": 1.5,
+            "ThematicConsistency": 1.2,
+            "VisualDesign": 1.2,
+            "CompetitiveViability": 1.2,
+            "TypeBalance": 0.5,
+            "MovesetDesign": 0.67,
+            "EvolutionLogic": 0.53,
+            "Accessibility": 0.33,
+            "Marketability": 0.3,
+            "LoreIntegration": 0.2
+        },
+        "Questions": [
+            "Toxic Surge의 마비 확률을 20%로 조정할 경우 밸런스 개선 효과는?",
+            "Ground 타입 카운터 대응을 위한 방어형 포켓몬 추가 계획은?",
+            "감비온과의 차별성을 높이기 위한 디자인/능력치 조정 방안은?",
+            "진화 라인의 디자인 연계성을 강화할 수 있는 방법은?",
+            "독 타입의 윤리적 우려를 해소할 수 있는 설정적 보완 요소는?"
+        ],
+        "Limitations": [
+            "Ground 타입 메타 지배력 증가 가능성",
+            "시그니처 무브의 효과가 특정 메타에서만 유용할 우려",
+            "뱀형 포켓몬 과잉으로 인한 플레이어 피로도 증가",
+            "장기전 지속력 부족(Coil 효과 한계)",
+            "독 타입의 부정적 인식으로 인한 캐주얼 플레이어 거부감"
+        ],
+        "EthicalConcerns": true,
+        "Soundness": 3,
+        "Presentation": 4,
+        "Contribution": 3,
+        "Overall": 9,
+        "Confidence": 4,
+        "Decision": "Accept"
+    },
+    {
+        "Originality": 4,
+        "ThematicConsistency": 4,
+        "VisualDesign": 4,
+        "CompetitiveViability": 3,
+        "TypeBalance": 3,
+        "MovesetDesign": 4,
+        "EvolutionLogic": 3,
+        "Accessibility": 2,
+        "Marketability": 4,
+        "LoreIntegration": 4,
+        "Soundness": 3,
+        "Presentation": 4,
+        "Contribution": 3,
+        "Overall": 9,
+        "Confidence": 4,
+        "Summary": "Consensus review aggregated from multiple expert perspectives.",
+        "Strengths": [],
+        "Weaknesses": [],
+        "Questions": [],
+        "Limitations": [],
+        "EthicalConcerns": false,
+        "Decision": "Accept",
+        "WeightedBreakdown": {
+            "Originality": 1.5,
+            "ThematicConsistency": 1.2,
+            "VisualDesign": 1.2,
+            "CompetitiveViability": 1.2,
+            "TypeBalance": 1.0,
+            "MovesetDesign": 1.0,
+            "EvolutionLogic": 0.53,
+            "Accessibility": 0.17,
+            "Marketability": 0.3,
+            "LoreIntegration": 0.2
+        }
+    },
+    {
+        "Summary": "알로아 지역 심해의 광맥 지대에서 진화한 Ghost/Steel 타입의 방어형 포켓몬. 높은 Defense(110)와 Iron Barbs로 물리 방어를 강화하며, Spectral Forge로 화상과 방어 상승을 동시에 적용합니다.",
+        "Strengths": [
+            "희귀하고 전략적인 Ghost/Steel 타입 조합",
+            "Defense 110과 Iron Barbs로 물리 벽 역할 최적화",
+            "Spectral Forge의 복합 효과(화상 + 방어 상승)",
+            "알로아 지역의 지질학적·역사적 설정과의 강한 연관성",
+            "미래적이면서 유령적 분위기를 표현한 시각적 디자인"
+        ],
+        "Weaknesses": [
+            "Fire/Fighting/Ground 타입에 대한 4중 약점",
+            "Weak Armor로 인한 Speed-방어 트레이드오프 리스크",
+            "Sp.Atk(85)가 보조 공격용으로만 제한적",
+            "Steel 타입 메타 중복성으로 인한 경쟁력 약화",
+            "진화 조건의 복잡성과 신규 플레이어 접근성 저하"
+        ],
+        "Originality": 4,
+        "ThematicConsistency": 4,
+        "VisualDesign": 4,
+        "CompetitiveViability": 3,
+        "TypeBalance": 3,
+        "MovesetDesign": 3,
+        "EvolutionLogic": 3,
+        "Accessibility": 2,
+        "Marketability": 4,
+        "LoreIntegration": 4,
+        "WeightedBreakdown": {
+            "Originality": 1.5,
+            "ThematicConsistency": 1.2,
+            "VisualDesign": 1.2,
+            "CompetitiveViability": 1.2,
+            "TypeBalance": 1.0,
+            "MovesetDesign": 0.67,
+            "EvolutionLogic": 0.53,
+            "Accessibility": 0.17,
+            "Marketability": 0.3,
+            "LoreIntegration": 0.2
+        },
+        "Questions": [
+            "Weak Armor 대신 Sturdy 또는 Quick Draw와 같은 능력 고려 여부?",
+            "Spectral Forge의 방어 상승 효과를 물리 방어로 한정할 경우 밸런스 변화?",
+            "진화 조건을 아이템 사용 등 더 일반적인 방식으로 변경 가능성?"
+        ],
+        "Limitations": [
+            "4중 약점으로 특정 메타에서 사용 제한",
+            "특수 공격 옵션의 비효율성",
+            "Steel 타입 중복성으로 인한 티어 경쟁력 부족"
+        ],
+        "EthicalConcerns": false,
+        "Soundness": 4,
+        "Presentation": 4,
+        "Contribution": 3,
+        "Overall": 9,
+        "Confidence": 4,
+        "Decision": "Accept"
     },
     {
         "Summary": "Voltorrent는 Voltorb와 물의 소용돌이를 결합한 전기/물 타입 포켓몬으로, 전기 폭풍 생성 능력을 가지고 있습니다. 'Storm Surge' 능력을 통해 비에서는 전기 기술을, 전기 지형에서는 물 기술을 강화할 수 있습니다.",
@@ -500,5 +921,183 @@
         "Overall": 8,
         "Confidence": 4,
         "Decision": "Reject"
+    },
+    {
+        "Summary": "Voltorrent는 Voltorb와 물의 소용돌이를 결합한 전기/물 타입 포켓몬으로, 전기 폭풍 생성 능력을 가지고 있습니다. 'Storm Surge' 능력을 통해 비에서는 전기 기술을, 전기 지형에서는 물 기술을 강화할 수 있습니다.",
+        "Strengths": [
+            "유니크한 전기/물 하이브리드 타입",
+            "창의적인 'Storm Surge' 능력",
+            "전기/물 타입의 전략적 상호작용",
+            "매력적인 시각적 디자인",
+            "테마적 스토리텔링 및 로어 개발의 잠재력"
+        ],
+        "Weaknesses": [
+            "전기/물 타입의 4배 약점",
+            "Storm Surge 능력의 복잡성",
+            "기존 둥근 전기 타입 포켓몬과의 유사성",
+            "신규 플레이어에게의 접근성 문제",
+            "경쟁적 활용성 문제"
+        ],
+        "Originality": 3,
+        "ThematicConsistency": 3,
+        "VisualDesign": 3,
+        "CompetitiveViability": 3,
+        "TypeBalance": 3,
+        "MovesetDesign": 4,
+        "EvolutionLogic": 2,
+        "Accessibility": 2,
+        "Marketability": 3,
+        "LoreIntegration": 3,
+        "WeightedBreakdown": {
+            "Originality": 1.0,
+            "ThematicConsistency": 0.8,
+            "VisualDesign": 0.8,
+            "CompetitiveViability": 1.2,
+            "TypeBalance": 1.0,
+            "MovesetDesign": 1.0,
+            "EvolutionLogic": 0.27,
+            "Accessibility": 0.17,
+            "Marketability": 0.2,
+            "LoreIntegration": 0.13
+        },
+        "Questions": [
+            "Storm Surge 능력의 메커니즘이 게임 플레이에 어떤 영향을 미칠까요?",
+            "Voltorrent의 디자인이 기존 둥근 전기 타입 포켓몬과 어떻게 차별화될 수 있을까요?",
+            "Voltorrent의 로어가 기존 포켓몬 세계와 어떻게 연결되는지 설명해 주세요."
+        ],
+        "Limitations": [
+            "전기/물 타입의 4배 약점",
+            "Storm Surge 능력의 복잡성",
+            "시각적 디자인의 유사성",
+            "경쟁적 활용성 문제",
+            "로어 통합의 한계"
+        ],
+        "EthicalConcerns": false,
+        "Soundness": 3,
+        "Presentation": 4,
+        "Contribution": 3,
+        "Overall": 8,
+        "Confidence": 4,
+        "Decision": "Reject"
+    },
+    {
+        "Summary": "Cinderax는 화산섬의 용암 협곡에 서식하는 Fire/Steel 타입 포켓몬으로, 강철 갑주와 용암 결정화 도끼 팔을 특징으로 하는 물리적 탱커. 시그니처 기술 'Molten Smash'로 방어력 버프와 화상 상태 이상을 유발하며, Stealth Rock을 통한 필드 컨트롤이 가능.",
+        "Strengths": [
+            "독창적인 용암-강철 테마와 시각적 임팩트",
+            "높은 공격력(125)과 방어력(100)으로 탱커 역할 최적화",
+            "Iron Fist + Heavy Armor 조합으로 방어력 극대화",
+            "Stealth Rock을 통한 더블 배틀 유틸리티",
+            "진화 라인과 서식지 설정의 세계관 일관성",
+            "강렬한 색상과 무기형 디자인의 상품성"
+        ],
+        "Weaknesses": [
+            "Ground 타입에 4배 취약성으로 카운터 대응 어려움",
+            "Fire/Steel 타입 조합의 진부성 및 메타 중복",
+            "낮은 스피드(65)로 선제 공격 기회 부족",
+            "시그니처 기술의 1턴 한정 버프로 전략적 깊이 부족",
+            "Pre-Evo 디자인 불명확성과 2단계 진화의 접근성 문제"
+        ],
+        "Originality": 3,
+        "ThematicConsistency": 4,
+        "VisualDesign": 4,
+        "CompetitiveViability": 3,
+        "TypeBalance": 2,
+        "MovesetDesign": 3,
+        "EvolutionLogic": 4,
+        "Accessibility": 3,
+        "Marketability": 4,
+        "LoreIntegration": 4,
+        "WeightedBreakdown": {
+            "Originality": 1.0,
+            "ThematicConsistency": 1.2,
+            "VisualDesign": 1.2,
+            "CompetitiveViability": 1.2,
+            "TypeBalance": 0.5,
+            "MovesetDesign": 0.67,
+            "EvolutionLogic": 0.8,
+            "Accessibility": 0.33,
+            "Marketability": 0.3,
+            "LoreIntegration": 0.2
+        },
+        "Questions": [
+            "시그니처 기술의 방어력 버프를 다턴 효과로 변경할 경우 밸런스 영향은?",
+            "Ground 타입 카운터를 상쇄할 추가 메커니즘(예: 회복 기술) 도입 가능성",
+            "Pre-Evo 'Emberclaw'의 디자인과 진화 트리거의 명확성 확인 필요",
+            "3단계 진화 추가 시 디자인 차별성 검토"
+        ],
+        "Limitations": [
+            "Ground 타입에 대한 과도한 취약성으로 팀 빌딩 제한",
+            "타입 조합의 메타 중복 및 전략적 가치 하락 가능성",
+            "1턴 버프 기술의 제한적 활용성",
+            "높은 스탯과 복잡한 진화 라인으로 인한 신규 플레이어 진입 장벽"
+        ],
+        "EthicalConcerns": false,
+        "Soundness": 4,
+        "Presentation": 4,
+        "Contribution": 3,
+        "Overall": 8,
+        "Confidence": 4,
+        "Decision": "Accept"
+    },
+    {
+        "Summary": "Duskfin은 알로아 심해 열수구 서식 Water/Psychic 타입 포켓몬. 바이오루미네선스 군집 행동과 지진 감지 능력을 특징으로 하며, 특수 공격형 서포터로 Deep Pulse와 Light Screen을 활용한 지속전을 구사합니다.",
+        "Strengths": [
+            "독창적인 심해 열수구 생태계 반영",
+            "높은 Sp.Atk(110)와 Speed(90)로 경쟁적 잠재력 보유",
+            "Calm Mind + Light Screen 조합으로 더블 배틀 서포터 역할 최적화",
+            "바이오루미네선스 디자인이 시각적으로 매력적",
+            "알로아 지역의 지질학적 설정과 자연스럽게 연계",
+            "Deep Pulse의 2회 타격 및 아군 특수방어 상승 효과로 전략적 다양성 제공"
+        ],
+        "Weaknesses": [
+            "전기 타입에 대한 4중 약점(Water+Psychic+Double Weak)이 메타에서 치명적",
+            "Deep Pulse의 낮은 확률성(20%)으로 인한 실용성 논란",
+            "진화형 Duskwhale의 디자인 일관성 부족 및 기능적 변화 미비",
+            "Hydration 능력의 제한적 유용성",
+            "신규 플레이어의 접근성을 저해할 수 있는 복잡한 기술 조합"
+        ],
+        "Originality": 4,
+        "ThematicConsistency": 4,
+        "VisualDesign": 4,
+        "CompetitiveViability": 3,
+        "TypeBalance": 2,
+        "MovesetDesign": 3,
+        "EvolutionLogic": 3,
+        "Accessibility": 2,
+        "Marketability": 4,
+        "LoreIntegration": 4,
+        "WeightedBreakdown": {
+            "Originality": 1.5,
+            "ThematicConsistency": 1.2,
+            "VisualDesign": 1.2,
+            "CompetitiveViability": 1.2,
+            "TypeBalance": 0.5,
+            "MovesetDesign": 0.67,
+            "EvolutionLogic": 0.53,
+            "Accessibility": 0.17,
+            "Marketability": 0.3,
+            "LoreIntegration": 0.2
+        },
+        "Questions": [
+            "Duskwhale 진화 시 비행 타입 추가 여부 검토했는가?",
+            "Deep Pulse의 2회 타격 대신 확률성 없는 효과(예: 아군 전체 특수방어 상승) 고려했는가?",
+            "전기 타입 약점을 상쇄할 수 있는 능력(예: Volt Absorb) 검토 필요성",
+            "알로아 지역 기존 포켓몬(예: Silvally)과의 생태적 중복성 확인",
+            "Duskwhale의 디자인이 Duskfin의 콘셉트를 어떻게 발전시킬 것인가?",
+            "Deep Pulse의 특수 방어 상승 효과가 팀 전체에 적용되나요, 아니면 사용자만 해당되나요?"
+        ],
+        "Limitations": [
+            "전기 타입 메타에 따른 사용률 변동성",
+            "Deep Pulse 효과의 실용성 부족 가능성",
+            "진화형의 기능적 변화 미비",
+            "타입 조합으로 인한 상성 약점이 대전 메타에서 불리하게 작용"
+        ],
+        "EthicalConcerns": false,
+        "Soundness": 4,
+        "Presentation": 4,
+        "Contribution": 3,
+        "Overall": 8,
+        "Confidence": 4,
+        "Decision": "Accept"
     }
 ]
