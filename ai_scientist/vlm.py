@@ -150,6 +150,8 @@ def generate_image_from_prompt(prompt: str, output_path: str) -> str:
         #     "pokemon style, style of Ken Sugimori, vibrant colors, clean lineart, "
         #     "white background"
         # )
+
+        ## 기존
         style_prompt = (
             "(official Pokémon artwork:1.4), (Ken Sugimori style:1.3), (Ohmura style:1.1), "
             "(single creature:1.4), (full body:1.3), (3/4 view:1.2), (centered:1.2), "
@@ -159,7 +161,8 @@ def generate_image_from_prompt(prompt: str, output_path: str) -> str:
             # "(cute proportions, big expressive eyes, small mouth:1.2), "
             # "(no clothes, no armor, creature design not human:1.4)"
 
-            "(white background:1.5), (light gray drop shadow:1.1), "
+            "(solid white background:1.6), (plain background:1.4), "
+            # "(white background:1.5), (light gray drop shadow:1.1), "
             "(clean thick-thin black lineart:1.3), (flat cel shading:1.3), (two-tone shadows:1.2), "
             "(simple geometric shapes:1.2), (limited 2-3 color palette + accent:1.2), "
             "(cute proportions, big expressive eyes, small mouth:1.1), "
@@ -182,7 +185,37 @@ def generate_image_from_prompt(prompt: str, output_path: str) -> str:
             "background, sky, clouds, landscape,"
             "text, logo, watermark, signature,"
             "ugly, lowres, blurry, noisy, worst quality, monochrome"
+            # <<< 추가된 부분: 그림자와 회색 배경을 명시적으로 금지합니다.
+            "shadows, drop shadow, gray background, gradient background"
         )
+        # ## 기존
+
+        # # 2. 포켓몬 공식 아트워크 스타일을 위한 프롬프트 엔지니어링
+        # style_prompt = (
+        #     "(official Pokémon artwork:1.4), (Ken Sugimori style:1.3), "
+        #     "(single creature:1.6), (full body:1.3), (front view:1.3), (centered:1.3), "
+        #     "(clear face:1.4), (expressive eyes:1.2), "
+        #     "(pure white background:2.2), (solid white background:2.2), (no background:2.0), "
+        #     "(clean bold black outline:1.4), (flat cel shading:1.3), (two-tone shadows:1.2), "
+        #     "(simple geometric shapes:1.2), (limited 2-3 color palette + 1 accent:1.2), "
+        #     "(creature design not human:1.5), (matte finish:1.2)"
+        # )
+
+        # full_prompt = f"{style_prompt}, {prompt}, redesign as a creature, readable silhouette, minimal details"
+
+
+        # # 3. 원치 않는 결과(실사, 3D 등)를 방지하기 위한 네거티브 프롬프트
+        # negative_prompt = (
+        #     "nsfw, photorealistic, photograph, 3d, rendering, cgi, "
+        #     "text, logo, watermark, signature, caption, copyright, words, numbers, "
+        #     "title, label, trademark, letters, symbols, "
+        #     "background, scenery, landscape, sky, gradient, colored background, gray background, "
+        #     "drop shadow, vignette, spotlight, aura, particles, effects, magic circle, "
+        #     "human, humanoid, girl, boy, man, woman, realistic anatomy, fingers, hands, "
+        #     "clothing, armor, accessories, props, "
+        #     "ugly, lowres, blurry, noisy, worst quality"
+            
+        # )
 
         print(f"Generating Pokemon-style image for prompt: '{prompt}'")
         
