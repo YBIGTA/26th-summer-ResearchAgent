@@ -292,7 +292,8 @@ def _strip_markdown_decorations(t: str) -> str:
     return t
 
 def _extract_args_region(text: str) -> str:
-    m = re.search(r"^[ \t]*Arguments:[^\S\r\n]*", text, flags=re.M)
+    # 'Arguments:' 또는 'ARGUMENTS:' 모두 허용
+    m = re.search(r"^[ \t]*(?:Arguments|ARGUMENTS):[^\S\r\n]*", text, flags=re.M)
     return text[m.end():] if m else text
 
 def _loads_json_or_python_obj(s: str) -> Optional[Dict[str, Any]]:
@@ -458,7 +459,7 @@ def parse_tool_call(text: str) -> Tuple[str, Dict[str, Any]]:
 
     # Arguments 영역 파싱
     arg_region = _extract_args_region(t)
-    #args_obj = _extract_args_object(arg_region)
+    args_obj = _extract_args_object(arg_region)
 
     return action, args_obj
 
@@ -525,9 +526,26 @@ def generate_temp_free_idea(
                 # print("!!!!!!!!response_text!!!!",response_text,"!!!!!!!!response_text!!!!")
                 # Parse the LLM's response
                 try:
+
+                    action, parsed_args = parse_tool_call(response_text)
+
                     # Use regular expressions to extract the components
-                    action,arguments_text=parse_tool_call(response_text)
-                    
+                    # 2) 액션/인자 원문을 백업용으로 뽑아둠(유사도 계산/로그용)
+                    action_match = re.search(r"(?is)ACTION:\s*(.*?)\s*(?:ARGUMENTS:|$)", response_text)
+                    if not action and action_match:
+                        action = action_match.group(1).strip()
+
+                    arguments_match = re.search(r"(?is)ARGUMENTS:\s*(.*?)(?:$|\nTHOUGHT:|\n$)", response_text)
+                    arguments_text = arguments_match.group(1).strip() if arguments_match else ""
+
+                    # 3) 정규화
+                    action = canonicalize_action(action)
+
+                    # 4) 인자 dict 확보 (문자열이어도 확실히 dict로)
+                    arguments_json = parsed_args if parsed_args else load_arguments_loose(arguments_text)
+
+                    ## 기존 코드
+                    # action,arguments_text=parse_tool_call(response_text)
                     action_pattern = r"ACTION:\s*(.*?)\s*ARGUMENTS:"
                     arguments_pattern = r"ARGUMENTS:\s*(.*?)(?:$|\nTHOUGHT:|\n$)"
                     if action == None: 
