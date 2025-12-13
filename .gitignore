@@ -169,6 +169,7 @@ cython_debug/
 
 # Misc folders
 data/
+!star/data/
 *ckpt.pt
 *.zip
 templates/*/run_0/
